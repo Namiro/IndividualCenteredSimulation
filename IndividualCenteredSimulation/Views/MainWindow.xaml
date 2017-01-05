@@ -5,7 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IndividualCenteredSimulation"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        xmlns:viewModels="clr-namespace:IndividualCenteredSimulation.ViewModels"
+        WindowStyle="SingleBorderWindow"
+        ResizeMode="CanResizeWithGrip"
+        WindowStartupLocation="CenterScreen"
+        Title="Individual Centered Simulation" Height="350" Width="525">
+
+    <Window.DataContext>
+        <viewModels:MainWindowViewModel/>
+    </Window.DataContext>
+    
     <Grid>
         
     </Grid>
