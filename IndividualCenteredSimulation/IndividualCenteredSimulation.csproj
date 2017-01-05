@@ -78,6 +78,7 @@
     <Compile Include="Environments\Environment.cs" />
     <Compile Include="Helpers\Helper.cs" />
     <Compile Include="Helpers\Logger.cs" />
+    <Compile Include="Helpers\Service.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\ViewModel.cs" />
     <Compile Include="Views\MainWindow.xaml.cs">
