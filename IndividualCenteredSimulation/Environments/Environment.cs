@@ -1,4 +1,5 @@
 ﻿using IndividualCenteredSimulation.Agents;
+using IndividualCenteredSimulation.MAS;
 using System.Collections.Generic;
 
 namespace IndividualCenteredSimulation.Environments

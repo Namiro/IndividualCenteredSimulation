@@ -68,14 +68,20 @@
       <SubType>Designer</SubType>
     </Page>
     <Compile Include="Agents\Agent.cs" />
+    <Compile Include="Helpers\Drawable.cs" />
     <Compile Include="Constants\Constants.cs" />
     <Compile Include="Constants\SchedulingStrategyEnum.cs" />
+    <Compile Include="Constants\DirectionEnum.cs" />
     <Compile Include="Constants\StateEnum.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Environments\Environment.cs" />
+    <Compile Include="Helpers\Coordinate.cs" />
+    <Compile Include="Helpers\Empty.cs" />
+    <Compile Include="Helpers\GraphicHelper.cs" />
+    <Compile Include="Helpers\Grid.cs" />
     <Compile Include="Helpers\Helper.cs" />
     <Compile Include="Helpers\Logger.cs" />
     <Compile Include="Helpers\Service.cs" />

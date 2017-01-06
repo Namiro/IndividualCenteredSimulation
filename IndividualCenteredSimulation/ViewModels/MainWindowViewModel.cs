@@ -1,4 +1,6 @@
-﻿using IndividualCenteredSimulation.MAS;
+﻿using IndividualCenteredSimulation.Helpers;
+using IndividualCenteredSimulation.MAS;
+using System.Collections.Generic;
 
 namespace IndividualCenteredSimulation.ViewModels
 {
@@ -20,6 +22,22 @@ namespace IndividualCenteredSimulation.ViewModels
 
         #region GUI
 
+        private List<List<IDrawable>> _Grid = new List<List<IDrawable>>();
+        public List<List<IDrawable>> Grid
+        {
+            get
+            {
+                return _Grid;
+            }
+            set
+            {
+                _Grid = value;
+                RaisePropertyChanged(nameof(MainWindowViewModel.Grid));
+            }
+        }
+
+        public double BoxSize { get; set; } = Constants.Constants.DEFAULT_BOX_SIZE;
+
         #endregion
 
         public MultiAgentSystem MultiAgentSystem { get; set; }
@@ -30,6 +48,8 @@ namespace IndividualCenteredSimulation.ViewModels
 
         public MainWindowViewModel()
         {
+            BoxSize = App.BoxSize;
+
             MultiAgentSystem = new MultiAgentSystem();
 
 
@@ -38,13 +58,15 @@ namespace IndividualCenteredSimulation.ViewModels
             {
                 switch (args.PropertyName)
                 {
-                    case nameof(MultiAgentSystem.Agents):
+                    case nameof(MultiAgentSystem.Grid):
                         RefereshView();
                         break;
                     default:
                         break;
                 }
             };
+
+            RefereshView();
         }
 
         #endregion
@@ -57,7 +79,18 @@ namespace IndividualCenteredSimulation.ViewModels
         /// </summary>
         public void RefereshView()
         {
-            // TODO José Pansa
+            for (int i = 0; i < MultiAgentSystem.Grid.YSize - 1; i++)
+            {
+                Grid.Add(new List<IDrawable>());
+                for (int j = 0; j < MultiAgentSystem.Grid.XSize - 1; j++)
+                {
+                    if (MultiAgentSystem.Grid.YSize >= MultiAgentSystem.Grid.XSize)
+                        Grid[i].Add(((IDrawable)MultiAgentSystem.Grid.Get(i, j)));
+                    else
+                        Grid[i].Add(((IDrawable)MultiAgentSystem.Grid.Get(j, i)));
+                }
+
+            }
         }
 
         #endregion

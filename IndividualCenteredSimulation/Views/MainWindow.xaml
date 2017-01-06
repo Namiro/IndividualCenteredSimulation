@@ -1,4 +1,4 @@
-﻿<Window x:Class="IndividualCenteredSimulation.MainWindow"
+﻿<Window x:Name="MainWindow_" x:Class="IndividualCenteredSimulation.Views.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -9,13 +9,42 @@
         WindowStyle="SingleBorderWindow"
         ResizeMode="CanResizeWithGrip"
         WindowStartupLocation="CenterScreen"
-        Title="Individual Centered Simulation" Height="350" Width="525">
+        Title="Individual Centered Simulation">
 
     <Window.DataContext>
         <viewModels:MainWindowViewModel/>
     </Window.DataContext>
-    
+
     <Grid>
-        
+        <ScrollViewer x:Name="scrollViewer" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"  Margin="20,20,20,20">
+            <Border BorderBrush="Black" BorderThickness="0">
+                <Grid>
+                    <ItemsControl x:Name="lst" ItemsSource="{Binding Grid}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <ItemsControl ItemsSource="{Binding}">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel Orientation="Horizontal"/>
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border BorderBrush="Black" BorderThickness="1">
+                                                <Ellipse MinHeight="{Binding Path=DataContext.BoxSize, ElementName=MainWindow_}" MinWidth="{Binding Path=DataContext.BoxSize, ElementName=MainWindow_}" Margin="1,1,1,1">
+                                                    <Ellipse.Fill>
+                                                        <SolidColorBrush Color="{Binding Color}"/>
+                                                    </Ellipse.Fill>
+                                                </Ellipse>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Grid>
+            </Border>
+        </ScrollViewer>
     </Grid>
 </Window>

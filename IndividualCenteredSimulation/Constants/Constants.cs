@@ -16,13 +16,14 @@
         public const int DEFAULT_CANVAS_SIZE_X = 500;
         public const int DEFAULT_CANVAS_SIZE_Y = 500;
         public const int DEFAULT_BOX_SIZE = 20;
-        public const long DEFAULT_DELAY_MILLISECONDE = 1000;
-        public const long DEFAULT_TICK_NUMBER = 100;
+        public const int DEFAULT_DELAY_MILLISECONDE = 1000;
+        public const int DEFAULT_TICKS_NUMBER = 100;
         public const bool DEFAULT_IS_DISPLAY_GRID = true;
         public const bool DEFAULT_IS_TRACED = false;
         public const int DEFAULT_SEED = 0;
         public const int DEFAULT_RATE_REFRESH = 1;
         public const SchedulingStrategyEnum DEFAULT_SCHEDULING_STRATEGY = SchedulingStrategyEnum.Fair;
+        public const int DEFAULT_AGENTS_NUMBER = 100;
 
 
         // Keys of App.config
@@ -38,6 +39,7 @@
         public const string APP_CONFIG_KEY_SEED = "Seed";
         public const string APP_CONFIG_KEY_RATE_REFRESH = "RateRefresh";
         public const string APP_CONFIG_KEY_SCHEDULING_STRATEGY = "SchedulingStrategy";
+        public const string APP_CONFIG_KEY_AGENTS_NUMBER = "AgentsNumber";
 
 
         // Keys for the execution App Properties

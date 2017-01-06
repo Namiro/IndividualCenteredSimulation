@@ -68,5 +68,37 @@ namespace IndividualCenteredSimulation.Helpers
                 list[n] = value;
             }
         }
+
+        /// <summary>
+        /// To populate an array with a value
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="arr"></param>
+        /// <param name="value"></param>
+        public static void Populate<T>(this T[] arr, T value)
+        {
+            for (int i = 0; i < arr.Length; i++)
+            {
+                arr[i] = value;
+            }
+        }
+
+        /// <summary>
+        /// To populate an 2D array with a value
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="arr"></param>
+        /// <param name="value"></param>
+        public static void Populate<T>(T[,] array, T value)
+        {
+            Random rnd = new Random();
+            for (int i = 0; i < array.GetLength(0); i++)
+            {
+                for (int j = 0; j < array.GetLength(1); j++)
+                {
+                    array[i, j] = value;
+                }
+            }
+        }
     }
 }
