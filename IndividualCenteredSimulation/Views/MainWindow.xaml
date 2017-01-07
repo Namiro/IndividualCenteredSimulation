@@ -14,36 +14,10 @@
     <Window.DataContext>
         <viewModels:MainWindowViewModel/>
     </Window.DataContext>
-
     <Grid>
         <ScrollViewer x:Name="scrollViewer" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"  Margin="20,20,20,20">
-            <Border BorderBrush="Black" BorderThickness="0">
-                <Grid>
-                    <ItemsControl x:Name="lst" ItemsSource="{Binding Grid}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <ItemsControl ItemsSource="{Binding}">
-                                    <ItemsControl.ItemsPanel>
-                                        <ItemsPanelTemplate>
-                                            <StackPanel Orientation="Horizontal"/>
-                                        </ItemsPanelTemplate>
-                                    </ItemsControl.ItemsPanel>
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate>
-                                            <Border BorderBrush="Black" BorderThickness="1">
-                                                <Ellipse MinHeight="{Binding Path=DataContext.BoxSize, ElementName=MainWindow_}" MinWidth="{Binding Path=DataContext.BoxSize, ElementName=MainWindow_}" Margin="1,1,1,1">
-                                                    <Ellipse.Fill>
-                                                        <SolidColorBrush Color="{Binding Color}"/>
-                                                    </Ellipse.Fill>
-                                                </Ellipse>
-                                            </Border>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </Grid>
+            <Border BorderBrush="Black" BorderThickness="2">
+                <Image Stretch="Fill" Source="{Binding WriteableBitmap}" />
             </Border>
         </ScrollViewer>
     </Grid>

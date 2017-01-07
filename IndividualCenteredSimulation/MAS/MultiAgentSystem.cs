@@ -47,7 +47,7 @@ namespace IndividualCenteredSimulation.MAS
             }
 
             // Initialize the timers
-            TimerTick.Interval = 500;
+            TimerTick.Interval = 5000;
             TimerTick.Elapsed += Run;
             TimerTick.Enabled = true;
         }
