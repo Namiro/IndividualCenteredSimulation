@@ -1,5 +1,6 @@
 ﻿using IndividualCenteredSimulation.Helpers;
 using IndividualCenteredSimulation.MAS;
+using System;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
@@ -80,6 +81,8 @@ namespace IndividualCenteredSimulation.ViewModels
         /// </summary>
         public void RefereshView()
         {
+            App.StartExec = DateTime.Now;
+
             using (WriteableBitmap.GetBitmapContext())
             {
                 // Clear the WriteableBitmap with white color
@@ -95,6 +98,8 @@ namespace IndividualCenteredSimulation.ViewModels
                     }
                 }
                 RaisePropertyChanged(nameof(MainWindowViewModel.WriteableBitmap));
+
+                Logger.WriteLog("Draw time : " + DateTime.Now.Subtract(App.StartExec).Milliseconds);
             }
         }
 
