@@ -1,5 +1,6 @@
 ﻿using IndividualCenteredSimulation.Constants;
 using IndividualCenteredSimulation.Helpers;
+using System;
 using System.Configuration;
 using System.Windows;
 
@@ -11,6 +12,11 @@ namespace IndividualCenteredSimulation
     public partial class App : Application
     {
         #region Properties
+
+        /// <summary>
+        /// Calcul time execution
+        /// </summary>
+        public static DateTime StartExec { get; set; }
 
         /// <summary>
         /// The number of case in X.
