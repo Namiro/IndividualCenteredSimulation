@@ -1,5 +1,6 @@
 ﻿using IndividualCenteredSimulation.Helpers;
 using IndividualCenteredSimulation.MAS;
+using System;
 using System.Collections.Generic;
 
 namespace IndividualCenteredSimulation.ViewModels
@@ -79,6 +80,8 @@ namespace IndividualCenteredSimulation.ViewModels
         /// </summary>
         public void RefereshView()
         {
+            App.StartExec = DateTime.Now;
+
             Grid = new List<List<IDrawable>>();
 
             for (int i = 0; i < MultiAgentSystem.Grid.XSize; i++)
@@ -88,6 +91,8 @@ namespace IndividualCenteredSimulation.ViewModels
                 for (int j = 0; j < MultiAgentSystem.Grid.YSize; j++)
                     line.Add(((IDrawable)MultiAgentSystem.Grid.Get(i, j)));
             }
+
+            Logger.WriteLog("Draw time : " + DateTime.Now.Subtract(App.StartExec).Milliseconds);
         }
 
         #endregion

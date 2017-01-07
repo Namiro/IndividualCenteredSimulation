@@ -97,8 +97,6 @@ namespace IndividualCenteredSimulation.Agents
                     possibleDirections.Add(elem.Key);
             }
 
-            Logger.WriteLog(JsonConvert.SerializeObject(possibleDirections));
-
             // Mélange les possibilités.
             Helper.Shuffle(possibleDirections);
             if (possibleDirections.Count > 0)
@@ -156,7 +154,6 @@ namespace IndividualCenteredSimulation.Agents
 
             // Occupy the new position
             Grid.Occupy(Coordinate, this);
-            Logger.WriteLog(Coordinate + "");
         }
 
         private void ActionNothing()

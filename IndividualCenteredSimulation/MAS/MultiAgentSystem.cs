@@ -58,6 +58,7 @@ namespace IndividualCenteredSimulation.MAS
 
         public void Run(object myObject, EventArgs myEventArgs)
         {
+            App.StartExec = DateTime.Now;
             switch (App.SchedulingStrategy)
             {
                 case Constants.SchedulingStrategyEnum.Fair:
@@ -74,7 +75,7 @@ namespace IndividualCenteredSimulation.MAS
                     Environment.Exit(0);
                     break;
             }
-
+            Logger.WriteLog("Calcul time : " + DateTime.Now.Subtract(App.StartExec).Milliseconds);
             RaisePropertyChanged(nameof(MultiAgentSystem.Grid));
         }
 
