@@ -22,7 +22,7 @@ namespace IndividualCenteredSimulation.ViewModels
 
         #region GUI
 
-        private List<List<IDrawable>> _Grid = new List<List<IDrawable>>();
+        private List<List<IDrawable>> _Grid;
         public List<List<IDrawable>> Grid
         {
             get
@@ -79,17 +79,14 @@ namespace IndividualCenteredSimulation.ViewModels
         /// </summary>
         public void RefereshView()
         {
-            for (int i = 0; i < MultiAgentSystem.Grid.YSize - 1; i++)
-            {
-                Grid.Add(new List<IDrawable>());
-                for (int j = 0; j < MultiAgentSystem.Grid.XSize - 1; j++)
-                {
-                    if (MultiAgentSystem.Grid.YSize >= MultiAgentSystem.Grid.XSize)
-                        Grid[i].Add(((IDrawable)MultiAgentSystem.Grid.Get(i, j)));
-                    else
-                        Grid[i].Add(((IDrawable)MultiAgentSystem.Grid.Get(j, i)));
-                }
+            Grid = new List<List<IDrawable>>();
 
+            for (int i = 0; i < MultiAgentSystem.Grid.XSize; i++)
+            {
+                List<IDrawable> line = new List<IDrawable>();
+                Grid.Add(line);
+                for (int j = 0; j < MultiAgentSystem.Grid.YSize; j++)
+                    line.Add(((IDrawable)MultiAgentSystem.Grid.Get(i, j)));
             }
         }
 

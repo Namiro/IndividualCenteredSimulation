@@ -4,6 +4,7 @@ using IndividualCenteredSimulation.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Timers;
 
 namespace IndividualCenteredSimulation.MAS
 {
@@ -15,6 +16,7 @@ namespace IndividualCenteredSimulation.MAS
 
         private List<Agent> Agents { get; set; }
         private List<int> GridCellsNumber { get; set; }
+        private Timer TimerTick { get; set; } = new Timer();
 
         #endregion
 
@@ -39,18 +41,22 @@ namespace IndividualCenteredSimulation.MAS
                 int cellNumber = GridCellsNumber[randomNumber];
                 GridCellsNumber.Remove(cellNumber);
 
-                Color randomColor = Color.FromArgb(random.Next(200), random.Next(200), random.Next(200));
                 Coordinate coordinate = Grid.CellNumberToXYCoordinate(cellNumber);
-                Grid.Occupy(coordinate, new Agent(coordinate, GraphicHelper.CastColor(randomColor), Grid));
+                Grid.Occupy(coordinate, new Agent(coordinate, GraphicHelper.CastColor(Color.FromArgb(255, random.Next(200), random.Next(200), random.Next(200))), Grid, cellNumber));
                 Agents.Add((Agent)Grid.Get(coordinate));
             }
+
+            // Initialize the timers
+            TimerTick.Interval = 500;
+            TimerTick.Elapsed += Run;
+            TimerTick.Enabled = true;
         }
 
         #endregion
 
         #region Methodes
 
-        public void Run()
+        public void Run(object myObject, EventArgs myEventArgs)
         {
             switch (App.SchedulingStrategy)
             {

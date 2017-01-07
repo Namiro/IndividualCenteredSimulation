@@ -1,4 +1,6 @@
-﻿namespace IndividualCenteredSimulation.Helpers
+﻿using Newtonsoft.Json;
+
+namespace IndividualCenteredSimulation.Helpers
 {
     class Coordinate
     {
@@ -9,6 +11,15 @@
         {
             X = x;
             Y = y;
+        }
+
+        /// <summary>
+        /// This ToString is do simply to cast the object in a string formated in Json
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return JsonConvert.SerializeObject(this);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using IndividualCenteredSimulation.Constants;
 using IndividualCenteredSimulation.Helpers;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Windows.Media;
@@ -10,6 +11,7 @@ namespace IndividualCenteredSimulation.Agents
     {
         #region Properties
 
+        public int Id { get; set; }
         public Coordinate Coordinate { get; set; }
         public int Movement { get; set; } = 1;
         public Color Color { get; set; } = GraphicHelper.CastColor(System.Drawing.Color.Silver);
@@ -17,24 +19,26 @@ namespace IndividualCenteredSimulation.Agents
         public StateEnum State { get; set; } = StateEnum.Default;
 
         private Grid Grid { get; }
-        private static int ActionsNumber { get; } = 2;
+        private static int ActionsNumber { get; } = 1;
         private Dictionary<DirectionEnum, object> Neighborhood { get; set; }
 
         #endregion
 
         #region Construtors
 
-        public Agent(Coordinate coordinate, Grid grid)
+        public Agent(Coordinate coordinate, Grid grid, int id = -1)
         {
             this.Coordinate = coordinate;
             this.Grid = grid;
+            this.Id = id;
         }
 
-        public Agent(Coordinate coordinate, Color color, Grid grid)
+        public Agent(Coordinate coordinate, Color color, Grid grid, int id = -1)
         {
             this.Coordinate = coordinate;
             this.Color = color;
             this.Grid = grid;
+            this.Id = id;
         }
 
         #endregion
@@ -71,14 +75,14 @@ namespace IndividualCenteredSimulation.Agents
         {
             Neighborhood = new Dictionary<DirectionEnum, object>();
 
+            Neighborhood.Add(DirectionEnum.Right, Grid.Get(Coordinate.X, Coordinate.Y + 1));
+            Neighborhood.Add(DirectionEnum.Left, Grid.Get(Coordinate.X, Coordinate.Y - 1));
+            Neighborhood.Add(DirectionEnum.Bottom, Grid.Get(Coordinate.X + 1, Coordinate.Y));
+            Neighborhood.Add(DirectionEnum.Top, Grid.Get(Coordinate.X - 1, Coordinate.Y));
+            Neighborhood.Add(DirectionEnum.TopRight, Grid.Get(Coordinate.X - 1, Coordinate.Y + 1));
+            Neighborhood.Add(DirectionEnum.BottomLeft, Grid.Get(Coordinate.X + 1, Coordinate.Y - 1));
             Neighborhood.Add(DirectionEnum.TopLeft, Grid.Get(Coordinate.X - 1, Coordinate.Y - 1));
-            Neighborhood.Add(DirectionEnum.Top, Grid.Get(Coordinate.X, Coordinate.Y - 1));
-            Neighborhood.Add(DirectionEnum.TopRight, Grid.Get(Coordinate.X + 1, Coordinate.Y - 1));
-            Neighborhood.Add(DirectionEnum.Right, Grid.Get(Coordinate.X + 1, Coordinate.Y));
             Neighborhood.Add(DirectionEnum.BottomRight, Grid.Get(Coordinate.X + 1, Coordinate.Y + 1));
-            Neighborhood.Add(DirectionEnum.Bottom, Grid.Get(Coordinate.X, Coordinate.Y + 1));
-            Neighborhood.Add(DirectionEnum.BottomLeft, Grid.Get(Coordinate.X - 1, Coordinate.Y + 1));
-            Neighborhood.Add(DirectionEnum.Left, Grid.Get(Coordinate.X - 1, Coordinate.Y));
 
             return Neighborhood;
         }
@@ -93,13 +97,18 @@ namespace IndividualCenteredSimulation.Agents
                     possibleDirections.Add(elem.Key);
             }
 
+            Logger.WriteLog(JsonConvert.SerializeObject(possibleDirections));
+
             // Mélange les possibilités.
             Helper.Shuffle(possibleDirections);
-            return possibleDirections[0];
+            if (possibleDirections.Count > 0)
+                return possibleDirections[0];
+
+            return DirectionEnum.NoOne;
         }
 
         /// <summary>
-        /// 
+        /// To move the agent
         /// </summary>
         private void ActionMove()
         {
@@ -114,29 +123,31 @@ namespace IndividualCenteredSimulation.Agents
                     Coordinate.X--;
                     Coordinate.Y--;
                     break;
-                case DirectionEnum.Top:
+                case DirectionEnum.Left:
                     Coordinate.Y--;
                     break;
-                case DirectionEnum.TopRight:
+                case DirectionEnum.BottomLeft:
                     Coordinate.X++;
                     Coordinate.Y--;
                     break;
-                case DirectionEnum.Right:
+                case DirectionEnum.Top:
                     Coordinate.X--;
                     break;
                 case DirectionEnum.BottomRight:
                     Coordinate.X++;
                     Coordinate.Y++;
                     break;
+                case DirectionEnum.Right:
+                    Coordinate.Y++;
+                    break;
+                case DirectionEnum.TopRight:
+                    Coordinate.X--;
+                    Coordinate.Y++;
+                    break;
                 case DirectionEnum.Bottom:
-                    Coordinate.Y++;
+                    Coordinate.X++;
                     break;
-                case DirectionEnum.BottomLeft:
-                    Coordinate.X--;
-                    Coordinate.Y++;
-                    break;
-                case DirectionEnum.Left:
-                    Coordinate.X--;
+                case DirectionEnum.NoOne:
                     break;
                 default:
                     Logger.WriteLog("Unknown direction : " + direction.ToString(), LogLevelL4N.ERROR);
@@ -145,6 +156,7 @@ namespace IndividualCenteredSimulation.Agents
 
             // Occupy the new position
             Grid.Occupy(Coordinate, this);
+            Logger.WriteLog(Coordinate + "");
         }
 
         private void ActionNothing()

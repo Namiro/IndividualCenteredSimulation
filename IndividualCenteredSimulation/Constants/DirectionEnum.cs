@@ -9,6 +9,7 @@
         BottomRight,
         Bottom,
         BottomLeft,
-        Left
+        Left,
+        NoOne
     }
 }

@@ -31,7 +31,7 @@
         public void Occupy(Coordinate coordinate, object obj)
         {
             if (!(Grid2D[coordinate.X, coordinate.Y] is Empty))
-                throw new System.Exception("There is already an object to these coordinates in the grid.");
+                throw new System.Exception("There is already an object to these coordinates in the grid. - " + coordinate);
 
             Grid2D[coordinate.X, coordinate.Y] = obj;
         }
