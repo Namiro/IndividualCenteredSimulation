@@ -1,6 +1,7 @@
 ﻿using IndividualCenteredSimulation.Helpers;
 using IndividualCenteredSimulation.MAS;
 using System;
+using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
@@ -83,24 +84,31 @@ namespace IndividualCenteredSimulation.ViewModels
         {
             App.StartExec = DateTime.Now;
 
-            using (WriteableBitmap.GetBitmapContext())
+            Application.Current.Dispatcher.Invoke(() =>
             {
-                // Clear the WriteableBitmap with white color
-                WriteableBitmap.Clear(Colors.White);
+                //WriteableBitmap.Lock();
 
-                DrawGrid();
-
-                for (int i = 0; i < MultiAgentSystem.Grid.XSize; i++)
+                using (WriteableBitmap.GetBitmapContext())
                 {
-                    for (int j = 0; j < MultiAgentSystem.Grid.YSize; j++)
-                    {
-                        DrawGridCell(new Coordinate(i, j), ((IDrawable)MultiAgentSystem.Grid.Get(i, j)).Color);
-                    }
-                }
-                RaisePropertyChanged(nameof(MainWindowViewModel.WriteableBitmap));
+                    // Clear the WriteableBitmap with white color
+                    WriteableBitmap.Clear(Colors.White);
 
-                Logger.WriteLog("Draw time : " + DateTime.Now.Subtract(App.StartExec).Milliseconds);
-            }
+                    DrawGrid();
+
+                    for (int i = 0; i < MultiAgentSystem.Grid.XSize; i++)
+                    {
+                        for (int j = 0; j < MultiAgentSystem.Grid.YSize; j++)
+                        {
+                            DrawGridCell(new Coordinate(i, j), ((IDrawable)MultiAgentSystem.Grid.Get(i, j)).Color);
+                        }
+                    }
+                    RaisePropertyChanged(nameof(MainWindowViewModel.WriteableBitmap));
+
+                    Logger.WriteLog("Draw time : " + DateTime.Now.Subtract(App.StartExec).Milliseconds);
+                }
+
+                //WriteableBitmap.Unlock();
+            });
         }
 
         private void DrawGrid()
