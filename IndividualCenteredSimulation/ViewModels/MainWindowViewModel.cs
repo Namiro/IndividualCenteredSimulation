@@ -1,7 +1,9 @@
 ﻿using IndividualCenteredSimulation.Helpers;
 using IndividualCenteredSimulation.MAS;
 using System;
-using System.Collections.Generic;
+using System.Windows;
+using System.Windows.Media;
+using System.Windows.Threading;
 
 namespace IndividualCenteredSimulation.ViewModels
 {
@@ -9,39 +11,30 @@ namespace IndividualCenteredSimulation.ViewModels
     {
         #region Properties
 
-        #region Constants
 
-        #endregion
-
-        #region Commands
-
-        #endregion
-
-        #region Events
-
-        #endregion
-
-        #region GUI
-
-        private List<List<IDrawable>> _Grid;
-        public List<List<IDrawable>> Grid
-        {
-            get
-            {
-                return _Grid;
-            }
-            set
-            {
-                _Grid = value;
-                RaisePropertyChanged(nameof(MainWindowViewModel.Grid));
-            }
-        }
-
-        public double BoxSize { get; set; } = Constants.Constants.DEFAULT_BOX_SIZE;
-
-        #endregion
+        public DrawingImage SurfaceGrid { get; set; }
+        //private WriteableBitmap _SurfaceGridBitmap;
+        //public WriteableBitmap SurfaceGridBitmap
+        //{
+        //    get
+        //    {
+        //        return _SurfaceGridBitmap;
+        //    }
+        //    set
+        //    {
+        //        _SurfaceGridBitmap = value;
+        //        RaisePropertyChanged(nameof(MainWindowViewModel.SurfaceGridBitmap));
+        //    }
+        //}
 
         public MultiAgentSystem MultiAgentSystem { get; set; }
+        private GraphicHelperGrid GraphicHelperGrid { get; set; }
+        //private GraphicHelperGridEx GraphicHelperGridEx { get; set; }
+        private int DrawTimeNb { get; set; } = 0;
+        private int DrawTimeSum { get; set; } = 0;
+        private int DrawTimeBigestNb { get; set; } = 0;
+        private int DrawBiggestTimeSum { get; set; } = 0;
+        private int DrawTimeBiggest { get; set; } = 0;
 
         #endregion
 
@@ -49,10 +42,7 @@ namespace IndividualCenteredSimulation.ViewModels
 
         public MainWindowViewModel()
         {
-            BoxSize = App.BoxSize;
-
             MultiAgentSystem = new MultiAgentSystem();
-
 
             //This allow to refresh the data to display when the value from the system is modified
             MultiAgentSystem.PropertyChanged += (obj, args) =>
@@ -67,7 +57,15 @@ namespace IndividualCenteredSimulation.ViewModels
                 }
             };
 
-            RefereshView();
+
+            GraphicHelperGrid = new GraphicHelperGrid(MultiAgentSystem.Grid);
+            GraphicHelperGrid.IsDisplayAxeNum = true;
+            GraphicHelperGrid.IsDisplayGrid = App.IsDisplayGrid;
+            SurfaceGrid = GraphicHelperGrid.DrawingImage;
+
+            //GraphicHelperGridEx = new GraphicHelperGridEx(MultiAgentSystem.Grid);
+            //GraphicHelperGridEx.IsDisplayAxeNum = true;
+            //GraphicHelperGridEx.IsDisplayGrid = App.IsDisplayGrid;
         }
 
         #endregion
@@ -82,19 +80,37 @@ namespace IndividualCenteredSimulation.ViewModels
         {
             App.StartExec = DateTime.Now;
 
-            Grid = new List<List<IDrawable>>();
+            // This line allow to clear the event queue managed by the .NET Framework.
+            Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new Action(delegate { }));
 
-            for (int i = 0; i < MultiAgentSystem.Grid.XSize; i++)
+            Application.Current.Dispatcher.Invoke((Action)(() =>
             {
-                List<IDrawable> line = new List<IDrawable>();
-                Grid.Add(line);
-                for (int j = 0; j < MultiAgentSystem.Grid.YSize; j++)
-                    line.Add(((IDrawable)MultiAgentSystem.Grid.Get(i, j)));
-            }
+                GraphicHelperGrid.Draw();
+                //GraphicHelperGridEx.Draw();
+                //SurfaceGridBitmap = GraphicHelperGridEx.WriteableBitmap;
 
-            Logger.WriteLog("Draw time : " + DateTime.Now.Subtract(App.StartExec).Milliseconds);
+                if (App.IsTracedPerformance)
+                {
+                    DrawTimeNb++;
+                    int drawTime = DateTime.Now.Subtract(App.StartExec).Milliseconds;
+                    DrawTimeSum += drawTime;
+                    if (DrawTimeBiggest < drawTime)
+                        DrawTimeBiggest = drawTime;
+
+                    int averageTime = DrawTimeSum / DrawTimeNb;
+
+                    if (drawTime <= DrawTimeBiggest && drawTime > averageTime)
+                    {
+                        DrawTimeBigestNb++;
+                        DrawBiggestTimeSum += drawTime;
+                    }
+
+                    int averageBiggestTime = DrawBiggestTimeSum / DrawTimeBigestNb;
+                    Logger.WriteLog("Draw time: " + drawTime + "\tDraw time average : " + averageTime + "\tSlowest : " + DrawTimeBiggest + "\tAverage biggest :" + averageBiggestTime);
+                }
+            }));
         }
-
+        
         #endregion
     }
 }

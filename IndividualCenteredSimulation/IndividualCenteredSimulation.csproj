@@ -38,6 +38,10 @@
     <StartupObject>IndividualCenteredSimulation.App</StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FastWpfGrid, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DLLs\FastWpfGrid.dll</HintPath>
+    </Reference>
     <Reference Include="log4net">
       <HintPath>..\DLLs\log4net.dll</HintPath>
     </Reference>
@@ -48,6 +52,7 @@
     <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -60,6 +65,18 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WriteableBitmapEx.Wpf, Version=0.0.0.0, Culture=neutral, PublicKeyToken=50375ca6144f1c69, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DLLs\WriteableBitmapEx.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="Xemio.GameLibrary, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Xemio-GameLibrary.0.8.50\lib\net45\Xemio.GameLibrary.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xemio.GameLibrary.Rendering.GdiPlus, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Xemio-GameLibrary-GDI-Renderer.2.9\lib\net45\Xemio.GameLibrary.Rendering.GdiPlus.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -84,7 +101,9 @@
     <Compile Include="Helpers\Coordinate.cs" />
     <Compile Include="Helpers\Empty.cs" />
     <Compile Include="Helpers\GraphicHelper.cs" />
+    <Compile Include="Helpers\GraphicHelperGridEx.cs" />
     <Compile Include="Helpers\Grid.cs" />
+    <Compile Include="Helpers\GraphicHelperGrid.cs" />
     <Compile Include="Helpers\Helper.cs" />
     <Compile Include="Helpers\Logger.cs" />
     <Compile Include="Helpers\Service.cs" />
@@ -115,6 +134,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="Log4NET.config" />
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -122,7 +142,9 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ViewModels\Commands\" />

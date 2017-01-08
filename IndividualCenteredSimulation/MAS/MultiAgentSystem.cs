@@ -8,7 +8,7 @@ using System.Timers;
 
 namespace IndividualCenteredSimulation.MAS
 {
-    internal class MultiAgentSystem : Service
+    public class MultiAgentSystem : Service
     {
         #region Properties
 
@@ -17,6 +17,7 @@ namespace IndividualCenteredSimulation.MAS
         private List<Agent> Agents { get; set; }
         private List<int> GridCellsNumber { get; set; }
         private Timer TimerTick { get; set; } = new Timer();
+        private int TickNb { get; set; } = 0;
 
         #endregion
 
@@ -24,7 +25,7 @@ namespace IndividualCenteredSimulation.MAS
 
         public MultiAgentSystem()
         {
-            Random random = new Random();
+            Random random = new Random(App.Seed);
 
             Grid = new Grid(App.GridSizeX, App.GridSizeY);
 
@@ -47,7 +48,7 @@ namespace IndividualCenteredSimulation.MAS
             }
 
             // Initialize the timers
-            TimerTick.Interval = 500;
+            TimerTick.Interval = App.DelayMilliseconde;
             TimerTick.Elapsed += Run;
             TimerTick.Enabled = true;
         }
@@ -59,6 +60,7 @@ namespace IndividualCenteredSimulation.MAS
         public void Run(object myObject, EventArgs myEventArgs)
         {
             App.StartExec = DateTime.Now;
+            TickNb++;
             switch (App.SchedulingStrategy)
             {
                 case Constants.SchedulingStrategyEnum.Fair:
@@ -75,8 +77,17 @@ namespace IndividualCenteredSimulation.MAS
                     Environment.Exit(0);
                     break;
             }
-            Logger.WriteLog("Calcul time : " + DateTime.Now.Subtract(App.StartExec).Milliseconds);
-            RaisePropertyChanged(nameof(MultiAgentSystem.Grid));
+
+            if (App.IsTracedPerformance)
+                Logger.WriteLog("Calcul time : " + DateTime.Now.Subtract(App.StartExec).Milliseconds);
+
+            if (App.TicksNumber != 0 && TickNb >= App.TicksNumber)
+                TimerTick.Enabled = false;
+
+            if (!Convert.ToBoolean(TickNb % App.RateRefresh))
+                RaisePropertyChanged(nameof(MultiAgentSystem.Grid));
+
+            App.Trace("Tick");
         }
 
         private void RunRandomly()
@@ -95,7 +106,7 @@ namespace IndividualCenteredSimulation.MAS
 
         private void RunFairly()
         {
-            Helper.Shuffle(Agents);
+            Helper.Shuffle(Agents, App.Seed);
 
             foreach (Agent agent in Agents)
             {

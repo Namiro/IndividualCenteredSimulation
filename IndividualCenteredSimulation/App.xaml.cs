@@ -84,12 +84,23 @@ namespace IndividualCenteredSimulation
         /// </summary>
         public static int AgentsNumber { get; set; } = Constants.Constants.DEFAULT_AGENTS_NUMBER;
 
+        /// <summary>
+        /// Trace or not the app performance.
+        /// </summary>
+        public static bool IsTracedPerformance { get; set; } = Constants.Constants.DEFAULT_IS_TRACED_PERFORMANCE;
+
 
         #endregion
 
         #region Methodes
 
-
+        public static void Trace(string text)
+        {
+            if (App.IsTraced)
+            {
+                Logger.WriteLog(text, LogLevelL4N.INFO);
+            }
+        }
 
         /// <summary>
         /// Initialize settings.
@@ -103,31 +114,27 @@ namespace IndividualCenteredSimulation
             BoxSize = int.Parse(ConfigurationManager.AppSettings[Constants.Constants.APP_CONFIG_KEY_BOX_SIZE]);
             DelayMilliseconde = int.Parse(ConfigurationManager.AppSettings[Constants.Constants.APP_CONFIG_KEY_DELAY_MILLISECONDE]);
             TicksNumber = int.Parse(ConfigurationManager.AppSettings[Constants.Constants.APP_CONFIG_KEY_TICKS_NUMBER]);
-            Seed = int.Parse(ConfigurationManager.AppSettings[Constants.Constants.APP_CONFIG_KEY_SEED]);
             RateRefresh = int.Parse(ConfigurationManager.AppSettings[Constants.Constants.APP_CONFIG_KEY_RATE_REFRESH]);
             AgentsNumber = int.Parse(ConfigurationManager.AppSettings[Constants.Constants.APP_CONFIG_KEY_AGENTS_NUMBER]);
+            Seed = int.Parse(ConfigurationManager.AppSettings[Constants.Constants.APP_CONFIG_KEY_SEED]);
 
             // IsDisplayGrid
             if (ConfigurationManager.AppSettings[Constants.Constants.APP_CONFIG_KEY_IS_DISPLAY_GRID] == "True")
                 IsDisplayGrid = true;
             else if (ConfigurationManager.AppSettings[Constants.Constants.APP_CONFIG_KEY_IS_DISPLAY_GRID] == "False")
                 IsDisplayGrid = false;
-            else
-            {
-                IsDisplayGrid = Constants.Constants.DEFAULT_IS_DISPLAY_GRID;
-                Logger.WriteLog(Logger.CONSOLE, "The IsDisplayGrid value is unknown. Default value will be used", LogLevelL4N.WARN);
-            }
 
             // IsTraced
             if (ConfigurationManager.AppSettings[Constants.Constants.APP_CONFIG_KEY_IS_TRACED] == "True")
                 IsTraced = true;
             else if (ConfigurationManager.AppSettings[Constants.Constants.APP_CONFIG_KEY_IS_TRACED] == "False")
                 IsTraced = false;
-            else
-            {
-                IsTraced = Constants.Constants.DEFAULT_IS_TRACED;
-                Logger.WriteLog(Logger.CONSOLE, "The IsTraced value is unknown. Default value will be used", LogLevelL4N.WARN);
-            }
+
+            // IsTracedPerformance
+            if (ConfigurationManager.AppSettings[Constants.Constants.APP_CONFIG_KEY_IS_TRACED_PERFORMANCE] == "True")
+                IsTracedPerformance = true;
+            else if (ConfigurationManager.AppSettings[Constants.Constants.APP_CONFIG_KEY_IS_TRACED_PERFORMANCE] == "False")
+                IsTracedPerformance = false;
 
             // SchedulingStrategy
             if (ConfigurationManager.AppSettings[Constants.Constants.APP_CONFIG_KEY_SCHEDULING_STRATEGY] == SchedulingStrategyEnum.Fair.ToString())
@@ -136,11 +143,10 @@ namespace IndividualCenteredSimulation
                 SchedulingStrategy = SchedulingStrategyEnum.Sequential;
             else if (ConfigurationManager.AppSettings[Constants.Constants.APP_CONFIG_KEY_SCHEDULING_STRATEGY] == SchedulingStrategyEnum.Random.ToString())
                 SchedulingStrategy = SchedulingStrategyEnum.Random;
-            else
-            {
-                SchedulingStrategy = Constants.Constants.DEFAULT_SCHEDULING_STRATEGY;
-                Logger.WriteLog(Logger.CONSOLE, "The SchedulingStrategy value is unknown. Default value will be used", LogLevelL4N.WARN);
-            }
+
+            // Seed
+            if (Seed == 0)
+                Seed = Guid.NewGuid().GetHashCode();
         }
 
 

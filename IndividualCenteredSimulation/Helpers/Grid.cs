@@ -1,6 +1,6 @@
 ﻿namespace IndividualCenteredSimulation.Helpers
 {
-    internal class Grid
+    public class Grid
     {
         public int XSize { get; }
         public int YSize { get; }
