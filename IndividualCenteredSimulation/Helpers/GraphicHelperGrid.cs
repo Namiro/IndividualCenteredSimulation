@@ -9,18 +9,20 @@ namespace IndividualCenteredSimulation.Helpers
          /// </summary>
     class GraphicHelperGrid
     {
+        public DrawingImage DrawingImage { get; set; }
+
         private int GridStartX { get; set; }
         private int GridStartY { get; set; }
-        public DrawingGroup DrawingGroup { get; set; }
+        private DrawingGroup DrawingGroup { get; set; }
         private DrawingContext DrawingContext { get; set; }
         private Grid Grid { get; set; }
 
-        public GraphicHelperGrid(Grid grid, DrawingImage imageDrawing)
+        public GraphicHelperGrid(Grid grid)
         {
             Grid = grid;
 
             DrawingGroup = new DrawingGroup();
-            imageDrawing = new DrawingImage(DrawingGroup);
+            DrawingImage = new DrawingImage(DrawingGroup);
         }
 
         public void Draw()

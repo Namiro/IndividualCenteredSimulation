@@ -50,7 +50,8 @@ namespace IndividualCenteredSimulation.ViewModels
             };
 
 
-            GraphicHelperGrid = new GraphicHelperGrid(MultiAgentSystem.Grid, SurfaceGrid);
+            GraphicHelperGrid = new GraphicHelperGrid(MultiAgentSystem.Grid);
+            SurfaceGrid = GraphicHelperGrid.DrawingImage;
         }
 
         #endregion
