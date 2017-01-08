@@ -1,5 +1,4 @@
 ﻿using IndividualCenteredSimulation.Constants;
-using IndividualCenteredSimulation.Helpers;
 using System;
 using System.Configuration;
 using System.Windows;
@@ -84,6 +83,11 @@ namespace IndividualCenteredSimulation
         /// </summary>
         public static int AgentsNumber { get; set; } = Constants.Constants.DEFAULT_AGENTS_NUMBER;
 
+        /// <summary>
+        /// Trace or not the app performance.
+        /// </summary>
+        public static bool IsTracedPerformance { get; set; } = Constants.Constants.DEFAULT_IS_TRACED_PERFORMANCE;
+
 
         #endregion
 
@@ -112,22 +116,19 @@ namespace IndividualCenteredSimulation
                 IsDisplayGrid = true;
             else if (ConfigurationManager.AppSettings[Constants.Constants.APP_CONFIG_KEY_IS_DISPLAY_GRID] == "False")
                 IsDisplayGrid = false;
-            else
-            {
-                IsDisplayGrid = Constants.Constants.DEFAULT_IS_DISPLAY_GRID;
-                Logger.WriteLog(Logger.CONSOLE, "The IsDisplayGrid value is unknown. Default value will be used", LogLevelL4N.WARN);
-            }
 
             // IsTraced
             if (ConfigurationManager.AppSettings[Constants.Constants.APP_CONFIG_KEY_IS_TRACED] == "True")
                 IsTraced = true;
             else if (ConfigurationManager.AppSettings[Constants.Constants.APP_CONFIG_KEY_IS_TRACED] == "False")
                 IsTraced = false;
-            else
-            {
-                IsTraced = Constants.Constants.DEFAULT_IS_TRACED;
-                Logger.WriteLog(Logger.CONSOLE, "The IsTraced value is unknown. Default value will be used", LogLevelL4N.WARN);
-            }
+
+            // IsTraced
+            if (ConfigurationManager.AppSettings[Constants.Constants.APP_CONFIG_KEY_IS_TRACED_PERFORMANCE] == "True")
+                IsTraced = true;
+            else if (ConfigurationManager.AppSettings[Constants.Constants.APP_CONFIG_KEY_IS_TRACED_PERFORMANCE] == "False")
+                IsTraced = false;
+
 
             // SchedulingStrategy
             if (ConfigurationManager.AppSettings[Constants.Constants.APP_CONFIG_KEY_SCHEDULING_STRATEGY] == SchedulingStrategyEnum.Fair.ToString())
@@ -136,11 +137,6 @@ namespace IndividualCenteredSimulation
                 SchedulingStrategy = SchedulingStrategyEnum.Sequential;
             else if (ConfigurationManager.AppSettings[Constants.Constants.APP_CONFIG_KEY_SCHEDULING_STRATEGY] == SchedulingStrategyEnum.Random.ToString())
                 SchedulingStrategy = SchedulingStrategyEnum.Random;
-            else
-            {
-                SchedulingStrategy = Constants.Constants.DEFAULT_SCHEDULING_STRATEGY;
-                Logger.WriteLog(Logger.CONSOLE, "The SchedulingStrategy value is unknown. Default value will be used", LogLevelL4N.WARN);
-            }
         }
 
 

@@ -8,7 +8,7 @@ using System.Timers;
 
 namespace IndividualCenteredSimulation.MAS
 {
-    internal class MultiAgentSystem : Service
+    public class MultiAgentSystem : Service
     {
         #region Properties
 
@@ -47,7 +47,7 @@ namespace IndividualCenteredSimulation.MAS
             }
 
             // Initialize the timers
-            TimerTick.Interval = 500;
+            TimerTick.Interval = App.DelayMilliseconde;
             TimerTick.Elapsed += Run;
             TimerTick.Enabled = true;
         }
@@ -75,7 +75,10 @@ namespace IndividualCenteredSimulation.MAS
                     Environment.Exit(0);
                     break;
             }
-            Logger.WriteLog("Calcul time : " + DateTime.Now.Subtract(App.StartExec).Milliseconds);
+
+            if (App.IsTracedPerformance)
+                Logger.WriteLog("Calcul time : " + DateTime.Now.Subtract(App.StartExec).Milliseconds);
+
             RaisePropertyChanged(nameof(MultiAgentSystem.Grid));
         }
 

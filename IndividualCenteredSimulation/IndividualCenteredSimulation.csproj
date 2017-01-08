@@ -52,6 +52,7 @@
     <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -67,6 +68,14 @@
     <Reference Include="WriteableBitmapEx.Wpf, Version=0.0.0.0, Culture=neutral, PublicKeyToken=50375ca6144f1c69, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\DLLs\WriteableBitmapEx.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="Xemio.GameLibrary, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Xemio-GameLibrary.0.8.50\lib\net45\Xemio.GameLibrary.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xemio.GameLibrary.Rendering.GdiPlus, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Xemio-GameLibrary-GDI-Renderer.2.9\lib\net45\Xemio.GameLibrary.Rendering.GdiPlus.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -93,6 +102,7 @@
     <Compile Include="Helpers\Empty.cs" />
     <Compile Include="Helpers\GraphicHelper.cs" />
     <Compile Include="Helpers\Grid.cs" />
+    <Compile Include="Helpers\GraphicHelperGrid.cs" />
     <Compile Include="Helpers\Helper.cs" />
     <Compile Include="Helpers\Logger.cs" />
     <Compile Include="Helpers\Service.cs" />
@@ -123,6 +133,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="Log4NET.config" />
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
