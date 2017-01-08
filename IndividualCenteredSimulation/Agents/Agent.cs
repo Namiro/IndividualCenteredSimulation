@@ -77,10 +77,10 @@ namespace IndividualCenteredSimulation.Agents
         {
             Neighborhood = new Dictionary<DirectionEnum, object>();
 
-            Neighborhood.Add(DirectionEnum.Right, Grid.Get(Coordinate.X, Coordinate.Y + 1));
-            Neighborhood.Add(DirectionEnum.Left, Grid.Get(Coordinate.X, Coordinate.Y - 1));
-            Neighborhood.Add(DirectionEnum.Bottom, Grid.Get(Coordinate.X + 1, Coordinate.Y));
-            Neighborhood.Add(DirectionEnum.Top, Grid.Get(Coordinate.X - 1, Coordinate.Y));
+            Neighborhood.Add(DirectionEnum.Bottom, Grid.Get(Coordinate.X, Coordinate.Y + 1));
+            Neighborhood.Add(DirectionEnum.Top, Grid.Get(Coordinate.X, Coordinate.Y - 1));
+            Neighborhood.Add(DirectionEnum.Right, Grid.Get(Coordinate.X + 1, Coordinate.Y));
+            Neighborhood.Add(DirectionEnum.Left, Grid.Get(Coordinate.X - 1, Coordinate.Y));
             Neighborhood.Add(DirectionEnum.TopRight, Grid.Get(Coordinate.X - 1, Coordinate.Y + 1));
             Neighborhood.Add(DirectionEnum.BottomLeft, Grid.Get(Coordinate.X + 1, Coordinate.Y - 1));
             Neighborhood.Add(DirectionEnum.TopLeft, Grid.Get(Coordinate.X - 1, Coordinate.Y - 1));
@@ -123,28 +123,28 @@ namespace IndividualCenteredSimulation.Agents
                     Coordinate.X--;
                     Coordinate.Y--;
                     break;
-                case DirectionEnum.Left:
+                case DirectionEnum.Top:
                     Coordinate.Y--;
                     break;
                 case DirectionEnum.BottomLeft:
                     Coordinate.X++;
                     Coordinate.Y--;
                     break;
-                case DirectionEnum.Top:
+                case DirectionEnum.Left:
                     Coordinate.X--;
                     break;
                 case DirectionEnum.BottomRight:
                     Coordinate.X++;
                     Coordinate.Y++;
                     break;
-                case DirectionEnum.Right:
+                case DirectionEnum.Bottom:
                     Coordinate.Y++;
                     break;
                 case DirectionEnum.TopRight:
                     Coordinate.X--;
                     Coordinate.Y++;
                     break;
-                case DirectionEnum.Bottom:
+                case DirectionEnum.Right:
                     Coordinate.X++;
                     break;
                 case DirectionEnum.NoOne:
