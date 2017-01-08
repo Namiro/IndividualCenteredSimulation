@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using IndividualCenteredSimulation.ViewModels;
+using System.Windows;
 
 namespace IndividualCenteredSimulation.Views
 {
@@ -15,6 +16,8 @@ namespace IndividualCenteredSimulation.Views
             this.Width = App.CanvasSizeX;
 
             InitializeComponent();
+
+            MainWindowViewModel.Initialize(GraphicHelperGridSharpDX);
         }
     }
 }

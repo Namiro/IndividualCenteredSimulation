@@ -3,10 +3,11 @@ using System.Windows;
 using System.Windows.Media;
 
 namespace IndividualCenteredSimulation.Helpers
-{        /// <summary>
-         /// Service to Draw a Grid
-         /// </summary>
-    class GraphicHelperGrid
+{
+    /// <summary>
+    /// Service to Draw a Grid
+    /// </summary>
+    public class GraphicHelperGrid
     {
         public DrawingImage DrawingImage { get; set; }
         public bool IsDisplayGrid { get; set; } = false;
