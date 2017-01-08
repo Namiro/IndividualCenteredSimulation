@@ -16,8 +16,7 @@
     </Window.DataContext>
     <Grid>
         <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"  Margin="0,0,0,0">
-            <Image Source="{Binding SurfaceGrid}"/>
-            <!--<Image Source="{Binding SurfaceGridBitmap}"/>-->
+            <Image Source="{Binding SurfaceGridBitmap}"/>
         </ScrollViewer>
     </Grid>
 </Window>

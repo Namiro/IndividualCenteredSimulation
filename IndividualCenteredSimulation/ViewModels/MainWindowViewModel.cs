@@ -2,7 +2,7 @@
 using IndividualCenteredSimulation.MAS;
 using System;
 using System.Windows;
-using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 
 namespace IndividualCenteredSimulation.ViewModels
@@ -11,25 +11,22 @@ namespace IndividualCenteredSimulation.ViewModels
     {
         #region Properties
 
-
-        public DrawingImage SurfaceGrid { get; set; }
-        //private WriteableBitmap _SurfaceGridBitmap;
-        //public WriteableBitmap SurfaceGridBitmap
-        //{
-        //    get
-        //    {
-        //        return _SurfaceGridBitmap;
-        //    }
-        //    set
-        //    {
-        //        _SurfaceGridBitmap = value;
-        //        RaisePropertyChanged(nameof(MainWindowViewModel.SurfaceGridBitmap));
-        //    }
-        //}
+        private WriteableBitmap _SurfaceGridBitmap;
+        public WriteableBitmap SurfaceGridBitmap
+        {
+            get
+            {
+                return _SurfaceGridBitmap;
+            }
+            set
+            {
+                _SurfaceGridBitmap = value;
+                RaisePropertyChanged(nameof(MainWindowViewModel.SurfaceGridBitmap));
+            }
+        }
 
         public MultiAgentSystem MultiAgentSystem { get; set; }
-        private GraphicHelperGrid GraphicHelperGrid { get; set; }
-        //private GraphicHelperGridEx GraphicHelperGridEx { get; set; }
+        private GraphicHelperGridEx GraphicHelperGridEx { get; set; }
         private int DrawTimeNb { get; set; } = 0;
         private int DrawTimeSum { get; set; } = 0;
         private int DrawTimeBigestNb { get; set; } = 0;
@@ -57,15 +54,9 @@ namespace IndividualCenteredSimulation.ViewModels
                 }
             };
 
-
-            GraphicHelperGrid = new GraphicHelperGrid(MultiAgentSystem.Grid);
-            GraphicHelperGrid.IsDisplayAxeNum = App.IsDisplayAxe;
-            GraphicHelperGrid.IsDisplayGrid = App.IsDisplayGrid;
-            SurfaceGrid = GraphicHelperGrid.DrawingImage;
-
-            //GraphicHelperGridEx = new GraphicHelperGridEx(MultiAgentSystem.Grid);
-            //GraphicHelperGridEx.IsDisplayAxeNum = App.IsDisplayAxe;
-            //GraphicHelperGridEx.IsDisplayGrid = App.IsDisplayGrid;
+            GraphicHelperGridEx = new GraphicHelperGridEx(MultiAgentSystem.Grid);
+            GraphicHelperGridEx.IsDisplayAxeNum = App.IsDisplayAxe;
+            GraphicHelperGridEx.IsDisplayGrid = App.IsDisplayGrid;
         }
 
         #endregion
@@ -85,9 +76,8 @@ namespace IndividualCenteredSimulation.ViewModels
 
             Application.Current.Dispatcher.Invoke((Action)(() =>
             {
-                GraphicHelperGrid.Draw();
-                //GraphicHelperGridEx.Draw();
-                //SurfaceGridBitmap = GraphicHelperGridEx.WriteableBitmap;
+                GraphicHelperGridEx.Draw();
+                SurfaceGridBitmap = GraphicHelperGridEx.WriteableBitmap;
 
                 if (App.IsTracedPerformance)
                 {
