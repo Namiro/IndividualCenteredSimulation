@@ -56,6 +56,9 @@ namespace IndividualCenteredSimulation.Helpers
         /// <param name="list"></param>
         public static void Shuffle<T>(this IList<T> list, int seed = 0)
         {
+            if (seed == 0)
+                seed = Guid.NewGuid().GetHashCode();
+
             Random Random = new Random(seed);
             int n = list.Count;
             while (n > 1)

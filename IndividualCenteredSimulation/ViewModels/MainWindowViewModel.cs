@@ -59,12 +59,12 @@ namespace IndividualCenteredSimulation.ViewModels
 
 
             GraphicHelperGrid = new GraphicHelperGrid(MultiAgentSystem.Grid);
-            GraphicHelperGrid.IsDisplayAxeNum = true;
+            GraphicHelperGrid.IsDisplayAxeNum = App.IsDisplayAxe;
             GraphicHelperGrid.IsDisplayGrid = App.IsDisplayGrid;
             SurfaceGrid = GraphicHelperGrid.DrawingImage;
 
             //GraphicHelperGridEx = new GraphicHelperGridEx(MultiAgentSystem.Grid);
-            //GraphicHelperGridEx.IsDisplayAxeNum = true;
+            //GraphicHelperGridEx.IsDisplayAxeNum = App.IsDisplayAxe;
             //GraphicHelperGridEx.IsDisplayGrid = App.IsDisplayGrid;
         }
 
@@ -110,7 +110,7 @@ namespace IndividualCenteredSimulation.ViewModels
                 }
             }));
         }
-        
+
         #endregion
     }
 }

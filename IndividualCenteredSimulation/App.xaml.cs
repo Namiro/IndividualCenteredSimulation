@@ -89,6 +89,10 @@ namespace IndividualCenteredSimulation
         /// </summary>
         public static bool IsTracedPerformance { get; set; } = Constants.Constants.DEFAULT_IS_TRACED_PERFORMANCE;
 
+        /// <summary>
+        /// Display or not the axe.
+        /// </summary>
+        public static bool IsDisplayAxe { get; set; } = Constants.Constants.DEFAULT_IS_DISPLAY_AXE;
 
         #endregion
 
@@ -135,6 +139,12 @@ namespace IndividualCenteredSimulation
                 IsTracedPerformance = true;
             else if (ConfigurationManager.AppSettings[Constants.Constants.APP_CONFIG_KEY_IS_TRACED_PERFORMANCE] == "False")
                 IsTracedPerformance = false;
+
+            // IsDisplayAxe
+            if (ConfigurationManager.AppSettings[Constants.Constants.APP_CONFIG_KEY_IS_DISPLAY_AXE] == "True")
+                IsDisplayAxe = true;
+            else if (ConfigurationManager.AppSettings[Constants.Constants.APP_CONFIG_KEY_IS_DISPLAY_AXE] == "False")
+                IsDisplayAxe = false;
 
             // SchedulingStrategy
             if (ConfigurationManager.AppSettings[Constants.Constants.APP_CONFIG_KEY_SCHEDULING_STRATEGY] == SchedulingStrategyEnum.Fair.ToString())
