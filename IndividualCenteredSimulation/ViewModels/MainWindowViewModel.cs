@@ -110,7 +110,7 @@ namespace IndividualCenteredSimulation.ViewModels
                 }
             }));
         }
-
+        
         #endregion
     }
 }
