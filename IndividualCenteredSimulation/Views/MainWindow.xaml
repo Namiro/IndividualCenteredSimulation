@@ -5,7 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IndividualCenteredSimulation"
         mc:Ignorable="d"
+        xmlns:helpers="clr-namespace:IndividualCenteredSimulation.Helpers"
         xmlns:viewModels="clr-namespace:IndividualCenteredSimulation.ViewModels"
+        xmlns:hx="http://helix-toolkit.org/wpf/SharpDX"
         WindowStyle="SingleBorderWindow"
         ResizeMode="CanResizeWithGrip"
         WindowStartupLocation="CenterScreen"
@@ -16,8 +18,7 @@
     </Window.DataContext>
     <Grid>
         <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"  Margin="0,0,0,0">
-            <Image Source="{Binding SurfaceGrid}"/>
-            <!--<Image Source="{Binding SurfaceGridBitmap}"/>-->
+            <helpers:GraphicHelperGridSharpDX x:Name="GraphicHelperGridSharpDX"/>
         </ScrollViewer>
     </Grid>
 </Window>

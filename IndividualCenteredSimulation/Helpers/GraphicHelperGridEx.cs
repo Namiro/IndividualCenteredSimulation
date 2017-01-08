@@ -2,10 +2,11 @@
 using System.Windows.Media.Imaging;
 
 namespace IndividualCenteredSimulation.Helpers
-{        /// <summary>
-         /// Service to Draw a Grid
-         /// </summary>
-    class GraphicHelperGridEx
+{
+    /// <summary>
+    /// Service to Draw a Grid
+    /// </summary>
+    public class GraphicHelperGridEx
     {
         #region Properties
 
