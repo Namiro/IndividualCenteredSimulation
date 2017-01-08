@@ -50,7 +50,7 @@ namespace IndividualCenteredSimulation.Agents
         /// </summary>
         public void Decide()
         {
-            Random random = new Random();
+            Random random = new Random(App.Seed);
 
             CheckArround();
 
@@ -69,6 +69,8 @@ namespace IndividualCenteredSimulation.Agents
                     ActionNothing();
                     break;
             }
+
+            App.Trace(this.ToString());
         }
 
         private Dictionary<DirectionEnum, object> CheckArround()
@@ -159,6 +161,15 @@ namespace IndividualCenteredSimulation.Agents
         private void ActionNothing()
         {
 
+        }
+
+        /// <summary>
+        /// This ToString is do simply to cast the object in a string formated in Json
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return JsonConvert.SerializeObject(this);
         }
 
         #endregion

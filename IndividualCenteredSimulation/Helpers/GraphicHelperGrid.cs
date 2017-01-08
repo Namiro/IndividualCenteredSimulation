@@ -1,5 +1,4 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Windows;
 using System.Windows.Media;
 
@@ -10,6 +9,8 @@ namespace IndividualCenteredSimulation.Helpers
     class GraphicHelperGrid
     {
         public DrawingImage DrawingImage { get; set; }
+        public bool IsDisplayGrid { get; set; } = false;
+        public bool IsDisplayAxeNum { get; set; } = false;
 
         private int GridStartX { get; set; }
         private int GridStartY { get; set; }
@@ -17,20 +18,27 @@ namespace IndividualCenteredSimulation.Helpers
         private DrawingContext DrawingContext { get; set; }
         private Grid Grid { get; set; }
 
+        private Brush BlackBrush { get; set; } = Brushes.Black;
+
         public GraphicHelperGrid(Grid grid)
         {
             Grid = grid;
 
             DrawingGroup = new DrawingGroup();
             DrawingImage = new DrawingImage(DrawingGroup);
+            RenderOptions.SetBitmapScalingMode(DrawingImage, BitmapScalingMode.LowQuality);
+            RenderOptions.SetEdgeMode­(DrawingImage, EdgeMode.Aliased);
+
+            BlackBrush.Freeze();
         }
 
         public void Draw()
         {
-            App.StartExec = DateTime.Now;
             DrawingContext = DrawingGroup.Open();
+            if (IsDisplayAxeNum)
+                DrawNumCell();
 
-            if (App.IsDisplayGrid)
+            if (IsDisplayGrid)
                 DrawGrid();
 
             for (int i = 0; i < Grid.XSize; i++)
@@ -41,14 +49,12 @@ namespace IndividualCenteredSimulation.Helpers
                 }
             }
             DrawingContext.Close();
-
-            if (App.IsTracedPerformance)
-                Logger.WriteLog("Draw time : " + DateTime.Now.Subtract(App.StartExec).Milliseconds);
         }
 
         private void DrawGrid()
         {
-            DrawNumCell();
+            Pen pen = new Pen(BlackBrush, 1);
+            pen.Freeze();
 
             int x = GridStartX;
             int y = GridStartY;
@@ -57,10 +63,8 @@ namespace IndividualCenteredSimulation.Helpers
                 for (int j = 0; j < Grid.YSize; j++)
                 {
                     RectangleGeometry rectangleGeometry = new RectangleGeometry(new Rect(x, y, App.BoxSize, App.BoxSize));
-                    Brush brush = Brushes.Black;
-                    brush.Freeze();
                     rectangleGeometry.Freeze();
-                    DrawingContext.DrawDrawing(new GeometryDrawing(null, new Pen(brush, 1), rectangleGeometry));
+                    DrawingContext.DrawDrawing(new GeometryDrawing(null, pen, rectangleGeometry));
                     y += App.BoxSize;
                 }
                 x += App.BoxSize;
@@ -120,12 +124,10 @@ namespace IndividualCenteredSimulation.Helpers
 
         private void DrawText(Coordinate coordinate, string text)
         {
-            Brush brush = Brushes.Black;
-            brush.Freeze();
-            FormattedText formattedText = new FormattedText(text, CultureInfo.CurrentCulture, FlowDirection.LeftToRight, new Typeface("Tahoma"), 16, brush);
+            FormattedText formattedText = new FormattedText(text, CultureInfo.CurrentCulture, FlowDirection.LeftToRight, new Typeface("Tahoma"), 16, BlackBrush);
             Geometry geometry = formattedText.BuildGeometry(new Point(coordinate.X, coordinate.Y));
             geometry.Freeze();
-            DrawingContext.DrawDrawing(new GeometryDrawing(brush, null, geometry));
+            DrawingContext.DrawDrawing(new GeometryDrawing(BlackBrush, null, geometry));
         }
     }
 }

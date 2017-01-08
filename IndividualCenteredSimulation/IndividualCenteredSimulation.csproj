@@ -101,6 +101,7 @@
     <Compile Include="Helpers\Coordinate.cs" />
     <Compile Include="Helpers\Empty.cs" />
     <Compile Include="Helpers\GraphicHelper.cs" />
+    <Compile Include="Helpers\GraphicHelperGridEx.cs" />
     <Compile Include="Helpers\Grid.cs" />
     <Compile Include="Helpers\GraphicHelperGrid.cs" />
     <Compile Include="Helpers\Helper.cs" />

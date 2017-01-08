@@ -11,22 +11,30 @@ namespace IndividualCenteredSimulation.ViewModels
     {
         #region Properties
 
-        private DrawingImage _SurfaceGrid;
-        public DrawingImage SurfaceGrid
-        {
-            get
-            {
-                return _SurfaceGrid;
-            }
-            set
-            {
-                _SurfaceGrid = value;
-                RaisePropertyChanged(nameof(MainWindowViewModel.SurfaceGrid));
-            }
-        }
+
+        public DrawingImage SurfaceGrid { get; set; }
+        //private WriteableBitmap _SurfaceGridBitmap;
+        //public WriteableBitmap SurfaceGridBitmap
+        //{
+        //    get
+        //    {
+        //        return _SurfaceGridBitmap;
+        //    }
+        //    set
+        //    {
+        //        _SurfaceGridBitmap = value;
+        //        RaisePropertyChanged(nameof(MainWindowViewModel.SurfaceGridBitmap));
+        //    }
+        //}
 
         public MultiAgentSystem MultiAgentSystem { get; set; }
         private GraphicHelperGrid GraphicHelperGrid { get; set; }
+        //private GraphicHelperGridEx GraphicHelperGridEx { get; set; }
+        private int DrawTimeNb { get; set; } = 0;
+        private int DrawTimeSum { get; set; } = 0;
+        private int DrawTimeBigestNb { get; set; } = 0;
+        private int DrawBiggestTimeSum { get; set; } = 0;
+        private int DrawTimeBiggest { get; set; } = 0;
 
         #endregion
 
@@ -51,7 +59,13 @@ namespace IndividualCenteredSimulation.ViewModels
 
 
             GraphicHelperGrid = new GraphicHelperGrid(MultiAgentSystem.Grid);
+            GraphicHelperGrid.IsDisplayAxeNum = true;
+            GraphicHelperGrid.IsDisplayGrid = App.IsDisplayGrid;
             SurfaceGrid = GraphicHelperGrid.DrawingImage;
+
+            //GraphicHelperGridEx = new GraphicHelperGridEx(MultiAgentSystem.Grid);
+            //GraphicHelperGridEx.IsDisplayAxeNum = true;
+            //GraphicHelperGridEx.IsDisplayGrid = App.IsDisplayGrid;
         }
 
         #endregion
@@ -64,12 +78,36 @@ namespace IndividualCenteredSimulation.ViewModels
         /// </summary>
         public void RefereshView()
         {
+            App.StartExec = DateTime.Now;
+
             // This line allow to clear the event queue managed by the .NET Framework.
             Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new Action(delegate { }));
 
             Application.Current.Dispatcher.Invoke((Action)(() =>
             {
-                this.GraphicHelperGrid.Draw();
+                GraphicHelperGrid.Draw();
+                //GraphicHelperGridEx.Draw();
+                //SurfaceGridBitmap = GraphicHelperGridEx.WriteableBitmap;
+
+                if (App.IsTracedPerformance)
+                {
+                    DrawTimeNb++;
+                    int drawTime = DateTime.Now.Subtract(App.StartExec).Milliseconds;
+                    DrawTimeSum += drawTime;
+                    if (DrawTimeBiggest < drawTime)
+                        DrawTimeBiggest = drawTime;
+
+                    int averageTime = DrawTimeSum / DrawTimeNb;
+
+                    if (drawTime <= DrawTimeBiggest && drawTime > averageTime)
+                    {
+                        DrawTimeBigestNb++;
+                        DrawBiggestTimeSum += drawTime;
+                    }
+
+                    int averageBiggestTime = DrawBiggestTimeSum / DrawTimeBigestNb;
+                    Logger.WriteLog("Draw time: " + drawTime + "\tDraw time average : " + averageTime + "\tSlowest : " + DrawTimeBiggest + "\tAverage biggest :" + averageBiggestTime);
+                }
             }));
         }
 

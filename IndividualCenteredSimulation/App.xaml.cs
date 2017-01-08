@@ -1,4 +1,5 @@
 ﻿using IndividualCenteredSimulation.Constants;
+using IndividualCenteredSimulation.Helpers;
 using System;
 using System.Configuration;
 using System.Windows;
@@ -93,7 +94,13 @@ namespace IndividualCenteredSimulation
 
         #region Methodes
 
-
+        public static void Trace(string text)
+        {
+            if (App.IsTraced)
+            {
+                Logger.WriteLog(text, LogLevelL4N.INFO);
+            }
+        }
 
         /// <summary>
         /// Initialize settings.
@@ -107,9 +114,9 @@ namespace IndividualCenteredSimulation
             BoxSize = int.Parse(ConfigurationManager.AppSettings[Constants.Constants.APP_CONFIG_KEY_BOX_SIZE]);
             DelayMilliseconde = int.Parse(ConfigurationManager.AppSettings[Constants.Constants.APP_CONFIG_KEY_DELAY_MILLISECONDE]);
             TicksNumber = int.Parse(ConfigurationManager.AppSettings[Constants.Constants.APP_CONFIG_KEY_TICKS_NUMBER]);
-            Seed = int.Parse(ConfigurationManager.AppSettings[Constants.Constants.APP_CONFIG_KEY_SEED]);
             RateRefresh = int.Parse(ConfigurationManager.AppSettings[Constants.Constants.APP_CONFIG_KEY_RATE_REFRESH]);
             AgentsNumber = int.Parse(ConfigurationManager.AppSettings[Constants.Constants.APP_CONFIG_KEY_AGENTS_NUMBER]);
+            Seed = int.Parse(ConfigurationManager.AppSettings[Constants.Constants.APP_CONFIG_KEY_SEED]);
 
             // IsDisplayGrid
             if (ConfigurationManager.AppSettings[Constants.Constants.APP_CONFIG_KEY_IS_DISPLAY_GRID] == "True")
@@ -123,12 +130,11 @@ namespace IndividualCenteredSimulation
             else if (ConfigurationManager.AppSettings[Constants.Constants.APP_CONFIG_KEY_IS_TRACED] == "False")
                 IsTraced = false;
 
-            // IsTraced
+            // IsTracedPerformance
             if (ConfigurationManager.AppSettings[Constants.Constants.APP_CONFIG_KEY_IS_TRACED_PERFORMANCE] == "True")
-                IsTraced = true;
+                IsTracedPerformance = true;
             else if (ConfigurationManager.AppSettings[Constants.Constants.APP_CONFIG_KEY_IS_TRACED_PERFORMANCE] == "False")
-                IsTraced = false;
-
+                IsTracedPerformance = false;
 
             // SchedulingStrategy
             if (ConfigurationManager.AppSettings[Constants.Constants.APP_CONFIG_KEY_SCHEDULING_STRATEGY] == SchedulingStrategyEnum.Fair.ToString())
@@ -137,6 +143,10 @@ namespace IndividualCenteredSimulation
                 SchedulingStrategy = SchedulingStrategyEnum.Sequential;
             else if (ConfigurationManager.AppSettings[Constants.Constants.APP_CONFIG_KEY_SCHEDULING_STRATEGY] == SchedulingStrategyEnum.Random.ToString())
                 SchedulingStrategy = SchedulingStrategyEnum.Random;
+
+            // Seed
+            if (Seed == 0)
+                Seed = Guid.NewGuid().GetHashCode();
         }
 
 
