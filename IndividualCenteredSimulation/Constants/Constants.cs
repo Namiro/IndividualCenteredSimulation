@@ -26,6 +26,7 @@
         public const int DEFAULT_AGENTS_NUMBER = 100;
         public const bool DEFAULT_IS_TRACED_PERFORMANCE = false;
         public const bool DEFAULT_IS_DISPLAY_AXE = false;
+        public const bool DEFAULT_IS_TORIC = false;
 
 
         // Keys of App.config
@@ -44,6 +45,7 @@
         public const string APP_CONFIG_KEY_AGENTS_NUMBER = "AgentsNumber";
         public const string APP_CONFIG_KEY_IS_TRACED_PERFORMANCE = "IsTracedPerformance";
         public const string APP_CONFIG_KEY_IS_DISPLAY_AXE = "IsDisplayAxe";
+        public const string APP_CONFIG_KEY_IS_TORIC = "IsToric";
 
 
         // Keys for the execution App Properties

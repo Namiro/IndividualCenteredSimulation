@@ -94,6 +94,11 @@ namespace IndividualCenteredSimulation
         /// </summary>
         public static bool IsDisplayAxe { get; set; } = Constants.Constants.DEFAULT_IS_DISPLAY_AXE;
 
+        /// <summary>
+        /// Display or not the axe.
+        /// </summary>
+        public static bool IsToric { get; set; } = Constants.Constants.DEFAULT_IS_TORIC;
+
         #endregion
 
         #region Methodes
@@ -145,6 +150,12 @@ namespace IndividualCenteredSimulation
                 IsDisplayAxe = true;
             else if (ConfigurationManager.AppSettings[Constants.Constants.APP_CONFIG_KEY_IS_DISPLAY_AXE] == "False")
                 IsDisplayAxe = false;
+
+            // IsToric
+            if (ConfigurationManager.AppSettings[Constants.Constants.APP_CONFIG_KEY_IS_TORIC] == "True")
+                IsToric = true;
+            else if (ConfigurationManager.AppSettings[Constants.Constants.APP_CONFIG_KEY_IS_TORIC] == "False")
+                IsToric = false;
 
             // SchedulingStrategy
             if (ConfigurationManager.AppSettings[Constants.Constants.APP_CONFIG_KEY_SCHEDULING_STRATEGY] == SchedulingStrategyEnum.Fair.ToString())

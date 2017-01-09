@@ -78,24 +78,22 @@ namespace IndividualCenteredSimulation.Agents
             Neighborhood = new Dictionary<DirectionEnum, object>();
             Coordinate NewCoordinate = null;
 
-            bool Torique = true;
-
-            NewCoordinate = RectifyCoordonate(Torique, Coordinate.X, Coordinate.Y + 1);
+            NewCoordinate = RectifyCoordonate(App.IsToric, Coordinate.X, Coordinate.Y + 1);
             Neighborhood.Add(DirectionEnum.Bottom, Grid.Get(NewCoordinate.X, NewCoordinate.Y));
-            NewCoordinate = RectifyCoordonate(Torique, Coordinate.X, Coordinate.Y - 1);
+            NewCoordinate = RectifyCoordonate(App.IsToric, Coordinate.X, Coordinate.Y - 1);
             Neighborhood.Add(DirectionEnum.Top, Grid.Get(NewCoordinate.X, NewCoordinate.Y));
-            NewCoordinate = RectifyCoordonate(Torique, Coordinate.X + 1, Coordinate.Y);
+            NewCoordinate = RectifyCoordonate(App.IsToric, Coordinate.X + 1, Coordinate.Y);
             Neighborhood.Add(DirectionEnum.Right, Grid.Get(NewCoordinate.X, NewCoordinate.Y));
-            NewCoordinate = RectifyCoordonate(Torique, Coordinate.X - 1, Coordinate.Y);
+            NewCoordinate = RectifyCoordonate(App.IsToric, Coordinate.X - 1, Coordinate.Y);
             Neighborhood.Add(DirectionEnum.Left, Grid.Get(NewCoordinate.X, NewCoordinate.Y));
-            NewCoordinate = RectifyCoordonate(Torique, Coordinate.X - 1, Coordinate.Y + 1);
+            NewCoordinate = RectifyCoordonate(App.IsToric, Coordinate.X - 1, Coordinate.Y + 1);
             Neighborhood.Add(DirectionEnum.TopRight, Grid.Get(NewCoordinate.X, NewCoordinate.Y));
-            NewCoordinate = RectifyCoordonate(Torique, Coordinate.X + 1, Coordinate.Y - 1);
+            NewCoordinate = RectifyCoordonate(App.IsToric, Coordinate.X + 1, Coordinate.Y - 1);
             Neighborhood.Add(DirectionEnum.BottomLeft, Grid.Get(NewCoordinate.X, NewCoordinate.Y));
-            NewCoordinate = RectifyCoordonate(Torique, Coordinate.X - 1, Coordinate.Y - 1);
+            NewCoordinate = RectifyCoordonate(App.IsToric, Coordinate.X - 1, Coordinate.Y - 1);
             Neighborhood.Add(DirectionEnum.TopLeft, Grid.Get(NewCoordinate.X, NewCoordinate.Y));
-            NewCoordinate = RectifyCoordonate(Torique, Coordinate.X + 1, Coordinate.Y + 1);
-            Neighborhood.Add(DirectionEnum.BottomRight, Grid.Get(NewCoordinate.X, NewCoordinate.Y)); 
+            NewCoordinate = RectifyCoordonate(App.IsToric, Coordinate.X + 1, Coordinate.Y + 1);
+            Neighborhood.Add(DirectionEnum.BottomRight, Grid.Get(NewCoordinate.X, NewCoordinate.Y));
 
             return Neighborhood;
         }
@@ -166,8 +164,7 @@ namespace IndividualCenteredSimulation.Agents
             }
 
             //Rectify Coordonate
-            bool Torique = true;
-            Coordinate = RectifyCoordonate(Torique, Coordinate.X, Coordinate.Y);
+            Coordinate = RectifyCoordonate(App.IsToric, Coordinate.X, Coordinate.Y);
 
             // Occupy the new position
             Grid.Occupy(Coordinate, this);
@@ -182,7 +179,7 @@ namespace IndividualCenteredSimulation.Agents
         {
             Coordinate coord = new Coordinate(X, Y);
             if (!Torique) return coord;
-            
+
 
             if (X <= -1)
             {
@@ -204,11 +201,11 @@ namespace IndividualCenteredSimulation.Agents
             return coord;
         }
 
-    /// <summary>
-    /// This ToString is do simply to cast the object in a string formated in Json
-    /// </summary>
-    /// <returns></returns>
-    public override string ToString()
+        /// <summary>
+        /// This ToString is do simply to cast the object in a string formated in Json
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
         {
             return JsonConvert.SerializeObject(this);
         }
