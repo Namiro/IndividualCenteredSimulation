@@ -87,7 +87,7 @@ namespace IndividualCenteredSimulation.Helpers
 
             for (int i = 0; i < Grid.YSize; i++)
             {
-                DrawText(new Coordinate(0, y + App.BoxSize / 4), i + "");
+                DrawText(new Coordinate(0, y - App.BoxSize / 4), i + "");
                 y += App.BoxSize;
             }
         }
@@ -97,11 +97,14 @@ namespace IndividualCenteredSimulation.Helpers
             int x = GridStartX + coordinate.X * App.BoxSize;
             int y = GridStartY + coordinate.Y * App.BoxSize;
 
-            EllipseGeometry ellipseGeometry = new EllipseGeometry(new Rect(x + 2, y + 2, App.BoxSize - 4, App.BoxSize - 4));
+            //EllipseGeometry formGeometry = new EllipseGeometry(new Rect(x + 1, y + 1, App.BoxSize - 2, App.BoxSize - 2));
+            EllipseGeometry formGeometry = new EllipseGeometry(new Rect(x, y, App.BoxSize, App.BoxSize));
+            //RectangleGeometry formGeometry = new RectangleGeometry(new Rect(x + 1, y + 1, App.BoxSize - 2, App.BoxSize - 2));
+            //RectangleGeometry formGeometry = new RectangleGeometry(new Rect(x, y, App.BoxSize, App.BoxSize));
             Brush brush = new SolidColorBrush(color);
             brush.Freeze();
-            ellipseGeometry.Freeze();
-            DrawingContext.DrawDrawing(new GeometryDrawing(brush, null, ellipseGeometry));
+            formGeometry.Freeze();
+            DrawingContext.DrawDrawing(new GeometryDrawing(brush, null, formGeometry));
         }
 
         private void FillGridCell(Coordinate coordinate, ImageSource imageSource)

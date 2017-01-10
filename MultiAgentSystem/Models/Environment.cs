@@ -1,18 +1,16 @@
-﻿using Helpers.Services;
-using IndividualCenteredSimulation.Agents;
-using IndividualCenteredSimulation.Helpers;
+﻿using MultiAgentSystem.Helpers;
+using MultiAgentSystem.Models.Agents;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Timers;
 
-namespace IndividualCenteredSimulation.MAS
+namespace MultiAgentSystem.Environments
 {
-    public class MultiAgentSystem : Service
+    internal class Environment : Helpers.Services.Service
     {
         #region Properties
 
-        public Grid Grid { get; set; }
+        public static Grid Grid { get; set; }
 
         private List<Agent> Agents { get; set; }
         private List<int> GridCellsNumber { get; set; }
@@ -23,7 +21,7 @@ namespace IndividualCenteredSimulation.MAS
 
         #region Construtors
 
-        public MultiAgentSystem()
+        public Environment()
         {
             Grid = new Grid(App.GridSizeX, App.GridSizeY);
 
@@ -41,7 +39,7 @@ namespace IndividualCenteredSimulation.MAS
                 GridCellsNumber.Remove(cellNumber);
 
                 Coordinate coordinate = Grid.CellNumberToXYCoordinate(cellNumber);
-                Grid.Occupy(coordinate, new Agent(coordinate, GraphicHelper.CastColor(Color.FromArgb(255, App.Random.Next(200), App.Random.Next(200), App.Random.Next(200))), Grid, cellNumber));
+                Grid.Occupy(coordinate, new Agent(coordinate, new SharpDX.Color(App.Random.Next(200), App.Random.Next(200), App.Random.Next(200)), Grid, cellNumber));
                 Agents.Add((Agent)Grid.Get(coordinate));
             }
 
@@ -72,7 +70,7 @@ namespace IndividualCenteredSimulation.MAS
                     break;
                 default:
                     Logger.WriteLog("Unknown SchedulingStrategy : " + App.SchedulingStrategy.ToString(), LogLevelL4N.FATAL);
-                    Environment.Exit(0);
+                    System.Environment.Exit(0);
                     break;
             }
 
@@ -83,7 +81,7 @@ namespace IndividualCenteredSimulation.MAS
                 TimerTick.Enabled = false;
 
             if (!Convert.ToBoolean(TickNb % App.RateRefresh))
-                RaisePropertyChanged(nameof(MultiAgentSystem.Grid));
+                RaisePropertyChanged(nameof(Environment.Grid));
 
             App.Trace("Tick");
         }

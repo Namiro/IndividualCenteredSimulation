@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace IndividualCenteredSimulation.Helpers
+namespace MultiAgentSystem.Helpers
 {
     public static class Helper
     {

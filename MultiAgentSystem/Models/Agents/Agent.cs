@@ -1,25 +1,27 @@
-﻿using IndividualCenteredSimulation.Constants;
-using IndividualCenteredSimulation.Helpers;
+﻿using MultiAgentSystem.Constants;
+using MultiAgentSystem.Helpers;
+using MultiAgentSystem.Helpers.Graphics.Grids;
 using Newtonsoft.Json;
+using SharpDX;
+using SharpDX.Direct2D1;
 using System;
 using System.Collections.Generic;
-using System.Windows.Media;
 
-namespace IndividualCenteredSimulation.Agents
+namespace MultiAgentSystem.Models.Agents
 {
-    internal class Agent : IDrawable
+    internal class Agent : ICell
     {
         #region Properties
 
         public int Id { get; set; }
         public Coordinate Coordinate { get; set; }
         public int Movement { get; set; } = 1;
-        public Color Color { get; set; } = GraphicHelper.CastColor(System.Drawing.Color.Silver);
-        public System.Windows.Controls.Image Image { get; set; }
+        public Color Color { get; set; } = Color.Silver;
+        public Image Image { get; set; }
         public StateEnum State { get; set; } = StateEnum.Default;
 
         private Grid Grid { get; }
-        private static int ActionsNumber { get; } = 1;
+        private int ActionsNumber { get; } = 1;
         private Dictionary<DirectionEnum, object> Neighborhood { get; set; }
         private DirectionEnum CurrentDirection { get; set; }
         private Random Random { get; set; } = new Random();
@@ -54,7 +56,7 @@ namespace IndividualCenteredSimulation.Agents
         {
             CheckArround();
 
-            int actionChoice = App.Random.Next(ActionsNumber);
+            int actionChoice = 0;//App.Random.Next(ActionsNumber);
             switch (actionChoice)
             {
                 case 0:
@@ -100,7 +102,6 @@ namespace IndividualCenteredSimulation.Agents
 
         private DirectionEnum DecideDirection()
         {
-
             List<DirectionEnum> possibleDirections = new List<DirectionEnum>();
             foreach (var elem in Neighborhood)
             {
@@ -114,8 +115,9 @@ namespace IndividualCenteredSimulation.Agents
                 return CurrentDirection;
 
             // Mélange les possibilités.
+            Helper.Shuffle(possibleDirections, Random);
             if (possibleDirections.Count > 0)
-                return CurrentDirection = possibleDirections[Random.Next(possibleDirections.Count)];
+                return possibleDirections[0];
 
             return DirectionEnum.NoOne;
         }

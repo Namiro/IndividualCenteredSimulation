@@ -1,22 +1,23 @@
-﻿using IndividualCenteredSimulation.Constants;
-using IndividualCenteredSimulation.Helpers;
+﻿using MultiAgentSystem.Constants;
+using MultiAgentSystem.Helpers;
+using MultiAgentSystem.Helpers.Graphics;
+using MultiAgentSystem.Services;
 using System;
 using System.Configuration;
-using System.Windows;
+using System.Threading.Tasks;
 
-namespace IndividualCenteredSimulation
+namespace MultiAgentSystem
 {
-    /// <summary>
-    /// Logique d'interaction pour App.xaml
-    /// </summary>
-    public partial class App : Application
+    class App
     {
         #region Properties
+
+        #region Config Properties
 
         /// <summary>
         /// Calcul time execution
         /// </summary>
-        public static DateTime StartExec { get; set; }
+        public static System.DateTime StartExec { get; set; }
 
         /// <summary>
         /// The number of case in X.
@@ -99,11 +100,28 @@ namespace IndividualCenteredSimulation
         /// </summary>
         public static bool IsToric { get; set; } = Constants.Constants.DEFAULT_IS_TORIC;
 
-        public static Random Random { get; private set; }
+        #endregion
 
         #endregion
 
+        public static Random Random { get; private set; }
+        public static WindowGraphicHelper WindowGraphicHelper { get; private set; }
+        private static MASService MASService { get; set; }
+
         #region Methodes
+
+        public static void Main()
+        {
+            LoadSettings();
+
+            Task TaskMASService = Task.Run(() =>
+            {
+                MASService = new MASService();
+            });
+
+            WindowGraphicHelper = new WindowGraphicHelper();
+
+        }
 
         public static void Trace(string text)
         {
