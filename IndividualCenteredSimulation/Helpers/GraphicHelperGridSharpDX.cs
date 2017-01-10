@@ -19,6 +19,7 @@ namespace IndividualCenteredSimulation.Helpers
         private int GridStartX { get; set; }
         private int GridStartY { get; set; }
         private RenderTarget RenderTarget { get; set; }
+        private bool IsFirst { get; set; } = true;
 
         private Brush BlackBrush { get; set; }
         #endregion
@@ -37,16 +38,20 @@ namespace IndividualCenteredSimulation.Helpers
         public override void Render(RenderTarget target)
         {
             RenderTarget = target;
+            if (IsFirst)
+            {
+                BlackBrush = new SolidColorBrush(RenderTarget, ConvertColor(System.Windows.Media.Colors.Black));
 
-            target.Clear(ConvertColor(System.Windows.Media.Colors.White));
-            BlackBrush = new SolidColorBrush(RenderTarget, ConvertColor(System.Windows.Media.Colors.Black));
+                if (IsDisplayAxeNum)
+                    DrawNumCell();
 
-            if (IsDisplayAxeNum)
-                DrawNumCell();
+                if (IsDisplayGrid)
+                    DrawGrid();
 
-            if (IsDisplayGrid)
-                DrawGrid();
+                IsFirst = false;
+            }
 
+            RenderTarget.Clear(ConvertColor(System.Windows.Media.Colors.White));
             for (int i = 0; i < Grid.XSize; i++)
             {
                 for (int j = 0; j < Grid.YSize; j++)
@@ -56,7 +61,7 @@ namespace IndividualCenteredSimulation.Helpers
                 }
             }
 
-            RenderTarget.Flush();
+            //RenderTarget.Flush();
         }
 
         /// <summary>
@@ -65,7 +70,7 @@ namespace IndividualCenteredSimulation.Helpers
         /// </summary>
         public void Draw()
         {
-            Render(RenderTarget);
+            //Render(RenderTarget);
         }
 
         private void DrawGrid()
