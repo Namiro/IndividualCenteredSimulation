@@ -1,6 +1,5 @@
 ﻿using MultiAgentSystem.Environments;
-using MultiAgentSystem.Helpers;
-using MultiAgentSystem.Helpers.Graphics.Grids;
+using MultiAgentSystem.Helpers.Graphics;
 using MultiAgentSystem.Helpers.Services;
 
 namespace MultiAgentSystem.Services
@@ -48,8 +47,11 @@ namespace MultiAgentSystem.Services
         /// </summary>
         public void RefereshView()
         {
-            App.StartExec = System.DateTime.Now;
 
+            WindowGraphicHelper.GridGraphicHelper.Grid = Environment.Grid;
+
+            /*
+            App.StartExec = System.DateTime.Now;
 
             if (App.IsTracedPerformance)
             {
@@ -70,6 +72,7 @@ namespace MultiAgentSystem.Services
                 int averageBiggestTime = DrawBiggestTimeSum / DrawTimeBigestNb;
                 Logger.WriteLog("Draw time: " + drawTime + "\tDraw time average : " + averageTime + "\tSlowest : " + DrawTimeBiggest + "\tAverage biggest :" + averageBiggestTime);
             }
+            */
         }
 
         #endregion

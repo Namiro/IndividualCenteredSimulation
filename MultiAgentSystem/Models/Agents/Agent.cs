@@ -102,6 +102,7 @@ namespace MultiAgentSystem.Models.Agents
 
         private DirectionEnum DecideDirection()
         {
+
             List<DirectionEnum> possibleDirections = new List<DirectionEnum>();
             foreach (var elem in Neighborhood)
             {
@@ -115,9 +116,8 @@ namespace MultiAgentSystem.Models.Agents
                 return CurrentDirection;
 
             // Mélange les possibilités.
-            Helper.Shuffle(possibleDirections, Random);
             if (possibleDirections.Count > 0)
-                return possibleDirections[0];
+                return CurrentDirection = possibleDirections[Random.Next(possibleDirections.Count)];
 
             return DirectionEnum.NoOne;
         }

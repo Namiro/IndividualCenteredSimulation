@@ -1,5 +1,4 @@
-﻿using MultiAgentSystem.Environments;
-using MultiAgentSystem.Helpers.Graphics.Grids;
+﻿using MultiAgentSystem.Helpers.Graphics.Grids;
 using SharpDX;
 using SharpDX.Direct2D1;
 using SharpDX.Direct3D;
@@ -18,7 +17,8 @@ namespace MultiAgentSystem.Helpers.Graphics
         #region Properties
 
         public RenderTarget RenderTarget { get; set; }
-        private GridGraphicHelper GridGraphicHelper { get; set; }
+        public static GridGraphicHelper GridGraphicHelper { get; set; }
+        public static Form Form { get; set; }
 
         #endregion
 
@@ -26,20 +26,20 @@ namespace MultiAgentSystem.Helpers.Graphics
 
         public WindowGraphicHelper()
         {
-            GridGraphicHelper = new GridGraphicHelper(Environment.Grid);
+            GridGraphicHelper = new GridGraphicHelper();
             GridGraphicHelper.IsDisplayAxeNum = App.IsDisplayAxe;
             GridGraphicHelper.IsDisplayGrid = App.IsDisplayGrid;
 
 
             // Create render target window
-            var form = new RenderForm("MAS");
+            Form = new RenderForm("MAS");
 
             // Create swap chain description
             var swapChainDesc = new SwapChainDescription()
             {
                 BufferCount = 2,
                 Usage = Usage.RenderTargetOutput,
-                OutputHandle = form.Handle,
+                OutputHandle = Form.Handle,
                 IsWindowed = true,
                 ModeDescription = new ModeDescription(0, 0, new Rational(60, 1), Format.R8G8B8A8_UNorm),
                 SampleDescription = new SampleDescription(1, 0),
@@ -66,8 +66,8 @@ namespace MultiAgentSystem.Helpers.Graphics
                 // Create bitmap render target from DXGI surface
                 RenderTarget = new RenderTarget(factory, backBuffer, new RenderTargetProperties()
                 {
-                    DpiX = 0,
-                    DpiY = 0,
+                    DpiX = dpi.Height,
+                    DpiY = dpi.Width,
                     MinLevel = SharpDX.Direct2D1.FeatureLevel.Level_DEFAULT,
                     PixelFormat = new PixelFormat(Format.Unknown, SharpDX.Direct2D1.AlphaMode.Ignore),
                     Type = RenderTargetType.Default,
@@ -77,27 +77,27 @@ namespace MultiAgentSystem.Helpers.Graphics
 
             // Disable automatic ALT+Enter processing because it doesn't work properly with WinForms
             using (var factory = swapChain.GetParent<FactoryDXGI>())   // Factory or Factory1?
-                factory.MakeWindowAssociation(form.Handle, WindowAssociationFlags.IgnoreAltEnter);
+                factory.MakeWindowAssociation(Form.Handle, WindowAssociationFlags.IgnoreAltEnter);
 
             // Add event handler for ALT+Enter
-            form.KeyDown += (o, e) =>
+            Form.KeyDown += (o, e) =>
             {
                 if (e.Alt && e.KeyCode == Keys.Enter)
                     swapChain.IsFullScreen = !swapChain.IsFullScreen;
             };
 
             // Set window size
-            form.Size = new System.Drawing.Size(App.CanvasSizeX, App.CanvasSizeY);
+            Form.Size = new System.Drawing.Size(App.CanvasSizeX, App.CanvasSizeY);
 
             // Prevent window from being re-sized
-            form.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            //form.AutoSizeMode = AutoSizeMode.GrowAndShrink;
 
             // Rendering function
-            RenderLoop.Run(form, () =>
+            RenderLoop.Run(Form, () =>
             {
                 RenderTarget.BeginDraw();
                 RenderTarget.Transform = Matrix3x2.Identity;
-                RenderTarget.Clear(Color.White);
+
 
                 GridGraphicHelper.Draw(RenderTarget);
 

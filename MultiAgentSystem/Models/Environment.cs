@@ -10,7 +10,7 @@ namespace MultiAgentSystem.Environments
     {
         #region Properties
 
-        public static Grid Grid { get; set; }
+        public Grid Grid { get; set; }
 
         private List<Agent> Agents { get; set; }
         private List<int> GridCellsNumber { get; set; }

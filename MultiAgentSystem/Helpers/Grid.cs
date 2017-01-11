@@ -2,9 +2,13 @@
 {
     public class Grid
     {
-        public int XSize { get; }
-        public int YSize { get; }
-        private object[,] Grid2D { get; }
+        public int XSize { get; private set; }
+        public int YSize { get; private set; }
+        private object[,] Grid2D { get; set; }
+
+        public Grid()
+        {
+        }
 
         public Grid(int x, int y)
         {
@@ -52,6 +56,16 @@
         public void Free(Coordinate coordinate)
         {
             Grid2D[coordinate.X, coordinate.Y] = new Empty();
+        }
+
+        public Grid Clone()
+        {
+            Grid grid = new Grid();
+            grid.YSize = this.YSize;
+            grid.XSize = this.XSize;
+            grid.Grid2D = (object[,])this.Grid2D.Clone();
+
+            return grid;
         }
     }
 }

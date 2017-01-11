@@ -1,5 +1,6 @@
 ﻿using SharpDX;
 using SharpDX.Direct2D1;
+using SharpDX.DirectWrite;
 using SharpDX.Mathematics.Interop;
 
 namespace MultiAgentSystem.Helpers.Graphics.Grids
@@ -13,56 +14,57 @@ namespace MultiAgentSystem.Helpers.Graphics.Grids
 
         private int GridStartX { get; set; }
         private int GridStartY { get; set; }
-        private Grid Grid { get; set; }
+        public Grid Grid { get; set; }
         private RenderTarget RenderTarget { get; set; }
         private bool IsFirst { get; set; } = true;
 
         private SolidColorBrush BlackBrush { get; set; }
 
-        public GridGraphicHelper(Grid grid) : base()
+        public GridGraphicHelper() : base()
         {
-            Grid = grid;
         }
 
         public void Draw(RenderTarget renderTarget)
         {
-            if (IsFirst)
-            {
-                RenderTarget = renderTarget;
+            if (Grid == null)
+                return;
+            Grid = Grid.Clone();
+            RenderTarget = renderTarget;
+            RenderTarget.Clear(Color.White);
 
-                if (IsDisplayAxeNum)
-                    DrawNumCell();
+            BlackBrush = new SolidColorBrush(RenderTarget, Color.Black);
 
-                if (IsDisplayGrid)
-                    DrawGrid();
+            if (IsDisplayAxeNum)
+                DrawNumCell();
 
-                IsFirst = false;
-            }
+            if (IsDisplayGrid)
+                DrawGrid();
+
+
             for (int i = 0; i < Grid.XSize; i++)
             {
                 for (int j = 0; j < Grid.YSize; j++)
                 {
-                    ;// FillGridCell(new Coordinate(i, j), ((IDrawable)Grid.Get(i, j)).Color);
+                    FillGridCell(new Coordinate(i, j), ((ICell)Grid.Get(i, j)).Color);
                 }
             }
+
+            Grid = null;
         }
 
         private void DrawGrid()
         {
             int x = GridStartX;
             int y = GridStartY;
-            for (int i = 0; i < Grid.XSize; i++)
+            for (int i = 0; i <= Grid.XSize; i++)
             {
-                for (int j = 0; j < Grid.YSize; j++)
-                {
-                    RenderTarget.DrawRectangle(new RawRectangleF(x, y, App.BoxSize, App.BoxSize), new SolidColorBrush(RenderTarget, Color.Black));
-                    //RectangleGeometry rectangleGeometry = new RectangleGeometry(new Rect());
-                    //rectangleGeometry.Freeze();
-                    //DrawingContext.DrawDrawing(new GeometryDrawing(null, pen, rectangleGeometry));
-                    y += App.BoxSize;
-                }
+                RenderTarget.DrawLine(new RawVector2(x, 0), new RawVector2(x, WindowGraphicHelper.Form.Size.Height), BlackBrush);
                 x += App.BoxSize;
-                y = GridStartY;
+            }
+            for (int i = 0; i <= Grid.YSize; i++)
+            {
+                RenderTarget.DrawLine(new RawVector2(0, y), new RawVector2(WindowGraphicHelper.Form.Size.Width, y), BlackBrush);
+                y += App.BoxSize;
             }
         }
 
@@ -75,39 +77,41 @@ namespace MultiAgentSystem.Helpers.Graphics.Grids
             int y = GridStartY;
             for (int i = 0; i < Grid.XSize; i++)
             {
-                DrawText(new Coordinate(x, 0 + App.BoxSize / 4), i + "");
+                RenderTarget.DrawText(i + "", new TextFormat(new SharpDX.DirectWrite.Factory(), "Arial", 12), new RawRectangleF(x, 0 + App.BoxSize / 4, x + App.BoxSize, y + App.BoxSize), BlackBrush);
                 x += App.BoxSize;
             }
 
             for (int i = 0; i < Grid.YSize; i++)
             {
-                DrawText(new Coordinate(0, y + App.BoxSize / 4), i + "");
+                RenderTarget.DrawText(i + "", new TextFormat(new SharpDX.DirectWrite.Factory(), "Arial", 12), new RawRectangleF(0, y + App.BoxSize / 4, x + App.BoxSize, y + App.BoxSize), BlackBrush);
                 y += App.BoxSize;
             }
         }
 
-        private void FillGridCell(Coordinate coordinate, Color color)
+        private void FillGridCell(Coordinate coordinate, RawColor4 color)
         {
             int x = GridStartX + coordinate.X * App.BoxSize;
             int y = GridStartY + coordinate.Y * App.BoxSize;
 
-            //EllipseGeometry ellipseGeometry = new EllipseGeometry(new Rect(x + 2, y + 2, App.BoxSize - 4, App.BoxSize - 4));
+            SolidColorBrush solidColorBrush = new SolidColorBrush(RenderTarget, color);
+            RenderTarget.FillEllipse(new Ellipse(new RawVector2(x + (App.BoxSize / 2), y + (App.BoxSize / 2)), (App.BoxSize / 2), (App.BoxSize / 2)), solidColorBrush);
+            solidColorBrush.Dispose();
         }
 
-        private void FillGridCell(Coordinate coordinate, ImageSource imageSource)
+        private void FillGridCell(Coordinate coordinate, Bitmap BitmapImage)
         {
             int x = GridStartX + coordinate.X * App.BoxSize;
             int y = GridStartY + coordinate.Y * App.BoxSize;
 
-            //ImageDrawing imageDrawing = new ImageDrawing(imageSource, new Rect(x, y, App.BoxSize, App.BoxSize));
+            RenderTarget.DrawBitmap(BitmapImage, 1, BitmapInterpolationMode.Linear);
         }
 
         private void FillGridCell(Coordinate coordinate, string text)
         {
-            coordinate.X = GridStartX + coordinate.X * App.BoxSize;
-            coordinate.Y = GridStartY + coordinate.Y * App.BoxSize;
+            int x = GridStartX + coordinate.X * App.BoxSize;
+            int y = GridStartY + coordinate.Y * App.BoxSize;
 
-            DrawText(coordinate, text);
+            RenderTarget.DrawText(text, new TextFormat(new SharpDX.DirectWrite.Factory(), "Arial", 12), new RawRectangleF(x, y + App.BoxSize / 4, x + App.BoxSize, y + App.BoxSize), BlackBrush);
         }
 
         private void DrawText(Coordinate coordinate, string text)
