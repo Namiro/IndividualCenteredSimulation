@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IndividualCenteredSimulatio
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultiAgentSystem", "MultiAgentSystem\MultiAgentSystem.csproj", "{94959F68-BFE1-48CF-A519-09429861DB9C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultiAgentSystemV2", "MultiAgentSystemV2\MultiAgentSystemV2.csproj", "{CBED6166-0AAB-47BB-86DD-1D2DC5BA0C9B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{94959F68-BFE1-48CF-A519-09429861DB9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{94959F68-BFE1-48CF-A519-09429861DB9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{94959F68-BFE1-48CF-A519-09429861DB9C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CBED6166-0AAB-47BB-86DD-1D2DC5BA0C9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBED6166-0AAB-47BB-86DD-1D2DC5BA0C9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBED6166-0AAB-47BB-86DD-1D2DC5BA0C9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBED6166-0AAB-47BB-86DD-1D2DC5BA0C9B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
