@@ -88,7 +88,7 @@
     <Compile Include="Helpers\Logger.cs" />
     <Compile Include="Models\Agents\Agent.cs" />
     <Compile Include="Models\Environment.cs" />
-    <Compile Include="Views\XNAGraphicHelper.cs" />
+    <Compile Include="Helpers\XNAGraphicHelper.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework;
 using MultiAgentSystem.Helpers;
 using MultiAgentSystem.Models.Agents;
 using MultiAgentSystemV2;
-using System;
 using System.Collections.Generic;
 using System.Timers;
 
@@ -18,7 +17,6 @@ namespace MultiAgentSystem.Environments
         private List<Agent> Agents { get; set; }
         private List<int> GridCellsNumber { get; set; }
         private Timer TimerTick { get; set; } = new Timer();
-        private int TickNb { get; set; } = 0;
 
         #endregion
 
@@ -45,21 +43,14 @@ namespace MultiAgentSystem.Environments
                 Grid.Occupy(coordinate, new Agent(coordinate, new Color(App.Random.Next(200), App.Random.Next(200), App.Random.Next(200)), Grid, cellNumber));
                 Agents.Add((Agent)Grid.Get(coordinate));
             }
-
-            // Initialize the timers
-            TimerTick.Interval = App.DelayMilliseconde;
-            TimerTick.Elapsed += Run;
-            TimerTick.Enabled = true;
         }
 
         #endregion
 
         #region Methodes
 
-        public void Run(object myObject, EventArgs myEventArgs)
+        public void Run()
         {
-            App.StartExec = DateTime.Now;
-            TickNb++;
             switch (App.SchedulingStrategy)
             {
                 case Constants.SchedulingStrategyEnum.Fair:
@@ -76,17 +67,6 @@ namespace MultiAgentSystem.Environments
                     System.Environment.Exit(0);
                     break;
             }
-
-            if (App.IsTracedPerformance)
-                Logger.WriteLog("Calcul time : " + DateTime.Now.Subtract(App.StartExec).Milliseconds);
-
-            if (App.TicksNumber != 0 && TickNb >= App.TicksNumber)
-                TimerTick.Enabled = false;
-
-            if (!Convert.ToBoolean(TickNb % App.RateRefresh))
-                RaisePropertyChanged(nameof(Environment.Grid));
-
-            App.Trace("Tick");
         }
 
         private void RunRandomly()

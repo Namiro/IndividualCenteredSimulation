@@ -4,6 +4,7 @@ using MonoGame.Framework.WpfInterop;
 using MultiAgentSystem.Environments;
 using MultiAgentSystem.Helpers.Graphics.Grids;
 using MultiAgentSystemV2;
+using System.Threading;
 
 namespace MultiAgentSystem.Helpers.Graphics
 {
@@ -16,25 +17,13 @@ namespace MultiAgentSystem.Helpers.Graphics
         private IGraphicsDeviceService GraphicsDeviceManager { get; set; }
         private SpriteBatch SpriteBatch;
         private Environment Environment { get; set; }
-        private Grid Grid { get; set; } = new Grid();
+        private int TickNb { get; set; } = 0;
 
         public static GridGraphicHelper GridGraphicHelper { get; set; }
 
         protected override void Initialize()
         {
             Environment = new Environment();
-
-            Environment.PropertyChanged += (obj, args) =>
-            {
-                switch (args.PropertyName)
-                {
-                    case nameof(Environment.Grid):
-                        Grid = Environment.Grid.Clone();
-                        break;
-                    default:
-                        break;
-                }
-            };
 
             GridGraphicHelper = new GridGraphicHelper();
             GridGraphicHelper.IsDisplayGrid = App.IsDisplayGrid;
@@ -60,31 +49,49 @@ namespace MultiAgentSystem.Helpers.Graphics
 
         protected override void Update(GameTime gameTime)
         {
-            elapsedTime += gameTime.ElapsedGameTime;
+            if (App.TicksNumber == 0 || TickNb >= App.TicksNumber)
+            {
+                System.DateTime StartCalcul = System.DateTime.Now;
+                Environment.Run();
+                TickNb++;
+                App.Trace("Tick");
 
+                if (App.IsTracedPerformance)
+                    Logger.WriteLog("Calcul time : " + System.DateTime.Now.Subtract(StartCalcul).Milliseconds);
+            }
+
+
+
+            // To calcul the FPS
+            elapsedTime += gameTime.ElapsedGameTime;
             if (elapsedTime > System.TimeSpan.FromSeconds(1))
             {
                 elapsedTime -= System.TimeSpan.FromSeconds(1);
                 frameRate = frameCounter;
                 frameCounter = 0;
             }
+
+            Thread.Sleep(App.DelayMilliseconde);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.White);
-            SpriteBatch.Begin();
+            if (!System.Convert.ToBoolean(TickNb % App.RateRefresh))
+            {
+                GraphicsDevice.Clear(Color.White);
+                SpriteBatch.Begin();
 
-            GridGraphicHelper.Draw(SpriteBatch, Grid);
+                GridGraphicHelper.Draw(SpriteBatch, Environment.Grid);
 
-            base.Draw(gameTime);
-            SpriteBatch.End();
+                base.Draw(gameTime);
+                SpriteBatch.End();
+            }
 
             frameCounter++;
             string fps = string.Format("fps: {0} mem : {1}", frameRate, System.GC.GetTotalMemory(false));
-            //Logger.WriteLog(fps);
 
-            //GraphicsDevice.SetRenderTarget(null);
+            if (App.IsTracedPerformance)
+                Logger.WriteLog(fps);
         }
     }
 }
