@@ -10,18 +10,6 @@ Permet d'afficher un certain nombre d'agent (particule) sur une grille 2D. Chaqu
 - Monde torique = Agent passe de l'autre coté de la grillesi il veut.
 
 ## Version 2
-A venir...
-
-# Description des branches
-Sur le branche master on trouve du code source qui est capable de faire compiler deux version graphique différentes (Qui sont les deux suivantes)
-
-Les branches sont listé par performance d'affichage graphique (Du moins bon au meilleur)
-GraphicWPFDrawing
-GraphicBitmap
-SharpDXGraphic (Pas le plus pratique à utiliser)
-
-Ces branches sont hypotétiques pour le moment :
-Sur la branche DrawWay le but est d'ajouter la possibilité dessiner le chemin que fait un agent. Mais pas encore décidé avec laquelle des méthodes graphique précédente.
-Sur la branche Graphic3D le but est d'afficher en 3D au lieu de faire de la 2D.
+Seul le projet MultiAgentSystemV2 est vraiment bon et continuera a être développer. Les autres sont des échecs d'implémentation.
 
 Réalisé par Burléon Junior
