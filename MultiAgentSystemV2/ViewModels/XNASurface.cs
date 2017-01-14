@@ -2,11 +2,13 @@
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Framework.WpfInterop;
 using MultiAgentSystem.Environments;
-using MultiAgentSystem.Helpers.Graphics.Grids;
+using MultiAgentSystem.Helpers;
+using MultiAgentSystem.Helpers.Grids;
+using MultiAgentSystem.Models.Agents;
 using MultiAgentSystemV2;
 using System.Threading;
 
-namespace MultiAgentSystem.Helpers.Graphics
+namespace MultiAgentSystem.ViewModels
 {
     public class XNASurface : WpfGame
     {
@@ -18,23 +20,18 @@ namespace MultiAgentSystem.Helpers.Graphics
         private SpriteBatch SpriteBatch;
         private Environment Environment { get; set; }
         private int TickNb { get; set; } = 0;
-
-        public static GridGraphicHelper GridGraphicHelper { get; set; }
+        private int i = 0;
 
         protected override void Initialize()
         {
             Environment = new Environment();
 
-            GridGraphicHelper = new GridGraphicHelper();
-            GridGraphicHelper.IsDisplayGrid = App.IsDisplayGrid;
-
-
+            // must be initialized. required by Content loading and rendering (will add itself to the Services)
+            GraphicsDeviceManager = new WpfGraphicsDeviceService(this);
+            Content.RootDirectory = "Content";
 
             // must be called after the WpfGraphicsDeviceService instance was created
             base.Initialize();
-
-            // must be initialized. required by Content loading and rendering (will add itself to the Services)
-            GraphicsDeviceManager = new WpfGraphicsDeviceService(this);
         }
 
         /// <summary>
@@ -45,6 +42,19 @@ namespace MultiAgentSystem.Helpers.Graphics
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             SpriteBatch = new SpriteBatch(GraphicsDevice);
+
+            Texture2D circleTexture = Content.Load<Texture2D>("circle");
+
+            foreach (Cell cell in Environment.Grid.Grid2D)
+            {
+                if (cell is Agent)
+                {
+                    cell.Texture = circleTexture;
+                    cell.Color = new Color((float)App.Random.NextDouble(), (float)App.Random.NextDouble(), (float)App.Random.NextDouble());
+                    cell.Size = App.BoxSize;
+                }
+
+            }
         }
 
         protected override void Update(GameTime gameTime)
@@ -59,8 +69,6 @@ namespace MultiAgentSystem.Helpers.Graphics
                 if (App.IsTracedPerformance)
                     Logger.WriteLog("Calcul time : " + System.DateTime.Now.Subtract(StartCalcul).Milliseconds);
             }
-
-
 
             // To calcul the FPS
             elapsedTime += gameTime.ElapsedGameTime;
@@ -78,10 +86,37 @@ namespace MultiAgentSystem.Helpers.Graphics
         {
             if (!System.Convert.ToBoolean(TickNb % App.RateRefresh))
             {
-                GraphicsDevice.Clear(Color.White);
+
+                GraphicsDevice.PlatformClear(ClearOptions.Target, Color.White.ToVector4(), 0.0f, 1);
                 SpriteBatch.Begin();
 
-                GridGraphicHelper.Draw(SpriteBatch, Environment.Grid);
+                // Clear
+                //SpriteBatch.FillRectangle(new Rectangle(0, 0, App.CanvasSizeX, App.CanvasSizeY), Color.White);
+
+                // Draw Grid
+                if (App.IsDisplayGrid)
+                {
+                    int x = 0;
+                    for (int i = 0; i <= Environment.Grid.XSize; i++)
+                    {
+                        XNAGraphicHelper.DrawLine(SpriteBatch, x, 0, x, App.CanvasSizeY, Color.Black);
+                        x += App.BoxSize;
+                    }
+                    int y = 0;
+                    for (int i = 0; i <= Environment.Grid.YSize; i++)
+                    {
+                        XNAGraphicHelper.DrawLine(SpriteBatch, 0, y, App.CanvasSizeX, y, Color.Black);
+                        y += App.BoxSize;
+                    }
+                }
+
+                //Draw All Cells
+                foreach (Cell cell in Environment.Grid.Grid2D)
+                    cell.Draw(SpriteBatch);
+
+                // Draw only the Agents
+                //foreach (Cell cell in Environment.Agents)
+                //    cell.Draw(SpriteBatch);
 
                 base.Draw(gameTime);
                 SpriteBatch.End();

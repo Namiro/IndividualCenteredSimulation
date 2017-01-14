@@ -1,7 +1,5 @@
-﻿using Microsoft.Xna.Framework;
-using MultiAgentSystem.Constants;
+﻿using MultiAgentSystem.Constants;
 using MultiAgentSystem.Helpers;
-using MultiAgentSystem.Helpers.Graphics.Grids;
 using MultiAgentSystem.Helpers.Grids;
 using MultiAgentSystemV2;
 using Newtonsoft.Json;
@@ -10,20 +8,14 @@ using System.Collections.Generic;
 
 namespace MultiAgentSystem.Models.Agents
 {
-    internal class Agent : ICell
+    internal class Agent : Cell
     {
         #region Properties
 
-        public int Id { get; set; }
-        public Coordinate Coordinate { get; set; }
-        public int Movement { get; set; } = 1;
-        public Color Color { get; set; } = Color.Silver;
-        public System.Windows.Controls.Image Image { get; set; }
         public StateEnum State { get; set; } = StateEnum.Default;
-
         private Grid Grid { get; }
         private int ActionsNumber { get; } = 1;
-        private Dictionary<DirectionEnum, object> Neighborhood { get; set; }
+        private Dictionary<DirectionEnum, Cell> Neighborhood { get; set; }
         private DirectionEnum CurrentDirection { get; set; }
         private Random Random { get; set; } = new Random();
 
@@ -31,19 +23,10 @@ namespace MultiAgentSystem.Models.Agents
 
         #region Construtors
 
-        public Agent(Coordinate coordinate, Grid grid, int id = -1)
+        public Agent(Coordinate coordinate, Grid grid)
         {
             this.Coordinate = coordinate;
             this.Grid = grid;
-            this.Id = id;
-        }
-
-        public Agent(Coordinate coordinate, Color color, Grid grid, int id = -1)
-        {
-            this.Coordinate = coordinate;
-            this.Color = color;
-            this.Grid = grid;
-            this.Id = id;
         }
 
         #endregion
@@ -57,47 +40,31 @@ namespace MultiAgentSystem.Models.Agents
         {
             CheckArround();
 
-            int actionChoice = 0;//App.Random.Next(ActionsNumber);
-            switch (actionChoice)
+            switch (DecideAction())
             {
-                case 0:
-                    for (int i = 0; i < Movement; i++)
-                        ActionMove();
+                case ActionEnum.Move:
+                    ActionMove();
                     break;
-                case 1:
-                    ActionNothing();
-                    break;
-                default:
-                    Logger.WriteLog("actionChoice selected doesn't exist or is not treated so agent decide to do nothing", LogLevelL4N.WARN);
+                case ActionEnum.Nothing:
                     ActionNothing();
                     break;
             }
 
-            App.Trace(this.ToString());
         }
 
-        private Dictionary<DirectionEnum, object> CheckArround()
+        private Dictionary<DirectionEnum, Cell> CheckArround()
         {
 
-            Neighborhood = new Dictionary<DirectionEnum, object>();
-            Coordinate NewCoordinate = null;
+            Neighborhood = new Dictionary<DirectionEnum, Cell>();
 
-            NewCoordinate = RectifyCoordonate(App.IsToric, Coordinate.X, Coordinate.Y + 1);
-            Neighborhood.Add(DirectionEnum.Bottom, Grid.Get(NewCoordinate.X, NewCoordinate.Y));
-            NewCoordinate = RectifyCoordonate(App.IsToric, Coordinate.X, Coordinate.Y - 1);
-            Neighborhood.Add(DirectionEnum.Top, Grid.Get(NewCoordinate.X, NewCoordinate.Y));
-            NewCoordinate = RectifyCoordonate(App.IsToric, Coordinate.X + 1, Coordinate.Y);
-            Neighborhood.Add(DirectionEnum.Right, Grid.Get(NewCoordinate.X, NewCoordinate.Y));
-            NewCoordinate = RectifyCoordonate(App.IsToric, Coordinate.X - 1, Coordinate.Y);
-            Neighborhood.Add(DirectionEnum.Left, Grid.Get(NewCoordinate.X, NewCoordinate.Y));
-            NewCoordinate = RectifyCoordonate(App.IsToric, Coordinate.X - 1, Coordinate.Y + 1);
-            Neighborhood.Add(DirectionEnum.TopRight, Grid.Get(NewCoordinate.X, NewCoordinate.Y));
-            NewCoordinate = RectifyCoordonate(App.IsToric, Coordinate.X + 1, Coordinate.Y - 1);
-            Neighborhood.Add(DirectionEnum.BottomLeft, Grid.Get(NewCoordinate.X, NewCoordinate.Y));
-            NewCoordinate = RectifyCoordonate(App.IsToric, Coordinate.X - 1, Coordinate.Y - 1);
-            Neighborhood.Add(DirectionEnum.TopLeft, Grid.Get(NewCoordinate.X, NewCoordinate.Y));
-            NewCoordinate = RectifyCoordonate(App.IsToric, Coordinate.X + 1, Coordinate.Y + 1);
-            Neighborhood.Add(DirectionEnum.BottomRight, Grid.Get(NewCoordinate.X, NewCoordinate.Y));
+            Neighborhood.Add(DirectionEnum.Bottom, Grid.Get(Grid.DirectionToCoordinate(DirectionEnum.Bottom, Coordinate)));
+            Neighborhood.Add(DirectionEnum.Top, Grid.Get(Grid.DirectionToCoordinate(DirectionEnum.Top, Coordinate)));
+            Neighborhood.Add(DirectionEnum.Right, Grid.Get(Grid.DirectionToCoordinate(DirectionEnum.Right, Coordinate)));
+            Neighborhood.Add(DirectionEnum.Left, Grid.Get(Grid.DirectionToCoordinate(DirectionEnum.Left, Coordinate)));
+            Neighborhood.Add(DirectionEnum.TopRight, Grid.Get(Grid.DirectionToCoordinate(DirectionEnum.TopRight, Coordinate)));
+            Neighborhood.Add(DirectionEnum.BottomLeft, Grid.Get(Grid.DirectionToCoordinate(DirectionEnum.BottomLeft, Coordinate)));
+            Neighborhood.Add(DirectionEnum.TopLeft, Grid.Get(Grid.DirectionToCoordinate(DirectionEnum.TopLeft, Coordinate)));
+            Neighborhood.Add(DirectionEnum.BottomRight, Grid.Get(Grid.DirectionToCoordinate(DirectionEnum.BottomRight, Coordinate)));
 
             return Neighborhood;
         }
@@ -125,6 +92,24 @@ namespace MultiAgentSystem.Models.Agents
         }
 
         /// <summary>
+        /// In this methode, implement the decision of action that need to take the agent.
+        /// </summary>
+        private ActionEnum DecideAction()
+        {
+            int actionChoice = App.Random.Next(ActionsNumber);
+            switch (actionChoice)
+            {
+                case 0:
+                    return ActionEnum.Move;
+                case 1:
+                    return ActionEnum.Nothing;
+                default:
+                    Logger.WriteLog("actionChoice selected doesn't exist or is not treated so agent decide to do nothing", LogLevelL4N.WARN);
+                    return ActionEnum.Nothing;
+            }
+        }
+
+        /// <summary>
         /// To move the agent
         /// </summary>
         private void ActionMove()
@@ -134,45 +119,7 @@ namespace MultiAgentSystem.Models.Agents
             // Free the current position
             Grid.Free(Coordinate);
 
-            switch (direction)
-            {
-                case DirectionEnum.TopLeft:
-                    Coordinate.X--;
-                    Coordinate.Y--;
-                    break;
-                case DirectionEnum.Top:
-                    Coordinate.Y--;
-                    break;
-                case DirectionEnum.BottomLeft:
-                    Coordinate.X++;
-                    Coordinate.Y--;
-                    break;
-                case DirectionEnum.Left:
-                    Coordinate.X--;
-                    break;
-                case DirectionEnum.BottomRight:
-                    Coordinate.X++;
-                    Coordinate.Y++;
-                    break;
-                case DirectionEnum.Bottom:
-                    Coordinate.Y++;
-                    break;
-                case DirectionEnum.TopRight:
-                    Coordinate.X--;
-                    Coordinate.Y++;
-                    break;
-                case DirectionEnum.Right:
-                    Coordinate.X++;
-                    break;
-                case DirectionEnum.NoOne:
-                    break;
-                default:
-                    Logger.WriteLog("Unknown direction : " + direction.ToString(), LogLevelL4N.ERROR);
-                    break;
-            }
-
-            //Rectify Coordonate
-            Coordinate = RectifyCoordonate(App.IsToric, Coordinate.X, Coordinate.Y);
+            Coordinate = Grid.DirectionToCoordinate(direction, Coordinate);
 
             // Occupy the new position
             Grid.Occupy(Coordinate, this);
@@ -181,32 +128,6 @@ namespace MultiAgentSystem.Models.Agents
         private void ActionNothing()
         {
 
-        }
-
-        private Coordinate RectifyCoordonate(bool Torique, int X, int Y)
-        {
-            Coordinate coord = new Coordinate(X, Y);
-            if (!Torique) return coord;
-
-
-            if (X <= -1)
-            {
-                coord.X = App.GridSizeX - 1;
-            }
-            else if (X >= App.GridSizeX)
-            {
-                coord.X = 0;
-            }
-            else if (Y <= -1)
-            {
-                coord.Y = App.GridSizeY - 1;
-            }
-            else if (Y >= App.GridSizeY)
-            {
-                coord.Y = 0;
-            }
-
-            return coord;
         }
 
         /// <summary>
@@ -219,5 +140,11 @@ namespace MultiAgentSystem.Models.Agents
         }
 
         #endregion
+
+        private enum ActionEnum
+        {
+            Nothing,
+            Move
+        }
     }
 }

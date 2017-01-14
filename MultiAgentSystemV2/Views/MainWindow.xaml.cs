@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace MultiAgentSystemV2
+namespace MultiAgentSystemV2.Views
 {
     /// <summary>
     /// Logique d'interaction pour MainWindow.xaml
@@ -11,8 +11,8 @@ namespace MultiAgentSystemV2
         {
             App.LoadSettings();
 
-            this.Height = App.CanvasSizeY + 35;
-            this.Width = App.CanvasSizeX + 13;
+            this.Height = App.CanvasSizeY + 37;
+            this.Width = App.CanvasSizeX + 14;
 
             InitializeComponent();
         }

@@ -1,6 +1,5 @@
 ﻿using Helpers.Services;
-using Microsoft.Xna.Framework;
-using MultiAgentSystem.Helpers;
+using MultiAgentSystem.Helpers.Grids;
 using MultiAgentSystem.Models.Agents;
 using MultiAgentSystemV2;
 using System.Collections.Generic;
@@ -14,7 +13,7 @@ namespace MultiAgentSystem.Environments
 
         public Grid Grid { get; set; }
 
-        private List<Agent> Agents { get; set; }
+        public List<Agent> Agents { get; private set; }
         private List<int> GridCellsNumber { get; set; }
         private Timer TimerTick { get; set; } = new Timer();
 
@@ -24,7 +23,7 @@ namespace MultiAgentSystem.Environments
 
         public Environment()
         {
-            Grid = new Grid(App.GridSizeX, App.GridSizeY);
+            Grid = new Grid(App.GridSizeX, App.GridSizeY, App.IsToric);
 
             Agents = new List<Agent>();
 
@@ -40,7 +39,7 @@ namespace MultiAgentSystem.Environments
                 GridCellsNumber.Remove(cellNumber);
 
                 Coordinate coordinate = Grid.CellNumberToXYCoordinate(cellNumber);
-                Grid.Occupy(coordinate, new Agent(coordinate, new Color(App.Random.Next(200), App.Random.Next(200), App.Random.Next(200)), Grid, cellNumber));
+                Grid.Occupy(coordinate, new Agent(coordinate, Grid));
                 Agents.Add((Agent)Grid.Get(coordinate));
             }
         }
@@ -63,7 +62,7 @@ namespace MultiAgentSystem.Environments
                     RunRandomly();
                     break;
                 default:
-                    Logger.WriteLog("Unknown SchedulingStrategy : " + App.SchedulingStrategy.ToString(), LogLevelL4N.FATAL);
+                    Helpers.Logger.WriteLog("Unknown SchedulingStrategy : " + App.SchedulingStrategy.ToString(), Helpers.LogLevelL4N.FATAL);
                     System.Environment.Exit(0);
                     break;
             }
@@ -89,7 +88,7 @@ namespace MultiAgentSystem.Environments
 
         private void RunFairly()
         {
-            Helper.Shuffle(Agents, App.Random);
+            Helpers.Helper.Shuffle(Agents, App.Random);
 
             foreach (Agent agent in Agents)
             {
