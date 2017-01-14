@@ -1,4 +1,4 @@
-﻿namespace MultiAgentSystem.Constants
+﻿namespace MultiAgentSystem.Cores.Constants
 {
     public enum SchedulingStrategyEnum
     {

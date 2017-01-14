@@ -1,32 +1,28 @@
-﻿using MultiAgentSystem.Constants;
-using MultiAgentSystem.Helpers;
-using MultiAgentSystem.Helpers.Grids;
-using MultiAgentSystemV2;
-using Newtonsoft.Json;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using MultiAgentSystem.Cores.Constants;
+using MultiAgentSystem.Cores.Helpers;
+using MultiAgentSystem.Cores.Helpers.Grids;
+using MultiAgentSystem.Cores.Models;
+using MultiAgentSystem.ParticleSystem.ViewModels;
 using System;
 using System.Collections.Generic;
 
-namespace MultiAgentSystem.Models.Agents
+namespace MultiAgentSystem.ParticleSystem.Models
 {
-    internal class Agent : Cell
+    internal class Particle : Agent
     {
         #region Properties
 
-        public StateEnum State { get; set; } = StateEnum.Default;
-        private Grid Grid { get; }
-        private int ActionsNumber { get; } = 1;
-        private Dictionary<DirectionEnum, Cell> Neighborhood { get; set; }
-        private DirectionEnum CurrentDirection { get; set; }
-        private Random Random { get; set; } = new Random();
 
         #endregion
 
         #region Construtors
 
-        public Agent(Coordinate coordinate, Grid grid)
+        public Particle()
         {
-            this.Coordinate = coordinate;
-            this.Grid = grid;
+            Color = new Color((float)App.Random.NextDouble(), (float)App.Random.NextDouble(), (float)App.Random.NextDouble());
+            Texture = XNAParticleGrid.ContentManager.Load<Texture2D>("circle");
         }
 
         #endregion
@@ -36,7 +32,7 @@ namespace MultiAgentSystem.Models.Agents
         /// <summary>
         /// The behaviour when the agent meet the border or another agent
         /// </summary>
-        public void Decide()
+        public override void Decide()
         {
             CheckArround();
 
@@ -52,24 +48,7 @@ namespace MultiAgentSystem.Models.Agents
 
         }
 
-        private Dictionary<DirectionEnum, Cell> CheckArround()
-        {
-
-            Neighborhood = new Dictionary<DirectionEnum, Cell>();
-
-            Neighborhood.Add(DirectionEnum.Bottom, Grid.Get(Grid.DirectionToCoordinate(DirectionEnum.Bottom, Coordinate)));
-            Neighborhood.Add(DirectionEnum.Top, Grid.Get(Grid.DirectionToCoordinate(DirectionEnum.Top, Coordinate)));
-            Neighborhood.Add(DirectionEnum.Right, Grid.Get(Grid.DirectionToCoordinate(DirectionEnum.Right, Coordinate)));
-            Neighborhood.Add(DirectionEnum.Left, Grid.Get(Grid.DirectionToCoordinate(DirectionEnum.Left, Coordinate)));
-            Neighborhood.Add(DirectionEnum.TopRight, Grid.Get(Grid.DirectionToCoordinate(DirectionEnum.TopRight, Coordinate)));
-            Neighborhood.Add(DirectionEnum.BottomLeft, Grid.Get(Grid.DirectionToCoordinate(DirectionEnum.BottomLeft, Coordinate)));
-            Neighborhood.Add(DirectionEnum.TopLeft, Grid.Get(Grid.DirectionToCoordinate(DirectionEnum.TopLeft, Coordinate)));
-            Neighborhood.Add(DirectionEnum.BottomRight, Grid.Get(Grid.DirectionToCoordinate(DirectionEnum.BottomRight, Coordinate)));
-
-            return Neighborhood;
-        }
-
-        private DirectionEnum DecideDirection()
+        protected override DirectionEnum DecideDirection()
         {
 
             List<DirectionEnum> possibleDirections = new List<DirectionEnum>();
@@ -112,7 +91,7 @@ namespace MultiAgentSystem.Models.Agents
         /// <summary>
         /// To move the agent
         /// </summary>
-        private void ActionMove()
+        protected override void ActionMove()
         {
             // Choose the direction
             DirectionEnum direction = DecideDirection();
@@ -122,21 +101,12 @@ namespace MultiAgentSystem.Models.Agents
             Coordinate = Grid.DirectionToCoordinate(direction, Coordinate);
 
             // Occupy the new position
-            Grid.Occupy(Coordinate, this);
+            Grid.Occupy(this);
         }
 
-        private void ActionNothing()
+        protected override void ActionNothing()
         {
 
-        }
-
-        /// <summary>
-        /// This ToString is do simply to cast the object in a string formated in Json
-        /// </summary>
-        /// <returns></returns>
-        public override string ToString()
-        {
-            return JsonConvert.SerializeObject(this);
         }
 
         #endregion

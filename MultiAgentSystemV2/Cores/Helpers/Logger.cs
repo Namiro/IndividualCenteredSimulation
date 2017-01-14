@@ -3,7 +3,7 @@ using log4net.Config;
 using System;
 
 [assembly: XmlConfigurator(ConfigFile = "Log4Net.config", Watch = true)]
-namespace MultiAgentSystem.Helpers
+namespace MultiAgentSystem.Cores.Helpers
 {
     /// <summary>
     /// This class allow to use Log4NET.

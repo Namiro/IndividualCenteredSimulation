@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace MultiAgentSystem.Helpers.Grids
+namespace MultiAgentSystem.Cores.Helpers.Grids
 {
     public class Coordinate
     {

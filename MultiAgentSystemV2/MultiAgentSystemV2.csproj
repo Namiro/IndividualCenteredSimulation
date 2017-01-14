@@ -73,21 +73,29 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Constants\Constants.cs" />
-    <Compile Include="Constants\DirectionEnum.cs" />
-    <Compile Include="Constants\SchedulingStrategyEnum.cs" />
-    <Compile Include="Constants\StateEnum.cs" />
-    <Compile Include="Helpers\Grids\Coordinate.cs" />
-    <Compile Include="Helpers\Service.cs" />
-    <Compile Include="Helpers\Grids\Empty.cs" />
-    <Compile Include="Helpers\Grids\Cell.cs" />
-    <Compile Include="ViewModels\XNASurface.cs" />
-    <Compile Include="Helpers\Grids\Grid.cs" />
-    <Compile Include="Helpers\Helper.cs" />
-    <Compile Include="Helpers\Logger.cs" />
-    <Compile Include="Models\Agents\Agent.cs" />
-    <Compile Include="Models\Environment.cs" />
-    <Compile Include="Helpers\XNAGraphicHelper.cs" />
+    <Compile Include="Cores\Constants\Constants.cs" />
+    <Compile Include="Cores\Constants\DirectionEnum.cs" />
+    <Compile Include="Cores\Constants\SchedulingStrategyEnum.cs" />
+    <Compile Include="Systems\WatorSystem\Models\StateEnum.cs" />
+    <Compile Include="Cores\Helpers\Grids\Coordinate.cs" />
+    <Compile Include="Cores\Helpers\Service.cs" />
+    <Compile Include="Cores\Helpers\Grids\Empty.cs" />
+    <Compile Include="Cores\Helpers\Grids\Cell.cs" />
+    <Compile Include="Cores\Models\IAgent.cs" />
+    <Compile Include="Cores\ViewModels\XNASurface.cs" />
+    <Compile Include="Systems\WatorSystem\Models\Agents\Fish.cs" />
+    <Compile Include="Systems\WatorSystem\Models\Agents\Shark.cs" />
+    <Compile Include="Systems\WatorSystem\Models\WatorEnvironement.cs" />
+    <Compile Include="Systems\WatorSystem\ViewModels\XNAWatorGrid.cs" />
+    <Compile Include="Systems\ParticleSystem\Models\Agents\Particle.cs" />
+    <Compile Include="Systems\ParticleSystem\Models\ParticleEnvironement.cs" />
+    <Compile Include="Systems\ParticleSystem\ViewModels\XNAParticleGrid.cs" />
+    <Compile Include="Cores\Helpers\Grids\Grid.cs" />
+    <Compile Include="Cores\Helpers\Helper.cs" />
+    <Compile Include="Cores\Helpers\Logger.cs" />
+    <Compile Include="Cores\Models\Agent.cs" />
+    <Compile Include="Cores\Models\Environment.cs" />
+    <Compile Include="Cores\Helpers\XNAGraphicHelper.cs" />
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -132,11 +140,9 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Environments\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Content\circle.png">
+    <Resource Include="Resources\circle.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>

@@ -1,63 +1,58 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Framework.WpfInterop;
-using MultiAgentSystem.Environments;
-using MultiAgentSystem.Helpers;
-using MultiAgentSystem.Helpers.Grids;
-using MultiAgentSystem.Models.Agents;
-using MultiAgentSystemV2;
+using MultiAgentSystem.Cores.Helpers;
+using MultiAgentSystem.Cores.Helpers.Grids;
+using MultiAgentSystem.Cores.Models;
 using System.Threading;
 
-namespace MultiAgentSystem.ViewModels
+namespace MultiAgentSystem.Cores.ViewModels
 {
-    public class XNASurface : WpfGame
+    internal class XNASurface : WpfGame
     {
         private int frameRate = 0;
         private int frameCounter = 0;
         private System.TimeSpan elapsedTime = System.TimeSpan.Zero;
 
-        private IGraphicsDeviceService GraphicsDeviceManager { get; set; }
-        private SpriteBatch SpriteBatch;
-        private Environment Environment { get; set; }
-        private int TickNb { get; set; } = 0;
-        private int i = 0;
+        protected IGraphicsDeviceService GraphicsDeviceManager { get; set; }
+        protected SpriteBatch SpriteBatch;
+        protected Environment Environment { get; set; }
+        protected int TickNb { get; set; } = 0;
+        protected Color BackgroundColor = Color.White;
 
-        protected override void Initialize()
+        public static ContentManager ContentManager { get; set; }
+
+        /// <summary>
+        /// Allow to initialize the System
+        /// </summary>
+        protected sealed override void Initialize()
         {
-            Environment = new Environment();
-
             // must be initialized. required by Content loading and rendering (will add itself to the Services)
             GraphicsDeviceManager = new WpfGraphicsDeviceService(this);
-            Content.RootDirectory = "Content";
+            Content.RootDirectory = "Resources";
+            Cell.Size = App.BoxSize;
+            ContentManager = Content;
 
             // must be called after the WpfGraphicsDeviceService instance was created
             base.Initialize();
         }
 
         /// <summary>
-        /// LoadContent will be called once per game and is the place to load
+        /// LoadContent will be called once per game/system and is the place to load
         /// all of your content.
+        /// It's the place to create and initialize the environement
         /// </summary>
         protected override void LoadContent()
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
-            SpriteBatch = new SpriteBatch(GraphicsDevice);
 
-            Texture2D circleTexture = Content.Load<Texture2D>("circle");
-
-            foreach (Cell cell in Environment.Grid.Grid2D)
-            {
-                if (cell is Agent)
-                {
-                    cell.Texture = circleTexture;
-                    cell.Color = new Color((float)App.Random.NextDouble(), (float)App.Random.NextDouble(), (float)App.Random.NextDouble());
-                    cell.Size = App.BoxSize;
-                }
-
-            }
         }
 
-        protected override void Update(GameTime gameTime)
+        /// <summary>
+        /// It will be call at every tick of game/system
+        /// </summary>
+        /// <param name="gameTime"></param>
+        protected sealed override void Update(GameTime gameTime)
         {
             if (App.TicksNumber == 0 || TickNb >= App.TicksNumber)
             {
@@ -82,16 +77,19 @@ namespace MultiAgentSystem.ViewModels
             Thread.Sleep(App.DelayMilliseconde);
         }
 
-        protected override void Draw(GameTime gameTime)
+        /// <summary>
+        /// Allow to draw the frame. It will be call after each Update 
+        /// </summary>
+        /// <param name="gameTime"></param>
+        protected sealed override void Draw(GameTime gameTime)
         {
             if (!System.Convert.ToBoolean(TickNb % App.RateRefresh))
             {
 
-                GraphicsDevice.PlatformClear(ClearOptions.Target, Color.White.ToVector4(), 0.0f, 1);
-                SpriteBatch.Begin();
+                GraphicsDevice.PlatformClear(ClearOptions.Target, BackgroundColor.ToVector4(), 0.0f, 1);
+                SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, new RasterizerState { ScissorTestEnable = true });
 
-                // Clear
-                //SpriteBatch.FillRectangle(new Rectangle(0, 0, App.CanvasSizeX, App.CanvasSizeY), Color.White);
+                //SpriteBatch.DrawRectangle(new Rectangle(0, 0, App.CanvasSizeX, App.CanvasSizeY), BackgroundColor);
 
                 // Draw Grid
                 if (App.IsDisplayGrid)

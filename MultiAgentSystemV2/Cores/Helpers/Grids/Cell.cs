@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace MultiAgentSystem.Helpers.Grids
+namespace MultiAgentSystem.Cores.Helpers.Grids
 {
     public abstract class Cell
     {
@@ -10,16 +10,16 @@ namespace MultiAgentSystem.Helpers.Grids
         public Coordinate Coordinate
         {
             get { return _Coordinate; }
-            protected set
+            set
             {
                 _Coordinate = value;
                 Position = new Vector2(value.X * Size, value.Y * Size);
             }
         }
         public Vector2 Position { get; private set; }
-        public Color Color { get; set; } = Color.White;
+        public virtual Color Color { get; set; } = Color.White;
         public Texture2D Texture { get; set; }
-        public int Size { get; set; }
+        public static int Size { get; set; }
 
         public Cell()
         {

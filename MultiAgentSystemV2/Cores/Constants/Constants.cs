@@ -1,4 +1,4 @@
-﻿namespace MultiAgentSystem.Constants
+﻿namespace MultiAgentSystem.Cores.Constants
 {
     /// <summary>
     /// To make a constants : public const TYPE XXX = VALUE
@@ -23,10 +23,12 @@
         public const int DEFAULT_SEED = 0;
         public const int DEFAULT_RATE_REFRESH = 1;
         public const SchedulingStrategyEnum DEFAULT_SCHEDULING_STRATEGY = SchedulingStrategyEnum.Fair;
-        public const int DEFAULT_AGENTS_NUMBER = 100;
+        public const int DEFAULT_PARTICLES_NUMBER = 100;
         public const bool DEFAULT_IS_TRACED_PERFORMANCE = false;
         public const bool DEFAULT_IS_DISPLAY_AXE = false;
         public const bool DEFAULT_IS_TORIC = false;
+        public const int DEFAULT_SHARKS_NUMBER = 5;
+        public const int DEFAULT_FISHS_NUMBER = 25;
 
 
         // Keys of App.config
@@ -42,10 +44,12 @@
         public const string APP_CONFIG_KEY_SEED = "Seed";
         public const string APP_CONFIG_KEY_RATE_REFRESH = "RateRefresh";
         public const string APP_CONFIG_KEY_SCHEDULING_STRATEGY = "SchedulingStrategy";
-        public const string APP_CONFIG_KEY_AGENTS_NUMBER = "AgentsNumber";
+        public const string APP_CONFIG_KEY_PARTICLES_NUMBER = "ParticlesNumber";
         public const string APP_CONFIG_KEY_IS_TRACED_PERFORMANCE = "IsTracedPerformance";
         public const string APP_CONFIG_KEY_IS_DISPLAY_AXE = "IsDisplayAxe";
         public const string APP_CONFIG_KEY_IS_TORIC = "IsToric";
+        public const string APP_CONFIG_KEY_SHARKS_NUMBER = "SharksNumber";
+        public const string APP_CONFIG_KEY_FISHS_NUMBER = "FishsNumber";
 
 
         // Keys for the execution App Properties

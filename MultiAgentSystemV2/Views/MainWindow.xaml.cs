@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace MultiAgentSystemV2.Views
+namespace MultiAgentSystem.Views
 {
     /// <summary>
     /// Logique d'interaction pour MainWindow.xaml

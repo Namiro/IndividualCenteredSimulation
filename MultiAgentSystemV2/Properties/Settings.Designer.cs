@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MultiAgentSystemV2.Properties
+namespace MultiAgentSystem.Properties
 {
 
 

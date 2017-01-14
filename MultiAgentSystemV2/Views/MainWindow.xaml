@@ -1,9 +1,10 @@
-﻿<Window x:Class="MultiAgentSystemV2.Views.MainWindow"
+﻿<Window x:Class="MultiAgentSystem.Views.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:MultiAgentSystem.ViewModels"
+        xmlns:particleSystemVM="clr-namespace:MultiAgentSystem.ParticleSystem.ViewModels"
+        xmlns:watorSystemVM="clr-namespace:MultiAgentSystem.WatorSystem.ViewModels"
         mc:Ignorable="d"
         WindowStyle="SingleBorderWindow"
         ResizeMode="NoResize"
@@ -11,6 +12,7 @@
         Title="Individual Centered Simulation">
 
     <Grid>
-        <local:XNASurface x:Name="SurfaceGrid" />
+        <!--<particleSystemVM:XNAParticleGrid x:Name="SurfaceGrid" />-->
+        <watorSystemVM:XNAWatorGrid x:Name="SurfaceGrid" />
     </Grid>
 </Window>

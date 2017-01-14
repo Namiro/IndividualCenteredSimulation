@@ -1,7 +1,6 @@
-﻿using MultiAgentSystem.Constants;
-using MultiAgentSystemV2;
+﻿using MultiAgentSystem.Cores.Constants;
 
-namespace MultiAgentSystem.Helpers.Grids
+namespace MultiAgentSystem.Cores.Helpers.Grids
 {
     public class Grid
     {
@@ -37,12 +36,12 @@ namespace MultiAgentSystem.Helpers.Grids
             return ((coordinate.Y * YSize) + coordinate.X);
         }
 
-        public void Occupy(Coordinate coordinate, Cell obj)
+        public void Occupy(Cell obj)
         {
-            if (!(Grid2D[coordinate.X, coordinate.Y] is Empty))
-                throw new System.Exception("There is already an object to these coordinates in the grid. - " + coordinate);
+            if (!(Grid2D[obj.Coordinate.X, obj.Coordinate.Y] is Empty))
+                throw new System.Exception("There is already an object to these coordinates in the grid. - " + obj.Coordinate);
 
-            Grid2D[coordinate.X, coordinate.Y] = obj;
+            Grid2D[obj.Coordinate.X, obj.Coordinate.Y] = obj;
         }
 
         public Cell Get(Coordinate coordinate)

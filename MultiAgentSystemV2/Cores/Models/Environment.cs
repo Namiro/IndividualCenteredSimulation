@@ -1,21 +1,15 @@
 ﻿using Helpers.Services;
-using MultiAgentSystem.Helpers.Grids;
-using MultiAgentSystem.Models.Agents;
-using MultiAgentSystemV2;
+using MultiAgentSystem.Cores.Helpers.Grids;
 using System.Collections.Generic;
-using System.Timers;
 
-namespace MultiAgentSystem.Environments
+namespace MultiAgentSystem.Cores.Models
 {
     internal class Environment : Service
     {
         #region Properties
 
         public Grid Grid { get; set; }
-
-        public List<Agent> Agents { get; private set; }
-        private List<int> GridCellsNumber { get; set; }
-        private Timer TimerTick { get; set; } = new Timer();
+        public List<IAgent> Agents { get; private set; }
 
         #endregion
 
@@ -23,30 +17,34 @@ namespace MultiAgentSystem.Environments
 
         public Environment()
         {
+            Agents = new List<IAgent>();
             Grid = new Grid(App.GridSizeX, App.GridSizeY, App.IsToric);
-
-            Agents = new List<Agent>();
-
-            GridCellsNumber = new List<int>();
-            for (int i = 0; i < App.GridSizeX * App.GridSizeY; i++)
-                GridCellsNumber.Add(i);
-
-            int randomNumber;
-            for (int i = 0; i < App.AgentsNumber; i++)
-            {
-                randomNumber = App.Random.Next(0, GridCellsNumber.Count);
-                int cellNumber = GridCellsNumber[randomNumber];
-                GridCellsNumber.Remove(cellNumber);
-
-                Coordinate coordinate = Grid.CellNumberToXYCoordinate(cellNumber);
-                Grid.Occupy(coordinate, new Agent(coordinate, Grid));
-                Agents.Add((Agent)Grid.Get(coordinate));
-            }
         }
 
         #endregion
 
         #region Methodes
+
+        public void Initialize(List<IAgent> agents)
+        {
+            Agents = agents;
+
+            List<int> gridCellsNumber = new List<int>();
+            for (int i = 0; i < App.GridSizeX * App.GridSizeY; i++)
+                gridCellsNumber.Add(i);
+
+            int randomNumber;
+            foreach (Agent agent in Agents)
+            {
+                randomNumber = App.Random.Next(0, gridCellsNumber.Count);
+                int cellNumber = gridCellsNumber[randomNumber];
+                gridCellsNumber.Remove(cellNumber);
+
+                agent.Coordinate = Grid.CellNumberToXYCoordinate(cellNumber);
+                agent.Grid = Grid;
+                Grid.Occupy(agent);
+            }
+        }
 
         public void Run()
         {
@@ -70,7 +68,7 @@ namespace MultiAgentSystem.Environments
 
         private void RunRandomly()
         {
-            Agent[] agents = Agents.ToArray();
+            IAgent[] agents = Agents.ToArray();
 
             for (int i = 0; i < agents.Length; i++)
             {

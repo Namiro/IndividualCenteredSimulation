@@ -1,10 +1,10 @@
-﻿using MultiAgentSystem.Constants;
-using MultiAgentSystem.Helpers;
+﻿using MultiAgentSystem.Cores.Constants;
+using MultiAgentSystem.Cores.Helpers;
 using System;
 using System.Configuration;
 using System.Windows;
 
-namespace MultiAgentSystemV2
+namespace MultiAgentSystem
 {
     /// <summary>
     /// Logique d'interaction pour App.xaml
@@ -83,9 +83,9 @@ namespace MultiAgentSystemV2
         public static int RateRefresh { get; set; } = Constants.DEFAULT_RATE_REFRESH;
 
         /// <summary>
-        /// The number of agent we will simulate.
+        /// The number of particles we will simulate.
         /// </summary>
-        public static int AgentsNumber { get; set; } = Constants.DEFAULT_AGENTS_NUMBER;
+        public static int ParticlesNumber { get; set; } = Constants.DEFAULT_PARTICLES_NUMBER;
 
         /// <summary>
         /// Trace or not the app performance.
@@ -101,6 +101,17 @@ namespace MultiAgentSystemV2
         /// Display or not the axe.
         /// </summary>
         public static bool IsToric { get; set; } = Constants.DEFAULT_IS_TORIC;
+
+        /// <summary>
+        /// Display or not the axe.
+        /// </summary>
+        public static int FishsNumber { get; set; } = Constants.DEFAULT_FISHS_NUMBER;
+
+        /// <summary>
+        /// Display or not the axe.
+        /// </summary>
+        public static int SharksNumber { get; set; } = Constants.DEFAULT_SHARKS_NUMBER;
+
 
         #endregion
 
@@ -131,8 +142,10 @@ namespace MultiAgentSystemV2
             DelayMilliseconde = int.Parse(ConfigurationManager.AppSettings[Constants.APP_CONFIG_KEY_DELAY_MILLISECONDE]);
             TicksNumber = int.Parse(ConfigurationManager.AppSettings[Constants.APP_CONFIG_KEY_TICKS_NUMBER]);
             RateRefresh = int.Parse(ConfigurationManager.AppSettings[Constants.APP_CONFIG_KEY_RATE_REFRESH]);
-            AgentsNumber = int.Parse(ConfigurationManager.AppSettings[Constants.APP_CONFIG_KEY_AGENTS_NUMBER]);
+            ParticlesNumber = int.Parse(ConfigurationManager.AppSettings[Constants.APP_CONFIG_KEY_PARTICLES_NUMBER]);
             Seed = int.Parse(ConfigurationManager.AppSettings[Constants.APP_CONFIG_KEY_SEED]);
+            SharksNumber = int.Parse(ConfigurationManager.AppSettings[Constants.APP_CONFIG_KEY_SHARKS_NUMBER]);
+            FishsNumber = int.Parse(ConfigurationManager.AppSettings[Constants.APP_CONFIG_KEY_FISHS_NUMBER]);
 
             // IsDisplayGrid
             if (ConfigurationManager.AppSettings[Constants.APP_CONFIG_KEY_IS_DISPLAY_GRID] == "True")
