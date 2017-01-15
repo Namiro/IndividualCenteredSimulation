@@ -26,9 +26,9 @@ namespace MultiAgentSystem.WatorSystem.Models
                     return Color.Blue;
             }
         }
+        public WatorEnvironment WatorEnvironment { get; set; }
         public int GestationPeriod { get; private set; } = 5;
         private int Period = 1;
-        public WatorEnvironment WatorEnvironment { get; set; }
 
         #endregion
 
@@ -136,17 +136,13 @@ namespace MultiAgentSystem.WatorSystem.Models
             //
             if ((!Coordinate.Equals(OldCoordinate)) && Period == (GestationPeriod -1))
             {
-                Console.WriteLine("Reproduction");
                 //Ajouter le nouveau né dans la Grid
                 Fish Fish = new Fish(0);
                 Fish.Coordinate = OldCoordinate;
                 Fish.Grid = Grid;
                 Fish.WatorEnvironment = WatorEnvironment;
                 Grid.Occupy(Fish);
-                Console.WriteLine(WatorEnvironment);
                 WatorEnvironment.NewAgents.Add(Fish);
-                Console.WriteLine("NewAgents.count " + WatorEnvironment.NewAgents.Count);
-                
             }
         }
 

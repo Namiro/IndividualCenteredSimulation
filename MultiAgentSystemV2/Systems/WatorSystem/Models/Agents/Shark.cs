@@ -26,6 +26,11 @@ namespace MultiAgentSystem.WatorSystem.Models
                     return Color.Red;
             }
         }
+        public WatorEnvironment WatorEnvironment { get; set; }
+        public int GestationPeriod { get; private set; } = 8;
+        private int Period = 1;
+        public int SurvivalDuration { get; private set; } = 4;
+        private int RemainingDuration = 4;
 
         #endregion
 
@@ -33,6 +38,12 @@ namespace MultiAgentSystem.WatorSystem.Models
 
         public Shark()
         {
+            Texture = XNAWatorGrid.ContentManager.Load<Texture2D>("circle");
+        }
+
+        public Shark(int Years)
+        {
+            this.Years = Years;
             Texture = XNAWatorGrid.ContentManager.Load<Texture2D>("circle");
         }
 
@@ -59,26 +70,31 @@ namespace MultiAgentSystem.WatorSystem.Models
                     break;
             }
 
+            Period = (Period + 1) % GestationPeriod;
+            Years++;
+            RemainingDuration--;
+
         }
 
         protected override DirectionEnum DecideDirection()
         {
             // TODO Modifier pour correspondre à l'énoncée
 
+            List<DirectionEnum> possibleDirectionsForFish = new List<DirectionEnum>();
             List<DirectionEnum> possibleDirections = new List<DirectionEnum>();
             foreach (var elem in Neighborhood)
             {
                 // Si cellule pas null et est de type Empty, c'est que on est pas a une frontière et que la case n'est pas occupée.
-                if (elem.Value != null && elem.Value is Empty)
+                if (elem.Value != null && elem.Value is Fish)
+                    possibleDirectionsForFish.Add(elem.Key);
+                else if (elem.Value != null && elem.Value is Empty)
                     possibleDirections.Add(elem.Key);
             }
-
-            // Si la direction actuel est toujours possible on conitnue dans la même direction.
-            if (possibleDirections.Contains(CurrentDirection))
-                return CurrentDirection;
-
+            
             // Mélange les possibilités.
-            if (possibleDirections.Count > 0)
+            if (possibleDirectionsForFish.Count > 0)
+                return CurrentDirection = possibleDirectionsForFish[Random.Next(possibleDirectionsForFish.Count)];
+            else if(possibleDirections.Count > 0)
                 return CurrentDirection = possibleDirections[Random.Next(possibleDirections.Count)];
 
             return DirectionEnum.NoOne;
@@ -110,16 +126,44 @@ namespace MultiAgentSystem.WatorSystem.Models
         protected override void ActionMove()
         {
             // TODO Modifier pour correspondre à l'énoncée
+            Coordinate OldCoordinate = Coordinate;
 
             // Choose the direction
             DirectionEnum direction = DecideDirection();
             // Free the current position
             Grid.Free(Coordinate);
+            if(RemainingDuration <= 0)
+            {
+                WatorEnvironment.DeadAgents.Add(this);
+                return;
+            }
 
             Coordinate = Grid.DirectionToCoordinate(direction, Coordinate);
 
+            // Il s'agit d'un poisson, on le mange et on vit plus longtemps
+            Cell cell = Grid.Get(Coordinate);
+            if(cell is Fish)
+            {
+                Grid.Free(Coordinate);
+                Fish fish = (Fish) cell;
+                WatorEnvironment.DeadAgents.Add(fish);
+                RemainingDuration = SurvivalDuration;
+            }
+
             // Occupy the new position
             Grid.Occupy(this);
+
+            //
+            if ((!Coordinate.Equals(OldCoordinate)) && Period == (GestationPeriod - 1))
+            {
+                //Ajouter le nouveau né dans la Grid
+                Shark Shark = new Shark(0);
+                Shark.Coordinate = OldCoordinate;
+                Shark.Grid = Grid;
+                Shark.WatorEnvironment = WatorEnvironment;
+                Grid.Occupy(Shark);
+                WatorEnvironment.NewAgents.Add(Shark);
+            }
         }
 
         protected override void ActionNothing()

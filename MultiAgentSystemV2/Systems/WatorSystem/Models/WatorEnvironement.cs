@@ -9,7 +9,8 @@ namespace MultiAgentSystem.WatorSystem.Models
     {
         #region Properties
 
-        public List<IAgent> NewAgents { get; set; } = new List<IAgent>();
+        public List<IAgent> NewAgents { get; private set; } = new List<IAgent>();
+        public List<IAgent> DeadAgents { get; private set; } = new List<IAgent>();
 
         #endregion
 
@@ -17,8 +18,6 @@ namespace MultiAgentSystem.WatorSystem.Models
 
         public WatorEnvironment() : base()
         {
-            Console.WriteLine("lol");
-
             for (int i = 0; i < App.FishsNumber; i++)
             {
                 Fish Fish = new Fish();
@@ -27,7 +26,11 @@ namespace MultiAgentSystem.WatorSystem.Models
             }
 
             for (int i = 0; i < App.SharksNumber; i++)
-                Agents.Add(new Shark());
+            {
+                Shark Shark = new Shark();
+                Shark.WatorEnvironment = this;
+                Agents.Add(Shark);
+            }
 
             this.Initialize(Agents);
         }
@@ -42,32 +45,19 @@ namespace MultiAgentSystem.WatorSystem.Models
             {
                 Agents.Add(agent);
             }
-            NewAgents = new List<IAgent>();
+            foreach (Agent agent in DeadAgents)
+            {
+                Agents.Remove(agent);
+            }
+
+            NewAgents.Clear();
+            DeadAgents.Clear();
         }
 
         public override void Run()
         {
-            Console.WriteLine("c'est le Run");
-            Console.WriteLine(NewAgents.Count);
-            
             base.Run();
-            
-            if(NewAgents.Count > 0)
-            {
-                foreach (Agent agent in NewAgents)
-                {
-                    Agents.Add(agent);
-                }
-                NewAgents.Clear();
-            }
-            
-
-            /*
-            Fish f = new Fish();
-            f.Coordinate = new Coordinate(0, 0);
-            Agents.Add(f);
-            */
-            Console.WriteLine("Agents.count " + Agents.Count);
+            RefreshAgents();
         }
 
         #endregion
