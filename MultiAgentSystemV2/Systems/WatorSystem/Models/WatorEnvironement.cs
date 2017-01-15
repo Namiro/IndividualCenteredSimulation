@@ -1,4 +1,5 @@
-﻿using MultiAgentSystem.Cores.Helpers.Grids;
+﻿using MultiAgentSystem.Cores.Helpers;
+using MultiAgentSystem.Cores.Helpers.Grids;
 using MultiAgentSystem.Cores.Models;
 using System;
 using System.Collections.Generic;
@@ -43,10 +44,13 @@ namespace MultiAgentSystem.WatorSystem.Models
         {
             foreach (Agent agent in NewAgents)
             {
+                Console.WriteLine("Agent," + agent.GetType().Name + ",Birth;");
                 Agents.Add(agent);
             }
             foreach (Agent agent in DeadAgents)
             {
+                Console.WriteLine("Agent," + agent.GetType().Name + ",Death;");
+                //Logger.WriteLog("Agent," + agent.GetType().Name + ",Death;", LogLevelL4N.INFO);
                 Agents.Remove(agent);
             }
 
@@ -54,10 +58,25 @@ namespace MultiAgentSystem.WatorSystem.Models
             DeadAgents.Clear();
         }
 
+        private void CountDifferentAgents()
+        {
+            int sharks = 0;
+            int fishes = 0;
+            foreach (Agent agent in Agents)
+            {
+                if (agent is Shark)
+                    sharks++;
+                else if (agent is Fish)
+                    fishes++;
+            }
+            Console.WriteLine("Tick," + sharks + "," + fishes);
+        }
+
         public override void Run()
         {
             base.Run();
             RefreshAgents();
+            CountDifferentAgents();
         }
 
         #endregion

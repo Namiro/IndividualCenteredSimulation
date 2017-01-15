@@ -14,7 +14,7 @@ namespace MultiAgentSystem.WatorSystem.Models
     {
         #region Properties
 
-        public int Years { get; private set; } = 10;
+        public int Years { get; private set; } = 0;
         public StateEnum State { get; private set; }
         public override Color Color
         {
@@ -27,6 +27,7 @@ namespace MultiAgentSystem.WatorSystem.Models
             }
         }
         public WatorEnvironment WatorEnvironment { get; set; }
+        public Coordinate OldCoordinate { get; private set; }
         public int GestationPeriod { get; private set; } = 5;
         private int Period = 1;
 
@@ -36,12 +37,6 @@ namespace MultiAgentSystem.WatorSystem.Models
 
         public Fish()
         {
-            Texture = XNAWatorGrid.ContentManager.Load<Texture2D>("circle");
-        }
-
-        public Fish(int Years)
-        {
-            this.Years = Years;
             Texture = XNAWatorGrid.ContentManager.Load<Texture2D>("circle");
         }
 
@@ -56,8 +51,6 @@ namespace MultiAgentSystem.WatorSystem.Models
         {
 
             CheckArround();
-
-            // TODO Implémenter toutes les actions possibles
 
             switch (DecideAction())
             {
@@ -75,8 +68,6 @@ namespace MultiAgentSystem.WatorSystem.Models
 
         protected override DirectionEnum DecideDirection()
         {
-            // TODO Modifier pour correspondre à l'énoncée
-
             List<DirectionEnum> possibleDirections = new List<DirectionEnum>();
             foreach (var elem in Neighborhood)
             {
@@ -101,8 +92,6 @@ namespace MultiAgentSystem.WatorSystem.Models
         /// </summary>
         private ActionEnum DecideAction()
         {
-            // TODO Modifier pour correspondre à l'énoncée
-
             int actionChoice = App.Random.Next(ActionsNumber);
             switch (actionChoice)
             {
@@ -121,9 +110,8 @@ namespace MultiAgentSystem.WatorSystem.Models
         /// </summary>
         protected override void ActionMove()
         {
-            // TODO Modifier pour correspondre à l'énoncée
-            Coordinate OldCoordinate = Coordinate;
-
+            // Save this old coordinate
+            OldCoordinate = Coordinate;
             // Choose the direction
             DirectionEnum direction = DecideDirection();
             // Free the current position
@@ -133,16 +121,10 @@ namespace MultiAgentSystem.WatorSystem.Models
             // Occupy the new position
             Grid.Occupy(this);
 
-            //
+            // If agent moves and conditions are okay then it can reproduce
             if ((!Coordinate.Equals(OldCoordinate)) && Period == (GestationPeriod -1))
             {
-                //Ajouter le nouveau né dans la Grid
-                Fish Fish = new Fish(0);
-                Fish.Coordinate = OldCoordinate;
-                Fish.Grid = Grid;
-                Fish.WatorEnvironment = WatorEnvironment;
-                Grid.Occupy(Fish);
-                WatorEnvironment.NewAgents.Add(Fish);
+                ActionReproduction();
             }
         }
 
@@ -152,20 +134,25 @@ namespace MultiAgentSystem.WatorSystem.Models
 
         }
 
+        /// <summary>
+        /// To reproduce a new fish agent
+        /// </summary>
         private void ActionReproduction()
         {
-            
+            Fish Fish = new Fish();
+            Fish.Coordinate = OldCoordinate;
+            Fish.Grid = Grid;
+            Fish.WatorEnvironment = WatorEnvironment;
+            Grid.Occupy(Fish);
+            WatorEnvironment.NewAgents.Add(Fish);
         }
 
         #endregion
 
         private enum ActionEnum
         {
-            // TODO Ajouter les actions possible pour correspondre à l'énoncé
-
             Nothing,
-            Move,
-            Reproduction
+            Move
         }
     }
 }

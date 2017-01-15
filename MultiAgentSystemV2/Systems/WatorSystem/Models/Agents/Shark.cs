@@ -14,7 +14,7 @@ namespace MultiAgentSystem.WatorSystem.Models
     {
         #region Properties
 
-        public int Years { get; private set; } = 10;
+        public int Years { get; private set; } = 0;
         public StateEnum State { get; private set; }
         public override Color Color
         {
@@ -27,9 +27,10 @@ namespace MultiAgentSystem.WatorSystem.Models
             }
         }
         public WatorEnvironment WatorEnvironment { get; set; }
-        public int GestationPeriod { get; private set; } = 8;
+        public Coordinate OldCoordinate { get; private set; }
+        public int GestationPeriod { get; private set; } = 10;
         private int Period = 1;
-        public int SurvivalDuration { get; private set; } = 4;
+        public int SurvivalDuration { get; private set; } = 7;
         private int RemainingDuration = 4;
 
         #endregion
@@ -38,12 +39,6 @@ namespace MultiAgentSystem.WatorSystem.Models
 
         public Shark()
         {
-            Texture = XNAWatorGrid.ContentManager.Load<Texture2D>("circle");
-        }
-
-        public Shark(int Years)
-        {
-            this.Years = Years;
             Texture = XNAWatorGrid.ContentManager.Load<Texture2D>("circle");
         }
 
@@ -57,8 +52,6 @@ namespace MultiAgentSystem.WatorSystem.Models
         public override void Decide()
         {
             CheckArround();
-
-            // TODO Implémenter toutes les actions possibles
 
             switch (DecideAction())
             {
@@ -78,8 +71,6 @@ namespace MultiAgentSystem.WatorSystem.Models
 
         protected override DirectionEnum DecideDirection()
         {
-            // TODO Modifier pour correspondre à l'énoncée
-
             List<DirectionEnum> possibleDirectionsForFish = new List<DirectionEnum>();
             List<DirectionEnum> possibleDirections = new List<DirectionEnum>();
             foreach (var elem in Neighborhood)
@@ -105,8 +96,6 @@ namespace MultiAgentSystem.WatorSystem.Models
         /// </summary>
         private ActionEnum DecideAction()
         {
-            // TODO Modifier pour correspondre à l'énoncée
-
             int actionChoice = App.Random.Next(ActionsNumber);
             switch (actionChoice)
             {
@@ -125,44 +114,36 @@ namespace MultiAgentSystem.WatorSystem.Models
         /// </summary>
         protected override void ActionMove()
         {
-            // TODO Modifier pour correspondre à l'énoncée
-            Coordinate OldCoordinate = Coordinate;
-
+            // Save this old coordinate
+            OldCoordinate = Coordinate;
             // Choose the direction
             DirectionEnum direction = DecideDirection();
             // Free the current position
             Grid.Free(Coordinate);
+            
             if(RemainingDuration <= 0)
             {
-                WatorEnvironment.DeadAgents.Add(this);
+                ActionDie();
                 return;
             }
 
             Coordinate = Grid.DirectionToCoordinate(direction, Coordinate);
 
-            // Il s'agit d'un poisson, on le mange et on vit plus longtemps
+            // If a fish, a shark eats it
             Cell cell = Grid.Get(Coordinate);
             if(cell is Fish)
             {
-                Grid.Free(Coordinate);
                 Fish fish = (Fish) cell;
-                WatorEnvironment.DeadAgents.Add(fish);
-                RemainingDuration = SurvivalDuration;
+                ActionEat(fish);
             }
 
             // Occupy the new position
             Grid.Occupy(this);
 
-            //
+            // If agent moves and conditions are okay then it can reproduce
             if ((!Coordinate.Equals(OldCoordinate)) && Period == (GestationPeriod - 1))
             {
-                //Ajouter le nouveau né dans la Grid
-                Shark Shark = new Shark(0);
-                Shark.Coordinate = OldCoordinate;
-                Shark.Grid = Grid;
-                Shark.WatorEnvironment = WatorEnvironment;
-                Grid.Occupy(Shark);
-                WatorEnvironment.NewAgents.Add(Shark);
+                ActionReproduction();
             }
         }
 
@@ -171,27 +152,44 @@ namespace MultiAgentSystem.WatorSystem.Models
 
         }
 
+        /// <summary>
+        /// To reproduce a new shark agent
+        /// </summary>
         private void ActionReproduction()
         {
-
+            Shark Shark = new Shark();
+            Shark.Coordinate = OldCoordinate;
+            Shark.Grid = Grid;
+            Shark.WatorEnvironment = WatorEnvironment;
+            Grid.Occupy(Shark);
+            WatorEnvironment.NewAgents.Add(Shark);
         }
-        private void ActionEat()
+
+        /// <summary>
+        /// To eat a fish agent
+        /// </summary>
+        private void ActionEat(Fish fish)
         {
-
+            Grid.Free(Coordinate);
+            WatorEnvironment.DeadAgents.Add(fish);
+            RemainingDuration = SurvivalDuration;
         }
 
+        /// <summary>
+        /// To die
+        /// </summary>
+        private void ActionDie()
+        {
+            WatorEnvironment.DeadAgents.Add(this);
+        }
 
 
         #endregion
 
         private enum ActionEnum
         {
-            // TODO Ajouter les actions possible pour correspondre à l'énoncé
-
             Nothing,
-            Move,
-            Reproduction,
-            Eat
+            Move
         }
     }
 }
