@@ -26,6 +26,9 @@ namespace MultiAgentSystem.WatorSystem.Models
                     return Color.Blue;
             }
         }
+        public int GestationPeriod { get; private set; } = 5;
+        private int Period = 1;
+        public WatorEnvironment WatorEnvironment { get; set; }
 
         #endregion
 
@@ -33,6 +36,12 @@ namespace MultiAgentSystem.WatorSystem.Models
 
         public Fish()
         {
+            Texture = XNAWatorGrid.ContentManager.Load<Texture2D>("circle");
+        }
+
+        public Fish(int Years)
+        {
+            this.Years = Years;
             Texture = XNAWatorGrid.ContentManager.Load<Texture2D>("circle");
         }
 
@@ -60,6 +69,8 @@ namespace MultiAgentSystem.WatorSystem.Models
                     break;
             }
 
+            Period = (Period + 1) % GestationPeriod;
+            Years++;
         }
 
         protected override DirectionEnum DecideDirection()
@@ -111,6 +122,7 @@ namespace MultiAgentSystem.WatorSystem.Models
         protected override void ActionMove()
         {
             // TODO Modifier pour correspondre à l'énoncée
+            Coordinate OldCoordinate = Coordinate;
 
             // Choose the direction
             DirectionEnum direction = DecideDirection();
@@ -120,11 +132,33 @@ namespace MultiAgentSystem.WatorSystem.Models
             Coordinate = Grid.DirectionToCoordinate(direction, Coordinate);
             // Occupy the new position
             Grid.Occupy(this);
+
+            //
+            if ((!Coordinate.Equals(OldCoordinate)) && Period == (GestationPeriod -1))
+            {
+                Console.WriteLine("Reproduction");
+                //Ajouter le nouveau né dans la Grid
+                Fish Fish = new Fish(0);
+                Fish.Coordinate = OldCoordinate;
+                Fish.Grid = Grid;
+                Fish.WatorEnvironment = WatorEnvironment;
+                Grid.Occupy(Fish);
+                Console.WriteLine(WatorEnvironment);
+                WatorEnvironment.NewAgents.Add(Fish);
+                Console.WriteLine("NewAgents.count " + WatorEnvironment.NewAgents.Count);
+                
+            }
         }
+
 
         protected override void ActionNothing()
         {
 
+        }
+
+        private void ActionReproduction()
+        {
+            
         }
 
         #endregion
@@ -134,7 +168,8 @@ namespace MultiAgentSystem.WatorSystem.Models
             // TODO Ajouter les actions possible pour correspondre à l'énoncé
 
             Nothing,
-            Move
+            Move,
+            Reproduction
         }
     }
 }

@@ -127,6 +127,17 @@ namespace MultiAgentSystem.WatorSystem.Models
 
         }
 
+        private void ActionReproduction()
+        {
+
+        }
+        private void ActionEat()
+        {
+
+        }
+
+
+
         #endregion
 
         private enum ActionEnum
@@ -134,7 +145,9 @@ namespace MultiAgentSystem.WatorSystem.Models
             // TODO Ajouter les actions possible pour correspondre à l'énoncé
 
             Nothing,
-            Move
+            Move,
+            Reproduction,
+            Eat
         }
     }
 }

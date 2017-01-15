@@ -46,7 +46,7 @@ namespace MultiAgentSystem.Cores.Models
             }
         }
 
-        public void Run()
+        public virtual void Run()
         {
             switch (App.SchedulingStrategy)
             {

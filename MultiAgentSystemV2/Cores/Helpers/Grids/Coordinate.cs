@@ -21,5 +21,12 @@ namespace MultiAgentSystem.Cores.Helpers.Grids
         {
             return JsonConvert.SerializeObject(this);
         }
+
+        public override bool Equals(object obj)
+        {
+            if (!(obj is Coordinate)) return false;
+            Coordinate coord = (Coordinate)obj;
+            return this.X == coord.X && this.Y == coord.Y;
+        }
     }
 }
