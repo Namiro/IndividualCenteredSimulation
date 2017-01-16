@@ -3,6 +3,7 @@ using MultiAgentSystem.Cores.Helpers.Grids;
 using MultiAgentSystem.Cores.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace MultiAgentSystem.WatorSystem.Models
 {
@@ -34,6 +35,12 @@ namespace MultiAgentSystem.WatorSystem.Models
             }
 
             this.Initialize(Agents);
+
+            //Test de la redirection
+            FileStream fs = new FileStream("Wator.csv", FileMode.Create);
+            TextWriter tmp = Console.Out;
+            StreamWriter sw = new StreamWriter(fs);
+            Console.SetOut(sw);
         }
 
         #endregion
@@ -44,13 +51,10 @@ namespace MultiAgentSystem.WatorSystem.Models
         {
             foreach (Agent agent in NewAgents)
             {
-                Console.WriteLine("Agent," + agent.GetType().Name + ",Birth;");
                 Agents.Add(agent);
             }
             foreach (Agent agent in DeadAgents)
             {
-                Console.WriteLine("Agent," + agent.GetType().Name + ",Death;");
-                //Logger.WriteLog("Agent," + agent.GetType().Name + ",Death;", LogLevelL4N.INFO);
                 Agents.Remove(agent);
             }
 
@@ -69,7 +73,7 @@ namespace MultiAgentSystem.WatorSystem.Models
                 else if (agent is Fish)
                     fishes++;
             }
-            Console.WriteLine("Tick," + sharks + "," + fishes);
+            Console.WriteLine("Tick," + sharks + "," + fishes + ";");
         }
 
         public override void Run()
