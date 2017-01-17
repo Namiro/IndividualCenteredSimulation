@@ -11,10 +11,28 @@ namespace MultiAgentSystem.WatorSystem.Models
     {
         #region Properties
 
-        public List<IAgent> NewAgents { get; private set; } = new List<IAgent>();
-        public List<IAgent> DeadAgents { get; private set; } = new List<IAgent>();
-        int tick = 1;
-        StreamWriter sw;
+        /// <summary>
+        /// The list of the newborn agents (Sharks and Fishes) after each tick.
+        /// </summary>
+        public static List<IAgent> NewbornAgents { get; private set; } = new List<IAgent>();
+        /// <summary>
+        /// The list of the dead agents (Sharks and Fishes) after each tick.
+        /// </summary>
+        public static List<IAgent> DeadAgents { get; private set; } = new List<IAgent>();
+        private int TickCount = 1;
+        private StreamWriter sw;
+
+        //The statistics in Wator's environment
+        //Console.WriteLine("Tick_Num,Nb_Sharks,Nb_New_Sharks,Nb_Dead_Sharks,Older_Shark,Nb_Fishes,Nb_New_Fishes,Nb_Dead_Fishes,Older_Fish;");
+        public static int SharksNumber { get; set; } = App.SharksNumber;
+        public static int NewbornSharksNumber { get; set; } = 0;
+        public static int DeadSharksNumber { get; set; } = 0;
+        public static int AgeOfOlderShark { get; set; } = 0;
+
+        public static int FishsNumber { get; set; } = App.FishsNumber;
+        public static int NewbornFishsNumber { get; set; } = 0;
+        public static int DeadFishsNumber { get; set; } = 0;
+        public static int AgeOfOlderFish { get; set; } = 0;
 
         #endregion
 
@@ -24,21 +42,17 @@ namespace MultiAgentSystem.WatorSystem.Models
         {
             for (int i = 0; i < App.FishsNumber; i++)
             {
-                Fish Fish = new Fish();
-                Fish.WatorEnvironment = this;
-                Agents.Add(Fish);
+                Agents.Add(new Fish());
             }
 
             for (int i = 0; i < App.SharksNumber; i++)
             {
-                Shark Shark = new Shark();
-                Shark.WatorEnvironment = this;
-                Agents.Add(Shark);
+                Agents.Add(new Shark());
             }
 
             this.Initialize(Agents);
 
-            //Test de la redirection
+            //Redirection to file Wator.csv
             FileStream fs = new FileStream("Wator.csv", FileMode.Create);
             TextWriter tmp = Console.Out;
             sw = new StreamWriter(fs);
@@ -52,7 +66,7 @@ namespace MultiAgentSystem.WatorSystem.Models
 
         private void RefreshAgents()
         {
-            foreach (Agent agent in NewAgents)
+            foreach (Agent agent in NewbornAgents)
             {
                 Agents.Add(agent);
             }
@@ -61,7 +75,7 @@ namespace MultiAgentSystem.WatorSystem.Models
                 Agents.Remove(agent);
             }
 
-            NewAgents.Clear();
+            NewbornAgents.Clear();
             DeadAgents.Clear();
         }
 
@@ -128,7 +142,7 @@ namespace MultiAgentSystem.WatorSystem.Models
             int nbSharks = 0, nbNewSharks = 0, nbDeadSharks = 0, nbFishes = 0, nbNewFishes = 0, nbDeadFishes = 0;
             int olderShark = 0, olderFish = 0;
 
-            nbSharksFishes = CountDifferentAgents(NewAgents);
+            nbSharksFishes = CountDifferentAgents(NewbornAgents);
             nbNewSharks = nbSharksFishes[0]; nbNewFishes = nbSharksFishes[1];
             nbSharksFishes = CountDifferentAgents(DeadAgents);
             nbDeadSharks = nbSharksFishes[0]; nbDeadFishes = nbSharksFishes[1];
@@ -141,15 +155,15 @@ namespace MultiAgentSystem.WatorSystem.Models
             olderSharksFishes = GetOlderAgents();
             olderShark = olderSharksFishes[0]; olderFish = olderSharksFishes[1];
 
-            Console.WriteLine(tick + "," + nbSharks + "," + nbNewSharks + "," + nbDeadSharks + "," + olderShark + "," + nbFishes + "," + nbNewFishes + "," + nbDeadFishes + "," + olderFish + ";");
+            Console.WriteLine(TickCount + "," + nbSharks + "," + nbNewSharks + "," + nbDeadSharks + "," + olderShark + "," + nbFishes + "," + nbNewFishes + "," + nbDeadFishes + "," + olderFish + ";");
 
             //Au bout de N tick, on arrête le programme
-            if (tick == 100)
+            if (TickCount == 100)
             {
                 sw.Close();
                 System.Environment.Exit(0);
             }
-            tick++;
+            TickCount++;
         }
 
         public override void Run()

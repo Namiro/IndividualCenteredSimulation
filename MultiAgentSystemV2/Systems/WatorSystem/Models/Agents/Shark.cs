@@ -26,7 +26,6 @@ namespace MultiAgentSystem.WatorSystem.Models
                     return Color.Red;
             }
         }
-        public WatorEnvironment WatorEnvironment { get; set; }
         public Coordinate OldCoordinate { get; private set; }
         private int SharkBreedTimeTick = 0;
         private int SharkStarveTimeTick = 0;
@@ -158,9 +157,8 @@ namespace MultiAgentSystem.WatorSystem.Models
             Shark Shark = new Shark();
             Shark.Coordinate = OldCoordinate;
             Shark.Grid = Grid;
-            Shark.WatorEnvironment = WatorEnvironment;
             Grid.Occupy(Shark);
-            WatorEnvironment.NewAgents.Add(Shark);
+            WatorEnvironment.NewbornAgents.Add(Shark);
         }
 
         /// <summary>

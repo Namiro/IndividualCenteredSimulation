@@ -28,10 +28,10 @@
         public const bool DEFAULT_IS_DISPLAY_AXE = false;
         public const bool DEFAULT_IS_TORIC = false;
         public const int DEFAULT_SHARKS_NUMBER = 5;
-        public const int DEFAULT_SHARK_BREED_TIME = 8;
-        public const int DEFAULT_SHARK_STARVE_TIME = 4;
-        public const int DEFAULT_FISHS_NUMBER = 25;
-        public const int DEFAULT_FISH_BREED_TIME = 8;
+        public const int DEFAULT_SHARK_BREED_TIME = 10;
+        public const int DEFAULT_SHARK_STARVE_TIME = 3;
+        public const int DEFAULT_FISHS_NUMBER = 200;
+        public const int DEFAULT_FISH_BREED_TIME = 2;
 
 
         // Keys of App.config

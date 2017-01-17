@@ -26,9 +26,8 @@ namespace MultiAgentSystem.WatorSystem.Models
                     return Color.Blue;
             }
         }
-        public WatorEnvironment WatorEnvironment { get; set; }
         public Coordinate OldCoordinate { get; private set; }
-        private int FishBreedTimeTick = 1;
+        private int FishBreedTimeTick = 0;
 
         #endregion
 
@@ -141,9 +140,8 @@ namespace MultiAgentSystem.WatorSystem.Models
             Fish Fish = new Fish();
             Fish.Coordinate = OldCoordinate;
             Fish.Grid = Grid;
-            Fish.WatorEnvironment = WatorEnvironment;
             Grid.Occupy(Fish);
-            WatorEnvironment.NewAgents.Add(Fish);
+            WatorEnvironment.NewbornAgents.Add(Fish);
         }
 
         #endregion
