@@ -28,8 +28,7 @@ namespace MultiAgentSystem.WatorSystem.Models
         }
         public WatorEnvironment WatorEnvironment { get; set; }
         public Coordinate OldCoordinate { get; private set; }
-        public int GestationPeriod { get; private set; } = 5;
-        private int Period = 1;
+        private int FishBreedTimeTick = 1;
 
         #endregion
 
@@ -62,7 +61,7 @@ namespace MultiAgentSystem.WatorSystem.Models
                     break;
             }
 
-            Period = (Period + 1) % GestationPeriod;
+            FishBreedTimeTick = (FishBreedTimeTick + 1) % App.FishBreedTime;
             Years++;
         }
 
@@ -122,7 +121,7 @@ namespace MultiAgentSystem.WatorSystem.Models
             Grid.Occupy(this);
 
             // If agent moves and conditions are okay then it can reproduce
-            if ((!Coordinate.Equals(OldCoordinate)) && Period == (GestationPeriod -1))
+            if ((!Coordinate.Equals(OldCoordinate)) && FishBreedTimeTick == (App.FishBreedTime -1))
             {
                 ActionReproduction();
             }
@@ -145,7 +144,6 @@ namespace MultiAgentSystem.WatorSystem.Models
             Fish.WatorEnvironment = WatorEnvironment;
             Grid.Occupy(Fish);
             WatorEnvironment.NewAgents.Add(Fish);
-            //Console.WriteLine("Agent,Fish,Birth;");
         }
 
         #endregion

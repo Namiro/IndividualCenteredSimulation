@@ -28,8 +28,8 @@ namespace MultiAgentSystem.WatorSystem.Models
         }
         public WatorEnvironment WatorEnvironment { get; set; }
         public Coordinate OldCoordinate { get; private set; }
-        private int Period = 1;
-        private int RemainingDuration = 1;
+        private int SharkBreedTimeTick = 0;
+        private int SharkStarveTimeTick = 0;
 
         #endregion
 
@@ -61,9 +61,9 @@ namespace MultiAgentSystem.WatorSystem.Models
                     break;
             }
 
-            Period = (Period + 1) % App.SharkBreedTime;
-            Years++;
-            RemainingDuration--;
+            SharkBreedTimeTick = (SharkBreedTimeTick + 1) % App.SharkBreedTime;
+            SharkStarveTimeTick++;
+            Years++;           
 
         }
 
@@ -119,7 +119,7 @@ namespace MultiAgentSystem.WatorSystem.Models
             // Free the current position
             Grid.Free(Coordinate);
             
-            if(RemainingDuration <= 0)
+            if(SharkStarveTimeTick == App.SharkStarveTime)
             {
                 ActionDie();
                 return;
@@ -139,7 +139,7 @@ namespace MultiAgentSystem.WatorSystem.Models
             Grid.Occupy(this);
 
             // If agent moves and conditions are okay then it can reproduce
-            if ((!Coordinate.Equals(OldCoordinate)) && Period == (App.SharkBreedTime - 1))
+            if ((!Coordinate.Equals(OldCoordinate)) && SharkBreedTimeTick == (App.SharkBreedTime - 1))
             {
                 ActionReproduction();
             }
@@ -161,7 +161,6 @@ namespace MultiAgentSystem.WatorSystem.Models
             Shark.WatorEnvironment = WatorEnvironment;
             Grid.Occupy(Shark);
             WatorEnvironment.NewAgents.Add(Shark);
-            //Console.WriteLine("Agent,Shark,Birth;");
         }
 
         /// <summary>
@@ -171,8 +170,7 @@ namespace MultiAgentSystem.WatorSystem.Models
         {
             Grid.Free(Coordinate);
             WatorEnvironment.DeadAgents.Add(fish);
-            RemainingDuration = App.SharkStarveTime;
-            //Console.WriteLine("Agent,Fish,Death;");
+            SharkStarveTimeTick = 0;
         }
 
         /// <summary>
@@ -181,7 +179,6 @@ namespace MultiAgentSystem.WatorSystem.Models
         private void ActionDie()
         {
             WatorEnvironment.DeadAgents.Add(this);
-            //Console.WriteLine("Agent,Shark,Death;");
         }
 
 
