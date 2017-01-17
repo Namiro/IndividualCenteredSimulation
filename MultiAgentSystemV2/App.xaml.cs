@@ -105,12 +105,29 @@ namespace MultiAgentSystem
         /// <summary>
         /// Display or not the axe.
         /// </summary>
+        public static int SharksNumber { get; set; } = Constants.DEFAULT_SHARKS_NUMBER;
+
+        /// <summary>
+        /// Display or not the axe.
+        /// </summary>
+        public static int SharkBreedTime { get; set; } = Constants.DEFAULT_SHARK_BREED_TIME;
+
+        /// <summary>
+        /// Display or not the axe.
+        /// </summary>
+        public static int SharkStarveTime { get; set; } = Constants.DEFAULT_SHARK_STARVE_TIME;
+
+        /// <summary>
+        /// Display or not the axe.
+        /// </summary>
         public static int FishsNumber { get; set; } = Constants.DEFAULT_FISHS_NUMBER;
 
         /// <summary>
         /// Display or not the axe.
         /// </summary>
-        public static int SharksNumber { get; set; } = Constants.DEFAULT_SHARKS_NUMBER;
+        public static int FishBreedTime { get; set; } = Constants.DEFAULT_FISH_BREED_TIME;
+
+
 
 
         #endregion
@@ -145,7 +162,10 @@ namespace MultiAgentSystem
             ParticlesNumber = int.Parse(ConfigurationManager.AppSettings[Constants.APP_CONFIG_KEY_PARTICLES_NUMBER]);
             Seed = int.Parse(ConfigurationManager.AppSettings[Constants.APP_CONFIG_KEY_SEED]);
             SharksNumber = int.Parse(ConfigurationManager.AppSettings[Constants.APP_CONFIG_KEY_SHARKS_NUMBER]);
+            SharkBreedTime = int.Parse(ConfigurationManager.AppSettings[Constants.APP_CONFIG_KEY_SHARK_BREED_TIME]);
+            SharkStarveTime = int.Parse(ConfigurationManager.AppSettings[Constants.APP_CONFIG_KEY_SHARK_STARVE_TIME]);
             FishsNumber = int.Parse(ConfigurationManager.AppSettings[Constants.APP_CONFIG_KEY_FISHS_NUMBER]);
+            FishBreedTime = int.Parse(ConfigurationManager.AppSettings[Constants.APP_CONFIG_KEY_FISH_BREED_TIME]);
 
             // IsDisplayGrid
             if (ConfigurationManager.AppSettings[Constants.APP_CONFIG_KEY_IS_DISPLAY_GRID] == "True")

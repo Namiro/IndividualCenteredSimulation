@@ -28,10 +28,8 @@ namespace MultiAgentSystem.WatorSystem.Models
         }
         public WatorEnvironment WatorEnvironment { get; set; }
         public Coordinate OldCoordinate { get; private set; }
-        public int GestationPeriod { get; private set; } = 10;
         private int Period = 1;
-        public int SurvivalDuration { get; private set; } = 7;
-        private int RemainingDuration = 4;
+        private int RemainingDuration = 1;
 
         #endregion
 
@@ -63,7 +61,7 @@ namespace MultiAgentSystem.WatorSystem.Models
                     break;
             }
 
-            Period = (Period + 1) % GestationPeriod;
+            Period = (Period + 1) % App.SharkBreedTime;
             Years++;
             RemainingDuration--;
 
@@ -141,7 +139,7 @@ namespace MultiAgentSystem.WatorSystem.Models
             Grid.Occupy(this);
 
             // If agent moves and conditions are okay then it can reproduce
-            if ((!Coordinate.Equals(OldCoordinate)) && Period == (GestationPeriod - 1))
+            if ((!Coordinate.Equals(OldCoordinate)) && Period == (App.SharkBreedTime - 1))
             {
                 ActionReproduction();
             }
@@ -173,7 +171,7 @@ namespace MultiAgentSystem.WatorSystem.Models
         {
             Grid.Free(Coordinate);
             WatorEnvironment.DeadAgents.Add(fish);
-            RemainingDuration = SurvivalDuration;
+            RemainingDuration = App.SharkStarveTime;
             //Console.WriteLine("Agent,Fish,Death;");
         }
 

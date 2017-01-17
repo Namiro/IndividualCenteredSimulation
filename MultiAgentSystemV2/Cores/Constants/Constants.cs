@@ -28,7 +28,10 @@
         public const bool DEFAULT_IS_DISPLAY_AXE = false;
         public const bool DEFAULT_IS_TORIC = false;
         public const int DEFAULT_SHARKS_NUMBER = 5;
+        public const int DEFAULT_SHARK_BREED_TIME = 8;
+        public const int DEFAULT_SHARK_STARVE_TIME = 4;
         public const int DEFAULT_FISHS_NUMBER = 25;
+        public const int DEFAULT_FISH_BREED_TIME = 8;
 
 
         // Keys of App.config
@@ -49,7 +52,11 @@
         public const string APP_CONFIG_KEY_IS_DISPLAY_AXE = "IsDisplayAxe";
         public const string APP_CONFIG_KEY_IS_TORIC = "IsToric";
         public const string APP_CONFIG_KEY_SHARKS_NUMBER = "SharksNumber";
+        public const string APP_CONFIG_KEY_SHARK_BREED_TIME = "SharkBreedTime";
+        public const string APP_CONFIG_KEY_SHARK_STARVE_TIME = "SharkStarveTime";
         public const string APP_CONFIG_KEY_FISHS_NUMBER = "FishsNumber";
+        public const string APP_CONFIG_KEY_FISH_BREED_TIME = "FishBreedTime";
+        
 
 
         // Keys for the execution App Properties
