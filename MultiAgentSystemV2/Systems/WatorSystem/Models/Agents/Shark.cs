@@ -163,7 +163,7 @@ namespace MultiAgentSystem.WatorSystem.Models
             Shark.WatorEnvironment = WatorEnvironment;
             Grid.Occupy(Shark);
             WatorEnvironment.NewAgents.Add(Shark);
-            Console.WriteLine("Agent,Shark,Birth;");
+            //Console.WriteLine("Agent,Shark,Birth;");
         }
 
         /// <summary>
@@ -174,7 +174,7 @@ namespace MultiAgentSystem.WatorSystem.Models
             Grid.Free(Coordinate);
             WatorEnvironment.DeadAgents.Add(fish);
             RemainingDuration = SurvivalDuration;
-            Console.WriteLine("Agent,Fish,Death;");
+            //Console.WriteLine("Agent,Fish,Death;");
         }
 
         /// <summary>
@@ -183,7 +183,7 @@ namespace MultiAgentSystem.WatorSystem.Models
         private void ActionDie()
         {
             WatorEnvironment.DeadAgents.Add(this);
-            Console.WriteLine("Agent,Shark,Death;");
+            //Console.WriteLine("Agent,Shark,Death;");
         }
 
 

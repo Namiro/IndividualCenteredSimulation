@@ -145,7 +145,7 @@ namespace MultiAgentSystem.WatorSystem.Models
             Fish.WatorEnvironment = WatorEnvironment;
             Grid.Occupy(Fish);
             WatorEnvironment.NewAgents.Add(Fish);
-            Console.WriteLine("Agent,Fish,Birth;");
+            //Console.WriteLine("Agent,Fish,Birth;");
         }
 
         #endregion
