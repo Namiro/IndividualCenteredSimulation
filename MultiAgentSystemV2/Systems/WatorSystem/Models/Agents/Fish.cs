@@ -14,13 +14,23 @@ namespace MultiAgentSystem.WatorSystem.Models
     {
         #region Properties
 
-        public int Years { get; private set; } = 0;
+        private int _Ages = 0;
+        public int Ages {
+            get
+            {
+                return _Ages;
+            }
+            private set
+            {
+                _Ages = value;
+            }
+        }
         public StateEnum State { get; private set; }
         public override Color Color
         {
             get
             {
-                if (Years <= 1)
+                if (Ages <= 1)
                     return Color.Green;
                 else
                     return Color.Blue;
@@ -61,7 +71,7 @@ namespace MultiAgentSystem.WatorSystem.Models
             }
 
             FishBreedTimeTick = (FishBreedTimeTick + 1) % App.FishBreedTime;
-            Years++;
+            Ages++;
         }
 
         protected override DirectionEnum DecideDirection()
@@ -142,6 +152,8 @@ namespace MultiAgentSystem.WatorSystem.Models
             Fish.Grid = Grid;
             Grid.Occupy(Fish);
             WatorEnvironment.NewbornAgents.Add(Fish);
+            WatorEnvironment.FishsNumber++;
+            WatorEnvironment.NewbornFishsNumber++;
         }
 
         #endregion

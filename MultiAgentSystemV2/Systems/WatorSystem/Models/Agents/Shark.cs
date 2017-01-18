@@ -14,13 +14,24 @@ namespace MultiAgentSystem.WatorSystem.Models
     {
         #region Properties
 
-        public int Years { get; private set; } = 0;
+        private int _Ages = 0;
+        public int Ages
+        {
+            get
+            {
+                return _Ages;
+            }
+            private set
+            {
+                _Ages = value;
+            }
+        }
         public StateEnum State { get; private set; }
         public override Color Color
         {
             get
             {
-                if (Years <= 1)
+                if (Ages <= 1)
                     return Color.Pink;
                 else
                     return Color.Red;
@@ -62,7 +73,7 @@ namespace MultiAgentSystem.WatorSystem.Models
 
             SharkBreedTimeTick = (SharkBreedTimeTick + 1) % App.SharkBreedTime;
             SharkStarveTimeTick++;
-            Years++;           
+            Ages++;           
 
         }
 
@@ -159,6 +170,8 @@ namespace MultiAgentSystem.WatorSystem.Models
             Shark.Grid = Grid;
             Grid.Occupy(Shark);
             WatorEnvironment.NewbornAgents.Add(Shark);
+            WatorEnvironment.SharksNumber++;
+            WatorEnvironment.NewbornSharksNumber++;
         }
 
         /// <summary>
@@ -169,6 +182,8 @@ namespace MultiAgentSystem.WatorSystem.Models
             Grid.Free(Coordinate);
             WatorEnvironment.DeadAgents.Add(fish);
             SharkStarveTimeTick = 0;
+            WatorEnvironment.FishsNumber--;
+            WatorEnvironment.DeadFishsNumber++;
         }
 
         /// <summary>
@@ -177,6 +192,8 @@ namespace MultiAgentSystem.WatorSystem.Models
         private void ActionDie()
         {
             WatorEnvironment.DeadAgents.Add(this);
+            WatorEnvironment.SharksNumber--;
+            WatorEnvironment.DeadSharksNumber++;
         }
 
 
