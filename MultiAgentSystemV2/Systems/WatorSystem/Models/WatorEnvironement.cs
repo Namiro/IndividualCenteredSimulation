@@ -23,17 +23,19 @@ namespace MultiAgentSystem.WatorSystem.Models
         private StreamWriter sw;
 
         //The statistics in Wator's environment
+        private static int AppTick = 1000;
+
         public static int SharksNumber { get; set; } = App.SharksNumber;
         public static int NewbornSharksNumber { get; set; } = 0;
         public static int DeadSharksNumber { get; set; } = 0;
         public static int AgeOfOlderShark { get; set; } = 0;
-        public static int[] SharkAgePyramid { get; private set; } = new int[1000 +1];
+        public static int[] SharkAgePyramid { get; set; } = new int[AppTick + 1];
 
         public static int FishsNumber { get; set; } = App.FishsNumber;
         public static int NewbornFishsNumber { get; set; } = 0;
         public static int DeadFishsNumber { get; set; } = 0;
         public static int AgeOfOlderFish { get; set; } = 0;
-        public static int[] FishAgePyramid { get; private set; } = new int[1000 +1];
+        public static int[] FishAgePyramid { get; set; } = new int[AppTick + 1];
 
         #endregion
 
@@ -49,6 +51,12 @@ namespace MultiAgentSystem.WatorSystem.Models
             for (int i = 0; i < App.SharksNumber; i++)
             {
                 Agents.Add(new Shark());
+            }
+
+            for (int i = 0; i < AppTick; i++)
+            {
+                SharkAgePyramid[i] = 0;
+                FishAgePyramid[i] = 0;
             }
 
             this.Initialize(Agents);
@@ -84,33 +92,19 @@ namespace MultiAgentSystem.WatorSystem.Models
                 if(agent is Fish)
                 {
                     Fish fish = (Fish)agent;
+                    WatorEnvironment.FishAgePyramid[fish.Ages]++;
                     if (fish.Ages > WatorEnvironment.AgeOfOlderFish)
-                        WatorEnvironment.AgeOfOlderFish = fish.Ages;
+                        WatorEnvironment.AgeOfOlderFish = fish.Ages;                    
                 }
                 else if(agent is Shark)
                 {
                     Shark shark = (Shark)agent;
+                    WatorEnvironment.SharkAgePyramid[shark.Ages]++;
                     if (shark.Ages > WatorEnvironment.AgeOfOlderShark)
-                        WatorEnvironment.AgeOfOlderShark = shark.Ages;
+                        WatorEnvironment.AgeOfOlderShark = shark.Ages;                    
                 }
             }
         }
-
-        private int[] CountDifferentAgents(List<IAgent> agents)
-        {
-            int[] sharksFishes = new int[2];
-
-            foreach (Agent agent in agents)
-            {
-                if (agent is Shark)
-                    sharksFishes[0]++;
-                else if (agent is Fish)
-                    sharksFishes[1]++;
-            }
-
-            return sharksFishes;
-        }
-
 
         public override void Run()
         {
@@ -120,7 +114,7 @@ namespace MultiAgentSystem.WatorSystem.Models
 
             if (App.IsTraced)
             {
-                if (tickCount == 100)
+                if (tickCount == AppTick)
                 {
                     sw.Close();
                     System.Environment.Exit(0);
@@ -136,11 +130,21 @@ namespace MultiAgentSystem.WatorSystem.Models
                 WatorEnvironment.NewbornSharksNumber = 0;
                 WatorEnvironment.DeadSharksNumber = 0;
                 WatorEnvironment.AgeOfOlderShark = 0;
+                WatorEnvironment.SharkAgePyramid = new int[AppTick + 1];
                 WatorEnvironment.NewbornFishsNumber = 0;
                 WatorEnvironment.DeadFishsNumber = 0;
                 WatorEnvironment.AgeOfOlderFish = 0;
+                WatorEnvironment.FishAgePyramid = new int[AppTick + 1];
+                for (int i = 0; i < AppTick; i++)
+                {
+                    SharkAgePyramid[i] = 0;
+                    FishAgePyramid[i] = 0;
+                }
 
                 tickCount++;
+
+                //test
+                //Console.WriteLine(WatorEnvironment.SharkAgePyramid[0]);
             }                
                 
         }
