@@ -71,7 +71,7 @@ namespace MultiAgentSystem.WatorSystem.Models
                     break;
             }
 
-            SharkBreedTimeTick = (SharkBreedTimeTick + 1) % App.SharkBreedTime;
+            SharkBreedTimeTick++;
             SharkStarveTimeTick++;
             Ages++;           
 
@@ -149,9 +149,10 @@ namespace MultiAgentSystem.WatorSystem.Models
             Grid.Occupy(this);
 
             // If agent moves and conditions are okay then it can reproduce
-            if ((!Coordinate.Equals(OldCoordinate)) && SharkBreedTimeTick == (App.SharkBreedTime - 1))
+            if ((!Coordinate.Equals(OldCoordinate)) && SharkBreedTimeTick >= (App.SharkBreedTime - 1))
             {
                 ActionReproduction();
+                SharkBreedTimeTick = 0;
             }
         }
 
@@ -170,8 +171,8 @@ namespace MultiAgentSystem.WatorSystem.Models
             Shark.Grid = Grid;
             Grid.Occupy(Shark);
             WatorEnvironment.NewbornAgents.Add(Shark);
-            WatorEnvironment.SharksNumber++;
-            WatorEnvironment.NewbornSharksNumber++;
+            //WatorEnvironment.SharksNumber++;
+            //WatorEnvironment.NewbornSharksNumber++;
         }
 
         /// <summary>
@@ -182,8 +183,8 @@ namespace MultiAgentSystem.WatorSystem.Models
             Grid.Free(Coordinate);
             WatorEnvironment.DeadAgents.Add(fish);
             SharkStarveTimeTick = 0;
-            WatorEnvironment.FishsNumber--;
-            WatorEnvironment.DeadFishsNumber++;
+            //WatorEnvironment.FishsNumber--;
+            //WatorEnvironment.DeadFishsNumber++;
         }
 
         /// <summary>
@@ -192,8 +193,8 @@ namespace MultiAgentSystem.WatorSystem.Models
         private void ActionDie()
         {
             WatorEnvironment.DeadAgents.Add(this);
-            WatorEnvironment.SharksNumber--;
-            WatorEnvironment.DeadSharksNumber++;
+            //WatorEnvironment.SharksNumber--;
+            //WatorEnvironment.DeadSharksNumber++;
         }
 
 

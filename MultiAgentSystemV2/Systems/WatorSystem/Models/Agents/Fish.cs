@@ -70,7 +70,7 @@ namespace MultiAgentSystem.WatorSystem.Models
                     break;
             }
 
-            FishBreedTimeTick = (FishBreedTimeTick + 1) % App.FishBreedTime;
+            FishBreedTimeTick++;
             Ages++;
         }
 
@@ -130,9 +130,10 @@ namespace MultiAgentSystem.WatorSystem.Models
             Grid.Occupy(this);
 
             // If agent moves and conditions are okay then it can reproduce
-            if ((!Coordinate.Equals(OldCoordinate)) && FishBreedTimeTick == (App.FishBreedTime -1))
+            if ((!Coordinate.Equals(OldCoordinate)) && FishBreedTimeTick >= (App.FishBreedTime -1))
             {
                 ActionReproduction();
+                FishBreedTimeTick = 0;
             }
         }
 
@@ -152,8 +153,8 @@ namespace MultiAgentSystem.WatorSystem.Models
             Fish.Grid = Grid;
             Grid.Occupy(Fish);
             WatorEnvironment.NewbornAgents.Add(Fish);
-            WatorEnvironment.FishsNumber++;
-            WatorEnvironment.NewbornFishsNumber++;
+            //WatorEnvironment.FishsNumber++;
+            //WatorEnvironment.NewbornFishsNumber++;
         }
 
         #endregion

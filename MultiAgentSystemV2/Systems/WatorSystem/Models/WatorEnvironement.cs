@@ -52,12 +52,13 @@ namespace MultiAgentSystem.WatorSystem.Models
             {
                 Agents.Add(new Shark());
             }
-
+            /*
             for (int i = 0; i < AppTick; i++)
             {
                 SharkAgePyramid[i] = 0;
                 FishAgePyramid[i] = 0;
             }
+            */
 
             this.Initialize(Agents);
 
@@ -92,14 +93,14 @@ namespace MultiAgentSystem.WatorSystem.Models
                 if(agent is Fish)
                 {
                     Fish fish = (Fish)agent;
-                    WatorEnvironment.FishAgePyramid[fish.Ages]++;
+                    //WatorEnvironment.FishAgePyramid[fish.Ages]++;
                     if (fish.Ages > WatorEnvironment.AgeOfOlderFish)
                         WatorEnvironment.AgeOfOlderFish = fish.Ages;                    
                 }
                 else if(agent is Shark)
                 {
                     Shark shark = (Shark)agent;
-                    WatorEnvironment.SharkAgePyramid[shark.Ages]++;
+                    //WatorEnvironment.SharkAgePyramid[shark.Ages]++;
                     if (shark.Ages > WatorEnvironment.AgeOfOlderShark)
                         WatorEnvironment.AgeOfOlderShark = shark.Ages;                    
                 }
@@ -130,16 +131,18 @@ namespace MultiAgentSystem.WatorSystem.Models
                 WatorEnvironment.NewbornSharksNumber = 0;
                 WatorEnvironment.DeadSharksNumber = 0;
                 WatorEnvironment.AgeOfOlderShark = 0;
-                WatorEnvironment.SharkAgePyramid = new int[AppTick + 1];
+                //WatorEnvironment.SharkAgePyramid = new int[AppTick + 1];
                 WatorEnvironment.NewbornFishsNumber = 0;
                 WatorEnvironment.DeadFishsNumber = 0;
                 WatorEnvironment.AgeOfOlderFish = 0;
-                WatorEnvironment.FishAgePyramid = new int[AppTick + 1];
+                //WatorEnvironment.FishAgePyramid = new int[AppTick + 1];
+                /*
                 for (int i = 0; i < AppTick; i++)
                 {
                     SharkAgePyramid[i] = 0;
                     FishAgePyramid[i] = 0;
                 }
+                */
 
                 tickCount++;
 

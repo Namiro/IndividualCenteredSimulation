@@ -18,7 +18,7 @@ namespace MultiAgentSystem.Cores.ViewModels
         protected IGraphicsDeviceService GraphicsDeviceManager { get; set; }
         protected SpriteBatch SpriteBatch;
         protected Environment Environment { get; set; }
-        protected int TickNb { get; set; } = 0;
+        protected int TickCount { get; set; } = 0;
         protected Color BackgroundColor = Color.White;
 
         public static ContentManager ContentManager { get; set; }
@@ -54,11 +54,11 @@ namespace MultiAgentSystem.Cores.ViewModels
         /// <param name="gameTime"></param>
         protected sealed override void Update(GameTime gameTime)
         {
-            if (App.TicksNumber == 0 || TickNb >= App.TicksNumber)
+            if (App.TicksNumber == 0 || TickCount < App.TicksNumber)
             {
                 System.DateTime StartCalcul = System.DateTime.Now;
                 Environment.Run();
-                TickNb++;
+                TickCount++;
                 App.Trace("Tick");
 
                 if (App.IsTracedPerformance)
@@ -83,7 +83,7 @@ namespace MultiAgentSystem.Cores.ViewModels
         /// <param name="gameTime"></param>
         protected sealed override void Draw(GameTime gameTime)
         {
-            if (!System.Convert.ToBoolean(TickNb % App.RateRefresh))
+            if (!System.Convert.ToBoolean(TickCount % App.RateRefresh))
             {
 
                 GraphicsDevice.PlatformClear(ClearOptions.Target, BackgroundColor.ToVector4(), 0.0f, 1);
