@@ -23,19 +23,19 @@ namespace MultiAgentSystem.WatorSystem.Models
         private StreamWriter sw;
 
         //The statistics in Wator's environment
-        private static int AppTick = 1000;
+        //private static int App.TicksNumber = 10000;
 
         public static int SharksNumber { get; set; } = App.SharksNumber;
         public static int NewbornSharksNumber { get; set; } = 0;
         public static int DeadSharksNumber { get; set; } = 0;
         public static int AgeOfOlderShark { get; set; } = 0;
-        public static int[] SharkAgePyramid { get; set; } = new int[AppTick + 1];
+        public static int[] SharkAgePyramid { get; set; } = new int[App.TicksNumber + 1];
 
         public static int FishsNumber { get; set; } = App.FishsNumber;
         public static int NewbornFishsNumber { get; set; } = 0;
         public static int DeadFishsNumber { get; set; } = 0;
         public static int AgeOfOlderFish { get; set; } = 0;
-        public static int[] FishAgePyramid { get; set; } = new int[AppTick + 1];
+        public static int[] FishAgePyramid { get; set; } = new int[App.TicksNumber + 1];
 
         #endregion
 
@@ -52,13 +52,13 @@ namespace MultiAgentSystem.WatorSystem.Models
             {
                 Agents.Add(new Shark());
             }
-            /*
-            for (int i = 0; i < AppTick; i++)
+          
+            for (int i = 0; i <= App.TicksNumber; i++)
             {
                 SharkAgePyramid[i] = 0;
                 FishAgePyramid[i] = 0;
             }
-            */
+            
 
             this.Initialize(Agents);
 
@@ -87,22 +87,30 @@ namespace MultiAgentSystem.WatorSystem.Models
 
             NewbornAgents.Clear();
             DeadAgents.Clear();
+        }
 
-            foreach(Agent agent in Agents)
+        private void CollectAgentsInformation()
+        {
+            WatorEnvironment.FishsNumber = 0;
+            WatorEnvironment.SharksNumber = 0;
+
+            foreach (Agent agent in Agents)
             {
-                if(agent is Fish)
+                if (agent is Fish)
                 {
                     Fish fish = (Fish)agent;
-                    //WatorEnvironment.FishAgePyramid[fish.Ages]++;
+                    WatorEnvironment.FishsNumber++;
+                    WatorEnvironment.FishAgePyramid[fish.Ages] = WatorEnvironment.FishAgePyramid[fish.Ages] + 1;
                     if (fish.Ages > WatorEnvironment.AgeOfOlderFish)
-                        WatorEnvironment.AgeOfOlderFish = fish.Ages;                    
+                        WatorEnvironment.AgeOfOlderFish = fish.Ages;
                 }
-                else if(agent is Shark)
+                else if (agent is Shark)
                 {
                     Shark shark = (Shark)agent;
-                    //WatorEnvironment.SharkAgePyramid[shark.Ages]++;
+                    WatorEnvironment.SharksNumber++;
+                    WatorEnvironment.SharkAgePyramid[shark.Ages] = WatorEnvironment.SharkAgePyramid[shark.Ages] + 1;
                     if (shark.Ages > WatorEnvironment.AgeOfOlderShark)
-                        WatorEnvironment.AgeOfOlderShark = shark.Ages;                    
+                        WatorEnvironment.AgeOfOlderShark = shark.Ages;
                 }
             }
         }
@@ -110,44 +118,50 @@ namespace MultiAgentSystem.WatorSystem.Models
         public override void Run()
         {
             base.Run();
-            
+
             RefreshAgents();
+            CollectAgentsInformation();
 
             if (App.IsTraced)
             {
-                if (tickCount == AppTick)
+                if (tickCount == App.TicksNumber)
                 {
+                    //Donnees pour la pyramide des ages
+                    for (int i = 0; i <= App.TicksNumber; i++)
+                    {
+                        Console.WriteLine(WatorEnvironment.SharkAgePyramid[i] + ";" + WatorEnvironment.FishAgePyramid[i]);
+                    }
+
                     sw.Close();
                     System.Environment.Exit(0);
                 }
 
-
+                
+                /*
                 Console.WriteLine(
                     tickCount + ";" +
                     WatorEnvironment.SharksNumber + ";" + WatorEnvironment.NewbornSharksNumber + ";" + WatorEnvironment.DeadSharksNumber + ";" + WatorEnvironment.AgeOfOlderShark + ";" +
                     WatorEnvironment.FishsNumber + ";" + WatorEnvironment.NewbornFishsNumber + ";" + WatorEnvironment.DeadFishsNumber + ";" + WatorEnvironment.AgeOfOlderFish
                 );
+                */
 
                 WatorEnvironment.NewbornSharksNumber = 0;
                 WatorEnvironment.DeadSharksNumber = 0;
                 WatorEnvironment.AgeOfOlderShark = 0;
-                //WatorEnvironment.SharkAgePyramid = new int[AppTick + 1];
                 WatorEnvironment.NewbornFishsNumber = 0;
                 WatorEnvironment.DeadFishsNumber = 0;
                 WatorEnvironment.AgeOfOlderFish = 0;
-                //WatorEnvironment.FishAgePyramid = new int[AppTick + 1];
-                /*
-                for (int i = 0; i < AppTick; i++)
+                
+                for (int i = 0; i <= App.TicksNumber; i++)
                 {
-                    SharkAgePyramid[i] = 0;
-                    FishAgePyramid[i] = 0;
+                    WatorEnvironment.SharkAgePyramid[i] = 0;
+                    WatorEnvironment.FishAgePyramid[i] = 0;
                 }
-                */
+                
 
                 tickCount++;
 
-                //test
-                //Console.WriteLine(WatorEnvironment.SharkAgePyramid[0]);
+                
             }                
                 
         }

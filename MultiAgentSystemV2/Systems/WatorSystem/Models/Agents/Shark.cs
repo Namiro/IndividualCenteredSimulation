@@ -166,13 +166,12 @@ namespace MultiAgentSystem.WatorSystem.Models
         /// </summary>
         private void ActionReproduction()
         {
-            Shark Shark = new Shark();
-            Shark.Coordinate = OldCoordinate;
-            Shark.Grid = Grid;
-            Grid.Occupy(Shark);
-            WatorEnvironment.NewbornAgents.Add(Shark);
-            //WatorEnvironment.SharksNumber++;
-            //WatorEnvironment.NewbornSharksNumber++;
+            Shark shark = new Shark();
+            shark.Coordinate = OldCoordinate;
+            shark.Grid = Grid;
+            Grid.Occupy(shark);
+            WatorEnvironment.NewbornAgents.Add(shark);
+            WatorEnvironment.NewbornSharksNumber++;
         }
 
         /// <summary>
@@ -181,10 +180,9 @@ namespace MultiAgentSystem.WatorSystem.Models
         private void ActionEat(Fish fish)
         {
             Grid.Free(Coordinate);
-            WatorEnvironment.DeadAgents.Add(fish);
             SharkStarveTimeTick = 0;
-            //WatorEnvironment.FishsNumber--;
-            //WatorEnvironment.DeadFishsNumber++;
+            WatorEnvironment.DeadAgents.Add(fish);            
+            WatorEnvironment.DeadFishsNumber++;
         }
 
         /// <summary>
@@ -193,8 +191,7 @@ namespace MultiAgentSystem.WatorSystem.Models
         private void ActionDie()
         {
             WatorEnvironment.DeadAgents.Add(this);
-            //WatorEnvironment.SharksNumber--;
-            //WatorEnvironment.DeadSharksNumber++;
+            WatorEnvironment.DeadSharksNumber++;
         }
 
 

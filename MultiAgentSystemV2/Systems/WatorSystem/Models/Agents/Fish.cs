@@ -148,13 +148,12 @@ namespace MultiAgentSystem.WatorSystem.Models
         /// </summary>
         private void ActionReproduction()
         {
-            Fish Fish = new Fish();
-            Fish.Coordinate = OldCoordinate;
-            Fish.Grid = Grid;
-            Grid.Occupy(Fish);
-            WatorEnvironment.NewbornAgents.Add(Fish);
-            //WatorEnvironment.FishsNumber++;
-            //WatorEnvironment.NewbornFishsNumber++;
+            Fish fish = new Fish();
+            fish.Coordinate = OldCoordinate;
+            fish.Grid = Grid;
+            Grid.Occupy(fish);
+            WatorEnvironment.NewbornAgents.Add(fish);
+            WatorEnvironment.NewbornFishsNumber++;
         }
 
         #endregion
