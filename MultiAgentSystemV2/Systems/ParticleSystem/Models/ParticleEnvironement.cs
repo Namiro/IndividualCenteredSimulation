@@ -15,7 +15,7 @@
             for (int i = 0; i < App.ParticlesNumber; i++)
                 Agents.Add(new Particle());
 
-            this.Initialize(Agents);
+            this.Initialize();
         }
 
         #endregion

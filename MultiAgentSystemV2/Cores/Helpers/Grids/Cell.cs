@@ -6,6 +6,7 @@ namespace MultiAgentSystem.Cores.Helpers.Grids
 {
     public abstract class Cell
     {
+        public static int DijkstraMaxValue = 1;
         private Coordinate _Coordinate;
         public Coordinate Coordinate
         {
@@ -13,17 +14,23 @@ namespace MultiAgentSystem.Cores.Helpers.Grids
             set
             {
                 _Coordinate = value;
-                Position = new Vector2(value.X * Size, value.Y * Size);
+                GraphicPosition = new Vector2(value.X * Size, value.Y * Size);
             }
         }
-        public Vector2 Position { get; private set; }
+        public Vector2 GraphicPosition { get; private set; }
         public virtual Color Color { get; set; } = Color.White;
-        public Texture2D Texture { get; set; }
+        public Texture2D Texture { get; protected set; }
         public static int Size { get; set; }
+        public int DijkstraValue { get; set; } = -1;
 
         public Cell()
         {
 
+        }
+
+        public Cell(Coordinate coordinate)
+        {
+            Coordinate = coordinate;
         }
 
         public Cell(Coordinate coordinate, Color color, Texture2D texture, int size)
@@ -39,10 +46,25 @@ namespace MultiAgentSystem.Cores.Helpers.Grids
             if (this.Texture == null)
                 return;
 
-            Rectangle sourceRectangle = new Rectangle(0, 0, Texture.Width, Texture.Height);
-            Vector2 origin = new Vector2(0, 0);
+            if (Color == Color.Transparent)
+            {
+                spriteBatch.Draw(Texture, GraphicPosition, null, null, null, 0, new Vector2((float)((1.0f / Texture.Width) * Size)));
+            }
+            else
+            {
+                Rectangle sourceRectangle = new Rectangle(0, 0, Texture.Width, Texture.Height);
+                Vector2 origin = new Vector2(0, 0);
 
-            spriteBatch.Draw(Texture, Position, sourceRectangle, Color, 0f, origin, (float)((1.0f / Texture.Width) * Size), SpriteEffects.None, 0f);
+                spriteBatch.Draw(Texture, GraphicPosition, sourceRectangle, Color, 0f, origin, (float)((1.0f / Texture.Width) * Size), SpriteEffects.None, 0f);
+            }
+        }
+
+        public void DrawText(SpriteBatch spriteBatch, string text, SpriteFont font)
+        {
+            if (this.Texture == null)
+                return;
+
+            spriteBatch.DrawString(font, text, GraphicPosition, Color.White, 0f, new Vector2(0, 0), 0.5f, SpriteEffects.None, 0f);
         }
     }
 }

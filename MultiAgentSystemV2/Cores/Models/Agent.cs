@@ -11,8 +11,8 @@ namespace MultiAgentSystem.Cores.Models
         #region Properties
 
         public Grid Grid { get; set; }
-        protected int ActionsNumber { get; } = 1;
-        protected Dictionary<DirectionEnum, Cell> Neighborhood { get; set; }
+        protected int ActionsNumber { get; set; } = 1;
+        protected Dictionary<DirectionEnum, Cell> Neighbors { get; set; }
         protected DirectionEnum CurrentDirection { get; set; }
         protected Random Random { get; set; } = new Random();
 
@@ -47,18 +47,21 @@ namespace MultiAgentSystem.Cores.Models
         protected Dictionary<DirectionEnum, Cell> CheckArround()
         {
 
-            Neighborhood = new Dictionary<DirectionEnum, Cell>();
+            Neighbors = new Dictionary<DirectionEnum, Cell>();
 
-            Neighborhood.Add(DirectionEnum.Bottom, Grid.Get(Grid.DirectionToCoordinate(DirectionEnum.Bottom, Coordinate)));
-            Neighborhood.Add(DirectionEnum.Top, Grid.Get(Grid.DirectionToCoordinate(DirectionEnum.Top, Coordinate)));
-            Neighborhood.Add(DirectionEnum.Right, Grid.Get(Grid.DirectionToCoordinate(DirectionEnum.Right, Coordinate)));
-            Neighborhood.Add(DirectionEnum.Left, Grid.Get(Grid.DirectionToCoordinate(DirectionEnum.Left, Coordinate)));
-            Neighborhood.Add(DirectionEnum.TopRight, Grid.Get(Grid.DirectionToCoordinate(DirectionEnum.TopRight, Coordinate)));
-            Neighborhood.Add(DirectionEnum.BottomLeft, Grid.Get(Grid.DirectionToCoordinate(DirectionEnum.BottomLeft, Coordinate)));
-            Neighborhood.Add(DirectionEnum.TopLeft, Grid.Get(Grid.DirectionToCoordinate(DirectionEnum.TopLeft, Coordinate)));
-            Neighborhood.Add(DirectionEnum.BottomRight, Grid.Get(Grid.DirectionToCoordinate(DirectionEnum.BottomRight, Coordinate)));
+            Neighbors.Add(DirectionEnum.Down, Grid.Get(Grid.DirectionToCoordinate(DirectionEnum.Down, Coordinate)));
+            Neighbors.Add(DirectionEnum.Up, Grid.Get(Grid.DirectionToCoordinate(DirectionEnum.Up, Coordinate)));
+            Neighbors.Add(DirectionEnum.Right, Grid.Get(Grid.DirectionToCoordinate(DirectionEnum.Right, Coordinate)));
+            Neighbors.Add(DirectionEnum.Left, Grid.Get(Grid.DirectionToCoordinate(DirectionEnum.Left, Coordinate)));
+            if (App.IsMoore)
+            {
+                Neighbors.Add(DirectionEnum.UpRight, Grid.Get(Grid.DirectionToCoordinate(DirectionEnum.UpRight, Coordinate)));
+                Neighbors.Add(DirectionEnum.DownLeft, Grid.Get(Grid.DirectionToCoordinate(DirectionEnum.DownLeft, Coordinate)));
+                Neighbors.Add(DirectionEnum.UpLeft, Grid.Get(Grid.DirectionToCoordinate(DirectionEnum.UpLeft, Coordinate)));
+                Neighbors.Add(DirectionEnum.DownRight, Grid.Get(Grid.DirectionToCoordinate(DirectionEnum.DownRight, Coordinate)));
+            }
 
-            return Neighborhood;
+            return Neighbors;
         }
 
         /// <summary>

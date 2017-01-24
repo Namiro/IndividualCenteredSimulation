@@ -4,25 +4,26 @@ using MultiAgentSystem.Cores.Constants;
 using MultiAgentSystem.Cores.Helpers;
 using MultiAgentSystem.Cores.Helpers.Grids;
 using MultiAgentSystem.Cores.Models;
-using MultiAgentSystem.ParticleSystem.ViewModels;
-using System;
+using MultiAgentSystem.HunterSystem.ViewModels;
 using System.Collections.Generic;
 
-namespace MultiAgentSystem.ParticleSystem.Models
+namespace MultiAgentSystem.HunterSystem.Models
 {
-    internal class Particle : Agent
+    internal class Hunter : Agent
     {
         #region Properties
 
+        private static int DecideCount { get; set; } = 0;
 
         #endregion
 
         #region Construtors
 
-        public Particle()
+        public Hunter()
         {
-            Color = new Color((float)App.Random.NextDouble(), (float)App.Random.NextDouble(), (float)App.Random.NextDouble());
-            Texture = XNAParticleGrid.ContentManager.Load<Texture2D>("circle");
+            ActionsNumber = 2;
+            Color = Color.Transparent;
+            Texture = XNAHunterGrid.ContentManager.Load<Texture2D>("hunter");
         }
 
         #endregion
@@ -34,7 +35,15 @@ namespace MultiAgentSystem.ParticleSystem.Models
         /// </summary>
         public override void Decide()
         {
+            if (++DecideCount % (101 - App.SpeedPercentHunter) != 0)
+                return;
+            DecideCount = 0;
+
             CheckArround();
+
+            CheckGameOver();
+            if (XNAHunterGrid.IsGameOver)
+                return;
 
             switch (DecideAction())
             {
@@ -48,9 +57,18 @@ namespace MultiAgentSystem.ParticleSystem.Models
 
         }
 
+        private void CheckGameOver()
+        {
+            foreach (var elem in Neighbors)
+            {
+                // Si cellule pas null et est de type Empty, c'est que on est pas a une frontière et que la case n'est pas occupée.
+                if (elem.Value != null && elem.Value is Avatar)
+                    XNAHunterGrid.IsGameOver = true;
+            }
+        }
+
         protected override DirectionEnum DecideDirection()
         {
-
             List<DirectionEnum> possibleDirections = new List<DirectionEnum>();
             foreach (var elem in Neighbors)
             {
@@ -59,15 +77,36 @@ namespace MultiAgentSystem.ParticleSystem.Models
                     possibleDirections.Add(elem.Key);
             }
 
-            // Si la direction actuel est toujours possible on conitnue dans la même direction.
-            if (possibleDirections.Contains(CurrentDirection))
-                return CurrentDirection;
+            // On prend la direction qui a l'indice de drijska le plus faible.
+            DirectionEnum returnedDirection = DirectionEnum.NoOne;
+            if (!XNAHunterGrid.IsSuperAvatar)
+            {
+                int previousDijkstraValue = int.MaxValue;
+                foreach (DirectionEnum direction in possibleDirections)
+                {
+                    int dijkstraValue = Grid.Get(Grid.DirectionToCoordinate(direction, Coordinate)).DijkstraValue;
+                    if (previousDijkstraValue > dijkstraValue && dijkstraValue != -1)
+                    {
+                        previousDijkstraValue = dijkstraValue;
+                        returnedDirection = direction;
+                    }
+                }
+            }
+            else
+            {
+                int previousDijkstraValue = int.MinValue;
+                foreach (DirectionEnum direction in possibleDirections)
+                {
+                    int dijkstraValue = Grid.Get(Grid.DirectionToCoordinate(direction, Coordinate)).DijkstraValue;
+                    if (previousDijkstraValue < dijkstraValue && dijkstraValue != -1)
+                    {
+                        previousDijkstraValue = dijkstraValue;
+                        returnedDirection = direction;
+                    }
+                }
+            }
 
-            // Mélange les possibilités.
-            if (possibleDirections.Count > 0)
-                return CurrentDirection = possibleDirections[Random.Next(possibleDirections.Count)];
-
-            return DirectionEnum.NoOne;
+            return returnedDirection;
         }
 
         /// <summary>

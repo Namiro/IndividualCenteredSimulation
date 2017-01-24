@@ -2,6 +2,7 @@
 using MultiAgentSystem.Cores.Helpers;
 using System;
 using System.Configuration;
+using System.Globalization;
 using System.Windows;
 
 namespace MultiAgentSystem
@@ -105,30 +106,21 @@ namespace MultiAgentSystem
         /// <summary>
         /// Display or not the axe.
         /// </summary>
-        public static int SharksNumber { get; set; } = Constants.DEFAULT_SHARKS_NUMBER;
-
-        /// <summary>
-        /// Display or not the axe.
-        /// </summary>
-        public static int SharkBreedTime { get; set; } = Constants.DEFAULT_SHARK_BREED_TIME;
-
-        /// <summary>
-        /// Display or not the axe.
-        /// </summary>
-        public static int SharkStarveTime { get; set; } = Constants.DEFAULT_SHARK_STARVE_TIME;
-
-        /// <summary>
-        /// Display or not the axe.
-        /// </summary>
         public static int FishsNumber { get; set; } = Constants.DEFAULT_FISHS_NUMBER;
 
         /// <summary>
         /// Display or not the axe.
         /// </summary>
-        public static int FishBreedTime { get; set; } = Constants.DEFAULT_FISH_BREED_TIME;
+        public static int SharksNumber { get; set; } = Constants.DEFAULT_SHARKS_NUMBER;
 
-
-
+        public static int HuntersNumber { get; set; } = Constants.DEFAULT_HUNTERS_NUMBER;
+        public static int WallsPercent { get; set; } = Constants.DEFAULT_WALLS_PERCENT;
+        public static int WallsSizeMin { get; set; } = Constants.DEFAULT_WALLS_SIZE_MIN;
+        public static int WallsSizeMax { get; set; } = Constants.DEFAULT_WALLS_SIZE_MAX;
+        public static int SpeedPercentHunter { get; set; } = Constants.DEFAULT_SPEED_PERCENT_HUNTER;
+        public static int SpeedPercentAvatar { get; set; } = Constants.DEFAULT_SPEED_PERCENT_AVATAR;
+        public static int DefenderLife { get; set; } = Constants.DEFAULT_DEFENDER_LIFE;
+        public static bool IsMoore { get; set; } = Constants.DEFAULT_IS_MOORE;
 
         #endregion
 
@@ -162,10 +154,23 @@ namespace MultiAgentSystem
             ParticlesNumber = int.Parse(ConfigurationManager.AppSettings[Constants.APP_CONFIG_KEY_PARTICLES_NUMBER]);
             Seed = int.Parse(ConfigurationManager.AppSettings[Constants.APP_CONFIG_KEY_SEED]);
             SharksNumber = int.Parse(ConfigurationManager.AppSettings[Constants.APP_CONFIG_KEY_SHARKS_NUMBER]);
-            SharkBreedTime = int.Parse(ConfigurationManager.AppSettings[Constants.APP_CONFIG_KEY_SHARK_BREED_TIME]);
-            SharkStarveTime = int.Parse(ConfigurationManager.AppSettings[Constants.APP_CONFIG_KEY_SHARK_STARVE_TIME]);
             FishsNumber = int.Parse(ConfigurationManager.AppSettings[Constants.APP_CONFIG_KEY_FISHS_NUMBER]);
-            FishBreedTime = int.Parse(ConfigurationManager.AppSettings[Constants.APP_CONFIG_KEY_FISH_BREED_TIME]);
+
+            HuntersNumber = int.Parse(ConfigurationManager.AppSettings[Constants.APP_CONFIG_KEY_HUNTERS_NUMBER]);
+            WallsPercent = int.Parse(ConfigurationManager.AppSettings[Constants.APP_CONFIG_KEY_WALLS_PERCENT], CultureInfo.InvariantCulture.NumberFormat);
+            WallsSizeMin = int.Parse(ConfigurationManager.AppSettings[Constants.APP_CONFIG_KEY_WALLS_SIZE_MIN]);
+            WallsSizeMax = int.Parse(ConfigurationManager.AppSettings[Constants.APP_CONFIG_KEY_WALLS_SIZE_MAX]);
+            SpeedPercentHunter = int.Parse(ConfigurationManager.AppSettings[Constants.APP_CONFIG_KEY_SPEED_PERCENT_HUNTER], CultureInfo.InvariantCulture.NumberFormat);
+            SpeedPercentAvatar = int.Parse(ConfigurationManager.AppSettings[Constants.APP_CONFIG_KEY_SPEED_PERCENT_AVATAR], CultureInfo.InvariantCulture.NumberFormat);
+            DefenderLife = int.Parse(ConfigurationManager.AppSettings[Constants.APP_CONFIG_KEY_DEFENDER_LIFE]);
+
+            // Percent (0 - 100)
+            if (WallsPercent > 100 || WallsPercent < 0)
+                WallsPercent = Constants.DEFAULT_WALLS_PERCENT;
+            if (SpeedPercentHunter > 100 || SpeedPercentHunter < 0)
+                SpeedPercentHunter = Constants.DEFAULT_SPEED_PERCENT_HUNTER;
+            if (SpeedPercentAvatar > 100 || SpeedPercentAvatar < 0)
+                SpeedPercentAvatar = Constants.DEFAULT_SPEED_PERCENT_AVATAR;
 
             // IsDisplayGrid
             if (ConfigurationManager.AppSettings[Constants.APP_CONFIG_KEY_IS_DISPLAY_GRID] == "True")
@@ -196,6 +201,12 @@ namespace MultiAgentSystem
                 IsToric = true;
             else if (ConfigurationManager.AppSettings[Constants.APP_CONFIG_KEY_IS_TORIC] == "False")
                 IsToric = false;
+
+            // IsMoore
+            if (ConfigurationManager.AppSettings[Constants.APP_CONFIG_KEY_IS_MOORE] == "True")
+                IsMoore = true;
+            else if (ConfigurationManager.AppSettings[Constants.APP_CONFIG_KEY_IS_MOORE] == "False")
+                IsMoore = false;
 
             // SchedulingStrategy
             if (ConfigurationManager.AppSettings[Constants.APP_CONFIG_KEY_SCHEDULING_STRATEGY] == SchedulingStrategyEnum.Fair.ToString())

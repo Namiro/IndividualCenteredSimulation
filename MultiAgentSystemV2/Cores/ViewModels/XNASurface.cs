@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Framework.WpfInterop;
+using MonoGame.Framework.WpfInterop.Input;
 using MultiAgentSystem.Cores.Helpers;
 using MultiAgentSystem.Cores.Helpers.Grids;
 using MultiAgentSystem.Cores.Models;
@@ -20,13 +21,16 @@ namespace MultiAgentSystem.Cores.ViewModels
         protected Environment Environment { get; set; }
         protected int TickCount { get; set; } = 0;
         protected Color BackgroundColor = Color.White;
+        protected WpfKeyboard Keyboard { get; private set; }
+        protected WpfMouse Mouse { get; private set; }
 
         public static ContentManager ContentManager { get; set; }
+        public static SpriteFont Font { get; protected set; }
 
         /// <summary>
         /// Allow to initialize the System
         /// </summary>
-        protected sealed override void Initialize()
+        protected override void Initialize()
         {
             // must be initialized. required by Content loading and rendering (will add itself to the Services)
             GraphicsDeviceManager = new WpfGraphicsDeviceService(this);
@@ -34,8 +38,17 @@ namespace MultiAgentSystem.Cores.ViewModels
             Cell.Size = App.BoxSize;
             ContentManager = Content;
 
+            Keyboard = new WpfKeyboard(this);
+            Mouse = new WpfMouse(this);
+
             // must be called after the WpfGraphicsDeviceService instance was created
             base.Initialize();
+
+            try
+            { Font = ContentManager.Load<SpriteFont>("spriteFont"); }
+            catch (System.Exception ex)
+            { Logger.WriteLog(ex.ToString()); }
+
         }
 
         /// <summary>
@@ -45,14 +58,16 @@ namespace MultiAgentSystem.Cores.ViewModels
         /// </summary>
         protected override void LoadContent()
         {
-
+            // Create a new SpriteBatch, which can be used to draw textures.
+            SpriteBatch = new SpriteBatch(GraphicsDevice);
+            Environment.Initialize();
         }
 
         /// <summary>
         /// It will be call at every tick of game/system
         /// </summary>
         /// <param name="gameTime"></param>
-        protected sealed override void Update(GameTime gameTime)
+        protected override void Update(GameTime gameTime)
         {
             if (App.TicksNumber == 0 || TickCount < App.TicksNumber)
             {
@@ -81,15 +96,16 @@ namespace MultiAgentSystem.Cores.ViewModels
         /// Allow to draw the frame. It will be call after each Update 
         /// </summary>
         /// <param name="gameTime"></param>
-        protected sealed override void Draw(GameTime gameTime)
+        protected override void Draw(GameTime gameTime)
         {
             if (!System.Convert.ToBoolean(TickCount % App.RateRefresh))
             {
 
-                GraphicsDevice.PlatformClear(ClearOptions.Target, BackgroundColor.ToVector4(), 0.0f, 1);
+                GraphicsDevice.Clear(Color.Transparent);
+                //GraphicsDevice.PlatformClear(ClearOptions.Target, BackgroundColor.ToVector4(), 0.0f, 1);
                 SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, new RasterizerState { ScissorTestEnable = true });
 
-                //SpriteBatch.DrawRectangle(new Rectangle(0, 0, App.CanvasSizeX, App.CanvasSizeY), BackgroundColor);
+                //SpriteBatch.DrawRectangle(new Rectangle(0, 0, App.CanvasSizeX, App.CanvasSizeY), BackgroundColor * 1f);
 
                 // Draw Grid
                 if (App.IsDisplayGrid)
@@ -110,7 +126,13 @@ namespace MultiAgentSystem.Cores.ViewModels
 
                 //Draw All Cells
                 foreach (Cell cell in Environment.Grid.Grid2D)
+                {
                     cell.Draw(SpriteBatch);
+
+                    if (App.IsDisplayGrid)
+                        cell.DrawText(SpriteBatch, cell.DijkstraValue + "", Font);
+                }
+
 
                 // Draw only the Agents
                 //foreach (Cell cell in Environment.Agents)

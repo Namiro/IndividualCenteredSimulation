@@ -25,27 +25,23 @@ namespace MultiAgentSystem.Cores.Models
 
         #region Methodes
 
-        public void Initialize(List<IAgent> agents)
+        /// <summary>
+        /// Initialize the agents and the grid. So must be call after that the agents has been add to the list of agents (Agents). 
+        /// </summary>
+        public virtual void Initialize()
         {
-            Agents = agents;
-
-            List<int> gridCellsNumber = new List<int>();
-            for (int i = 0; i < App.GridSizeX * App.GridSizeY; i++)
-                gridCellsNumber.Add(i);
-
-            int randomNumber;
             foreach (Agent agent in Agents)
             {
-                randomNumber = App.Random.Next(0, gridCellsNumber.Count);
-                int cellNumber = gridCellsNumber[randomNumber];
-                gridCellsNumber.Remove(cellNumber);
-
-                agent.Coordinate = Grid.CellNumberToXYCoordinate(cellNumber);
+                agent.Coordinate = Grid.GetRandomFreeCoordinate();
                 agent.Grid = Grid;
                 Grid.Occupy(agent);
             }
         }
 
+
+        /// <summary>
+        /// This function all to run one "tick" for the MAS (Multi Agent System)
+        /// </summary>
         public virtual void Run()
         {
             switch (App.SchedulingStrategy)

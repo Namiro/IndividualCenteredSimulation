@@ -5,14 +5,34 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:particleSystemVM="clr-namespace:MultiAgentSystem.ParticleSystem.ViewModels"
         xmlns:watorSystemVM="clr-namespace:MultiAgentSystem.WatorSystem.ViewModels"
+        xmlns:hunterSystemVM="clr-namespace:MultiAgentSystem.HunterSystem.ViewModels"
         mc:Ignorable="d"
         WindowStyle="SingleBorderWindow"
-        ResizeMode="NoResize"
+        ResizeMode="CanResize"
         WindowStartupLocation="CenterScreen"
         Title="Individual Centered Simulation">
 
+    <Window.DataContext>
+        <hunterSystemVM:XNAHunterGrid/>
+    </Window.DataContext>
+
     <Grid>
-        <!--<particleSystemVM:XNAParticleGrid x:Name="SurfaceGrid" />-->
-        <watorSystemVM:XNAWatorGrid x:Name="SurfaceGrid" />
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition Width="200"/>
+        </Grid.ColumnDefinitions>
+        <!--<particleSystemVM:XNAParticleGrid x:Name="SurfaceGrid" Grid.Column="0"/>-->
+        <!--<watorSystemVM:XNAWatorGrid x:Name="SurfaceGrid" Grid.Column="0"/>-->
+        <hunterSystemVM:XNAHunterGrid x:Name="SurfaceGrid" Grid.Column="0"/>
+        <StackPanel Grid.Column="1" Orientation="Vertical">
+            <Label Content="{Binding LabelGameTimeSeconds}" ContentStringFormat="{}Game time : {0} seconds" HorizontalAlignment="Left" Height="40" VerticalAlignment="Top" Width="200"/>
+            <Label Content="{Binding LabelNumberHunters}" ContentStringFormat="{}Number of hunters : {0}" HorizontalAlignment="Left" Height="40" VerticalAlignment="Top" Width="200"/>
+            <Label Content="{Binding LabelNumberDefendersEaten}" ContentStringFormat="{}Number of defenders eaten : {0}" HorizontalAlignment="Left" Height="40" VerticalAlignment="Top" Width="200"/>
+            <Label Content="{Binding LabelWallPercent}" ContentStringFormat="{}Wall percent : {0}%" HorizontalAlignment="Left" Height="40" VerticalAlignment="Top" Width="200"/>
+            <Label Content="{Binding LabelHunterSpeedPercent}" ContentStringFormat="{}Hunter speed percent : {0}%" HorizontalAlignment="Left" Height="40" VerticalAlignment="Top" Width="200"/>
+            <Label Content="{Binding LabelAvatarSpeedPercent}" ContentStringFormat="{}Avatar speed percent : {0}%" HorizontalAlignment="Left" Height="40" VerticalAlignment="Top" Width="200"/>
+            <Button x:Name="ButtonPlayPause" Content="{Binding PlayPauseString}" HorizontalAlignment="Left" Height="40" VerticalAlignment="Top" Width="200" Command="{Binding CommandXNAHunterGrid}" CommandParameter="{Binding ElementName=ButtonPlayPause}"/>
+            <Button x:Name="ButtonRestart" Content="Restart !" HorizontalAlignment="Left" Height="40" VerticalAlignment="Top" Width="200" Command="{Binding CommandXNAHunterGrid}" CommandParameter="{Binding ElementName=ButtonRestart}"/>
+        </StackPanel>
     </Grid>
 </Window>

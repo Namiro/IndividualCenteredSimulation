@@ -12,7 +12,7 @@ namespace MultiAgentSystem.Views
             App.LoadSettings();
 
             this.Height = App.CanvasSizeY + 37;
-            this.Width = App.CanvasSizeX + 14;
+            this.Width = App.CanvasSizeX + 14 + 200;
 
             InitializeComponent();
         }

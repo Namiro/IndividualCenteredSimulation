@@ -1,4 +1,7 @@
 ﻿using MultiAgentSystem.Cores.Constants;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace MultiAgentSystem.Cores.Helpers.Grids
 {
@@ -8,6 +11,7 @@ namespace MultiAgentSystem.Cores.Helpers.Grids
         public int YSize { get; private set; }
         public Cell[,] Grid2D { get; private set; }
         public bool IsToric { get; set; }
+        private List<int> GridCellsNumber { get; set; } = new List<int>();
 
         public Grid()
         {
@@ -20,10 +24,20 @@ namespace MultiAgentSystem.Cores.Helpers.Grids
             IsToric = isToric;
 
             Grid2D = new Cell[XSize, YSize];
-            Helper.Populate(Grid2D, new Empty());
+
+            for (int i = 0; i < Grid2D.GetLength(0); i++)
+            {
+                for (int j = 0; j < Grid2D.GetLength(1); j++)
+                {
+                    Grid2D[i, j] = new Empty(new Coordinate(i, j));
+                }
+            }
+
+            for (int i = 0; i < App.GridSizeX * App.GridSizeY; i++)
+                GridCellsNumber.Add(i);
         }
 
-        public Coordinate CellNumberToXYCoordinate(int cellNumber)
+        public Coordinate CellNumberToCoordinate(int cellNumber)
         {
             int x = cellNumber % App.GridSizeX;
             int y = (cellNumber - x) / App.GridSizeX;
@@ -31,22 +45,40 @@ namespace MultiAgentSystem.Cores.Helpers.Grids
             return new Coordinate(x, y);
         }
 
-        public int XYCoordinateToCellNumber(Coordinate coordinate)
+        public int CoordinateToCellNumber(Coordinate coordinate)
         {
             return ((coordinate.Y * YSize) + coordinate.X);
         }
 
-        public void Occupy(Cell obj)
+        public Cell Occupy(Cell obj)
         {
-            if (!(Grid2D[obj.Coordinate.X, obj.Coordinate.Y] is Empty))
-                throw new System.Exception("There is already an object to these coordinates in the grid. - " + obj.Coordinate);
-
+            Cell previousObj = Grid2D[obj.Coordinate.X, obj.Coordinate.Y];
             Grid2D[obj.Coordinate.X, obj.Coordinate.Y] = obj;
+            GridCellsNumber.Remove(this.CoordinateToCellNumber(obj.Coordinate));
+
+            return previousObj;
+        }
+
+        public bool IsFree(Coordinate coordinate)
+        {
+            if (Grid2D[coordinate.X, coordinate.Y] is Empty)
+                return true;
+            else
+                return false;
         }
 
         public Cell Get(Coordinate coordinate)
         {
             return Get(coordinate.X, coordinate.Y);
+        }
+
+        public Coordinate GetRandomFreeCoordinate()
+        {
+            int randomNumber = App.Random.Next(0, GridCellsNumber.Count);
+            int cellNumber = GridCellsNumber[randomNumber];
+            GridCellsNumber.Remove(cellNumber);
+
+            return this.CellNumberToCoordinate(cellNumber);
         }
 
         public Cell Get(int X, int Y)
@@ -59,7 +91,8 @@ namespace MultiAgentSystem.Cores.Helpers.Grids
 
         public void Free(Coordinate coordinate)
         {
-            Grid2D[coordinate.X, coordinate.Y] = new Empty();
+            Grid2D[coordinate.X, coordinate.Y] = new Empty(coordinate);
+            GridCellsNumber.Add(this.CoordinateToCellNumber(coordinate));
         }
 
         public Grid Clone()
@@ -77,28 +110,28 @@ namespace MultiAgentSystem.Cores.Helpers.Grids
             Coordinate coordinate = new Coordinate(fromPosition.X, fromPosition.Y);
             switch (direction)
             {
-                case DirectionEnum.TopLeft:
+                case DirectionEnum.UpLeft:
                     coordinate.X--;
                     coordinate.Y--;
                     break;
-                case DirectionEnum.Top:
+                case DirectionEnum.Up:
                     coordinate.Y--;
                     break;
-                case DirectionEnum.BottomLeft:
+                case DirectionEnum.UpRight:
                     coordinate.X++;
                     coordinate.Y--;
                     break;
                 case DirectionEnum.Left:
                     coordinate.X--;
                     break;
-                case DirectionEnum.BottomRight:
+                case DirectionEnum.DownRight:
                     coordinate.X++;
                     coordinate.Y++;
                     break;
-                case DirectionEnum.Bottom:
+                case DirectionEnum.Down:
                     coordinate.Y++;
                     break;
-                case DirectionEnum.TopRight:
+                case DirectionEnum.DownLeft:
                     coordinate.X--;
                     coordinate.Y++;
                     break;
@@ -141,6 +174,77 @@ namespace MultiAgentSystem.Cores.Helpers.Grids
             }
 
             return coord;
+        }
+
+        public void CalculateDijkstra(Coordinate startCoordionate)
+        {
+            List<Cell> allCell = new List<Cell>();
+
+            List<DirectionEnum> availableDirections = Enum.GetValues(typeof(DirectionEnum)).Cast<DirectionEnum>().ToList();
+            if (!App.IsMoore)
+            {
+                availableDirections.Remove(DirectionEnum.DownLeft);
+                availableDirections.Remove(DirectionEnum.DownRight);
+                availableDirections.Remove(DirectionEnum.UpLeft);
+                availableDirections.Remove(DirectionEnum.UpRight);
+            }
+            availableDirections.Remove(DirectionEnum.NoOne);
+
+            try
+            {
+
+
+                // Reset
+                foreach (Cell cell in Grid2D)
+                    cell.DijkstraValue = -1;
+
+                // TODO
+                int distance = 1;
+                List<Cell> listPos = new List<Cell>();
+                listPos.Add(Get(startCoordionate));
+
+                for (int i = 0; i < listPos.Count; i++)
+                {
+                    listPos = DrijkstraTurn(listPos, distance, availableDirections);
+                    distance++;
+                    i = 0;
+                }
+
+                Cell.DijkstraMaxValue = distance;
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteLog(ex.ToString());
+            }
+        }
+
+
+        private List<Cell> DrijkstraTurn(List<Cell> listPos, int distance, List<DirectionEnum> availableDirections)
+        {
+            List<Cell> nextListPos = new List<Cell>();
+
+            for (int i = 0; i < listPos.Count; i++)
+            {
+                Cell pos = listPos[i];
+                List<Cell> around = new List<Cell>();
+                foreach (DirectionEnum direction in availableDirections)
+                {
+                    around.Add(Get(DirectionToCoordinate(direction, pos.Coordinate)));
+                }
+
+
+                for (int j = 0; j < around.Count; j++)
+                {
+                    Cell position = around[j];
+                    if (position is Empty && position.DijkstraValue < 0)
+                    {
+                        position.DijkstraValue = distance;
+                        nextListPos.Add(position);
+                    }
+                }
+            }
+
+            return nextListPos;
         }
     }
 }

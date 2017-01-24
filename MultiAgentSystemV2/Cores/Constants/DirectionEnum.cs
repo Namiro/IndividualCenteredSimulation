@@ -2,13 +2,13 @@
 {
     public enum DirectionEnum
     {
-        TopLeft,
-        Top,
-        TopRight,
+        UpLeft,
+        Up,
+        UpRight,
         Right,
-        BottomRight,
-        Bottom,
-        BottomLeft,
+        DownRight,
+        Down,
+        DownLeft,
         Left,
         NoOne
     }
