@@ -23,9 +23,8 @@
         </Grid.ColumnDefinitions>
         <!--<particleSystemVM:XNAParticleGrid x:Name="SurfaceGrid" Grid.Column="0"/>-->
         <!--<watorSystemVM:XNAWatorGrid x:Name="SurfaceGrid" Grid.Column="0"/>-->
-        <hunterSystemVM:XNAHunterGrid x:Name="SurfaceGrid" Grid.Column="0"/>
+        <hunterSystemVM:XNAHunterGrid x:Name="SurfaceGrid" Grid.Column="0" />
         <StackPanel Grid.Column="1" Orientation="Vertical">
-            <Label Content="{Binding LabelGameTimeSeconds}" ContentStringFormat="{}Game time : {0} seconds" HorizontalAlignment="Left" Height="40" VerticalAlignment="Top" Width="200"/>
             <Label Content="{Binding LabelNumberHunters}" ContentStringFormat="{}Number of hunters : {0}" HorizontalAlignment="Left" Height="40" VerticalAlignment="Top" Width="200"/>
             <Label Content="{Binding LabelWallPercent}" ContentStringFormat="{}Wall percent : {0}%" HorizontalAlignment="Left" Height="40" VerticalAlignment="Top" Width="200"/>
             <Label Content="{Binding LabelNumberDefendersEaten}" ContentStringFormat="{}Number of defenders eaten : {0}" HorizontalAlignment="Left" Height="40" VerticalAlignment="Top" Width="200"/>

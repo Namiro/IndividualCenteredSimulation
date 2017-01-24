@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MultiAgentSystem.Cores.Constants;
-using MultiAgentSystem.Cores.Helpers;
 using MultiAgentSystem.Cores.ViewModels;
 using MultiAgentSystem.HunterSystem.Models;
 using System;
@@ -17,22 +16,8 @@ namespace MultiAgentSystem.HunterSystem.ViewModels
 
         #region GUI
 
-        private string _LabelGameTimeSeconds = "0";
-        public string LabelGameTimeSeconds
-        {
-            get
-            {
-                return _LabelGameTimeSeconds;
-            }
-            set
-            {
-                _LabelGameTimeSeconds = value;
-                RaisePropertyChanged(nameof(XNAHunterGrid.LabelGameTimeSeconds));
-            }
-        }
-
-        private string _LabelNumberHunters = "0";
-        public string LabelNumberHunters
+        private static int _LabelNumberHunters = 0;
+        public static int LabelNumberHunters
         {
             get
             {
@@ -41,12 +26,12 @@ namespace MultiAgentSystem.HunterSystem.ViewModels
             set
             {
                 _LabelNumberHunters = value;
-                RaisePropertyChanged(nameof(XNAHunterGrid.LabelNumberHunters));
+                RaiseStaticPropertyChanged(nameof(XNAHunterGrid.LabelNumberHunters));
             }
         }
 
-        private string _LabelNumberDefendersEaten = "0";
-        public string LabelNumberDefendersEaten
+        private static int _LabelNumberDefendersEaten = 0;
+        public static int LabelNumberDefendersEaten
         {
             get
             {
@@ -55,12 +40,12 @@ namespace MultiAgentSystem.HunterSystem.ViewModels
             set
             {
                 _LabelNumberDefendersEaten = value;
-                RaisePropertyChanged(nameof(XNAHunterGrid.LabelNumberDefendersEaten));
+                RaiseStaticPropertyChanged(nameof(XNAHunterGrid.LabelNumberDefendersEaten));
             }
         }
 
-        private string _LabelWallPercent = "0";
-        public string LabelWallPercent
+        private static int _LabelWallPercent = 0;
+        public static int LabelWallPercent
         {
             get
             {
@@ -69,12 +54,12 @@ namespace MultiAgentSystem.HunterSystem.ViewModels
             set
             {
                 _LabelWallPercent = value;
-                RaisePropertyChanged(nameof(XNAHunterGrid.LabelWallPercent));
+                RaiseStaticPropertyChanged(nameof(XNAHunterGrid.LabelWallPercent));
             }
         }
 
-        private string _LabelHunterSpeedPercent = "0";
-        public string LabelHunterSpeedPercent
+        private static int _LabelHunterSpeedPercent = 0;
+        public static int LabelHunterSpeedPercent
         {
             get
             {
@@ -83,12 +68,12 @@ namespace MultiAgentSystem.HunterSystem.ViewModels
             set
             {
                 _LabelHunterSpeedPercent = value;
-                RaisePropertyChanged(nameof(XNAHunterGrid.LabelHunterSpeedPercent));
+                RaiseStaticPropertyChanged(nameof(XNAHunterGrid.LabelHunterSpeedPercent));
             }
         }
 
-        private string _LabelAvatarSpeedPercent = "0";
-        public string LabelAvatarSpeedPercent
+        private static int _LabelAvatarSpeedPercent = 0;
+        public static int LabelAvatarSpeedPercent
         {
             get
             {
@@ -97,12 +82,12 @@ namespace MultiAgentSystem.HunterSystem.ViewModels
             set
             {
                 _LabelAvatarSpeedPercent = value;
-                RaisePropertyChanged(nameof(XNAHunterGrid.LabelAvatarSpeedPercent));
+                RaiseStaticPropertyChanged(nameof(XNAHunterGrid.LabelAvatarSpeedPercent));
             }
         }
 
-        private string _PlayPauseString = "Play";
-        public string PlayPauseString
+        private static string _PlayPauseString = "Play";
+        public static string PlayPauseString
         {
             get
             {
@@ -111,12 +96,12 @@ namespace MultiAgentSystem.HunterSystem.ViewModels
             set
             {
                 _PlayPauseString = value;
-                RaisePropertyChanged(nameof(XNAHunterGrid.PlayPauseString));
+                RaiseStaticPropertyChanged(nameof(XNAHunterGrid.PlayPauseString));
             }
         }
 
-        private int _SliderAvatarSpeedPercent = App.SpeedPercentAvatar;
-        public int SliderAvatarSpeedPercent
+        private static int _SliderAvatarSpeedPercent = App.SpeedPercentAvatar;
+        public static int SliderAvatarSpeedPercent
         {
             get
             {
@@ -126,12 +111,12 @@ namespace MultiAgentSystem.HunterSystem.ViewModels
             {
                 _SliderAvatarSpeedPercent = value;
                 App.SpeedPercentAvatar = value;
-                RaisePropertyChanged(nameof(XNAHunterGrid.SliderAvatarSpeedPercent));
+                RaiseStaticPropertyChanged(nameof(XNAHunterGrid.SliderAvatarSpeedPercent));
             }
         }
 
-        private int _SliderHunterSpeedPercent = App.SpeedPercentHunter;
-        public int SliderHunterSpeedPercent
+        private static int _SliderHunterSpeedPercent = App.SpeedPercentHunter;
+        public static int SliderHunterSpeedPercent
         {
             get
             {
@@ -141,13 +126,9 @@ namespace MultiAgentSystem.HunterSystem.ViewModels
             {
                 _SliderHunterSpeedPercent = value;
                 App.SpeedPercentHunter = value;
-                RaisePropertyChanged(nameof(XNAHunterGrid.SliderHunterSpeedPercent));
+                RaiseStaticPropertyChanged(nameof(XNAHunterGrid.SliderHunterSpeedPercent));
             }
         }
-
-
-
-
 
         public CommandXNAHunterGrid CommandXNAHunterGrid { get; private set; }
 
@@ -157,6 +138,7 @@ namespace MultiAgentSystem.HunterSystem.ViewModels
         public volatile static DirectionEnum UserDirectionChoose = DirectionEnum.NoOne;
 
         public event PropertyChangedEventHandler PropertyChanged;
+        public static event PropertyChangedEventHandler StaticPropertyChanged;
 
         public static bool IsGameOver { get; set; } = false;
         public static bool IsWinner { get; set; } = false;
@@ -206,17 +188,16 @@ namespace MultiAgentSystem.HunterSystem.ViewModels
 
         public XNAHunterGrid() : base()
         {
-            LabelNumberHunters = App.HuntersNumber + "";
-            LabelAvatarSpeedPercent = App.SpeedPercentAvatar + "";
-            LabelHunterSpeedPercent = App.SpeedPercentHunter + "";
-            LabelWallPercent = App.WallsPercent + "";
+            LabelNumberHunters = App.HuntersNumber;
+            LabelAvatarSpeedPercent = App.SpeedPercentAvatar;
+            LabelHunterSpeedPercent = App.SpeedPercentHunter;
+            LabelWallPercent = App.WallsPercent;
 
             CommandXNAHunterGrid = new CommandXNAHunterGrid();
         }
 
         protected override sealed void LoadContent()
         {
-
             Environment = new HunterEnvironment();
             base.LoadContent();
 
@@ -233,8 +214,7 @@ namespace MultiAgentSystem.HunterSystem.ViewModels
             Avatar avatar = ((HunterEnvironment)Environment).Avatar;
             if (!IsGameOver && !IsWinner && IsPlaying)
             {
-                LabelGameTimeSeconds = ((int)gameTime.TotalGameTime.TotalSeconds) + "";
-                LabelNumberDefendersEaten = avatar.DefenderEaten + "";
+                LabelNumberDefendersEaten = avatar.DefenderEaten;
 
                 // Every X second we create a new Defender
                 if ((gameTime.TotalGameTime.Seconds % SecondsForNewDefender) == 0 && gameTime.TotalGameTime.Seconds != CurrentGameSeconds && !IsDisplayWinnerDiamond)
@@ -337,6 +317,7 @@ namespace MultiAgentSystem.HunterSystem.ViewModels
             IsGameOver = false;
             IsWinner = false;
             IsPlaying = false;
+            PlayPauseString = "Play !";
             IsSuperAvatar = false;
             TickCount = 0;
             PreviousAvatarDefenderEaten = 0;
@@ -365,9 +346,18 @@ namespace MultiAgentSystem.HunterSystem.ViewModels
         /// Allow to raise property changement
         /// </summary>
         /// <param name="propertyName"></param>
-        protected virtual void RaisePropertyChanged([CallerMemberName] string propertyName = null)
+        protected void RaisePropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        /// <summary>
+        /// Allow to raise property changement
+        /// </summary>
+        /// <param name="propertyName"></param>
+        protected static void RaiseStaticPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            StaticPropertyChanged?.Invoke(new object(), new PropertyChangedEventArgs(propertyName));
         }
     }
 }
