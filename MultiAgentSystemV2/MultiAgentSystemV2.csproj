@@ -76,6 +76,7 @@
     <Compile Include="Cores\Constants\Constants.cs" />
     <Compile Include="Cores\Constants\DirectionEnum.cs" />
     <Compile Include="Cores\Constants\SchedulingStrategyEnum.cs" />
+    <Compile Include="Cores\Helpers\Grids\IIsDrijkstraBlocking.cs" />
     <Compile Include="Systems\HunterSystem\Models\Defender.cs" />
     <Compile Include="Systems\HunterSystem\Models\WinnerDiamond.cs" />
     <Compile Include="Systems\HunterSystem\Models\Wall.cs" />
@@ -144,13 +145,30 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <None Include="Resources\spriteFont.xnb" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\097-Monster11.png" />
+    <Resource Include="Resources\avatar.png" />
+    <Resource Include="Resources\catrecolors.png" />
+    <Resource Include="Resources\defender.png" />
+    <Resource Include="Resources\demon_statue.png" />
+    <Resource Include="Resources\diamond.png" />
+    <Resource Include="Resources\door.png" />
+    <Resource Include="Resources\doordemo.jpg" />
+    <Resource Include="Resources\font.xml" />
+    <Resource Include="Resources\gameover.png" />
+    <Resource Include="Resources\hunter.png" />
+    <Resource Include="Resources\square.png" />
+    <Resource Include="Resources\star.png" />
+    <Resource Include="Resources\wall.jpg" />
+    <Resource Include="Resources\winner.png" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\circle.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

@@ -27,10 +27,20 @@
         <StackPanel Grid.Column="1" Orientation="Vertical">
             <Label Content="{Binding LabelGameTimeSeconds}" ContentStringFormat="{}Game time : {0} seconds" HorizontalAlignment="Left" Height="40" VerticalAlignment="Top" Width="200"/>
             <Label Content="{Binding LabelNumberHunters}" ContentStringFormat="{}Number of hunters : {0}" HorizontalAlignment="Left" Height="40" VerticalAlignment="Top" Width="200"/>
-            <Label Content="{Binding LabelNumberDefendersEaten}" ContentStringFormat="{}Number of defenders eaten : {0}" HorizontalAlignment="Left" Height="40" VerticalAlignment="Top" Width="200"/>
             <Label Content="{Binding LabelWallPercent}" ContentStringFormat="{}Wall percent : {0}%" HorizontalAlignment="Left" Height="40" VerticalAlignment="Top" Width="200"/>
-            <Label Content="{Binding LabelHunterSpeedPercent}" ContentStringFormat="{}Hunter speed percent : {0}%" HorizontalAlignment="Left" Height="40" VerticalAlignment="Top" Width="200"/>
-            <Label Content="{Binding LabelAvatarSpeedPercent}" ContentStringFormat="{}Avatar speed percent : {0}%" HorizontalAlignment="Left" Height="40" VerticalAlignment="Top" Width="200"/>
+            <Label Content="{Binding LabelNumberDefendersEaten}" ContentStringFormat="{}Number of defenders eaten : {0}" HorizontalAlignment="Left" Height="40" VerticalAlignment="Top" Width="200"/>
+            
+            <Label Content="Avatar speed percent"  HorizontalAlignment="Left" Height="23" VerticalAlignment="Top" Width="200"/>
+            <StackPanel  Orientation="Horizontal">
+                <Slider x:Name="SliderAvatarSpeedPercent" HorizontalAlignment="Left" Height="27" VerticalAlignment="Bottom" Width="151" Value="{Binding SliderAvatarSpeedPercent}" Maximum="100" SmallChange="1" IsSnapToTickEnabled="True" IsMoveToPointEnabled="True" Interval="2" Margin="10,0,0,0"/>
+                <Label Content="{Binding Value, ElementName=SliderAvatarSpeedPercent, UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:F0}%" HorizontalAlignment="Left" Height="24" VerticalAlignment="Top" Width="40" Margin="0,-3,0,0"/>
+            </StackPanel>
+            
+            <Label Content="Hunter speed percent"  HorizontalAlignment="Left" Height="24" VerticalAlignment="Top" Width="200"/>
+            <StackPanel  Orientation="Horizontal">
+                <Slider x:Name="SliderHunterSpeedPercent" HorizontalAlignment="Left" Height="26" VerticalAlignment="Bottom" Width="151" Value="{Binding SliderHunterSpeedPercent}" Maximum="100" SmallChange="1" IsSnapToTickEnabled="True" IsMoveToPointEnabled="True" Interval="2" Margin="10,0,0,0"/>
+                <Label Content="{Binding Value, ElementName=SliderHunterSpeedPercent, UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="{}{0:F0}%" HorizontalAlignment="Left" Height="24" VerticalAlignment="Top" Width="40" Margin="0,-3,0,0"/>
+            </StackPanel>
             <Button x:Name="ButtonPlayPause" Content="{Binding PlayPauseString}" HorizontalAlignment="Left" Height="40" VerticalAlignment="Top" Width="200" Command="{Binding CommandXNAHunterGrid}" CommandParameter="{Binding ElementName=ButtonPlayPause}"/>
             <Button x:Name="ButtonRestart" Content="Restart !" HorizontalAlignment="Left" Height="40" VerticalAlignment="Top" Width="200" Command="{Binding CommandXNAHunterGrid}" CommandParameter="{Binding ElementName=ButtonRestart}"/>
         </StackPanel>

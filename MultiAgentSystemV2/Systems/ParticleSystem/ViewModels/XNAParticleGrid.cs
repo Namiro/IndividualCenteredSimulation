@@ -7,6 +7,10 @@ namespace MultiAgentSystem.ParticleSystem.ViewModels
 {
     internal class XNAParticleGrid : XNASurface
     {
+        public XNAParticleGrid() : base()
+        {
+
+        }
 
         protected override void LoadContent()
         {

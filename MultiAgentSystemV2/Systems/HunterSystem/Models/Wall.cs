@@ -5,7 +5,7 @@ using MultiAgentSystem.HunterSystem.ViewModels;
 
 namespace MultiAgentSystem.HunterSystem.Models
 {
-    class Wall : Cell
+    class Wall : Cell, IIsDrijkstraBlocking
     {
         public Wall()
         {

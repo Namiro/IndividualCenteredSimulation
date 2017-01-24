@@ -54,7 +54,6 @@ namespace MultiAgentSystem.HunterSystem.Models
                         {
                             Wall wall = new Wall();
                             wall.Coordinate = Grid.Grid2D[i, j].Coordinate;
-                            //Grid.Free(Grid.Grid2D[i, j].Coordinate);
                             Grid.Occupy(wall);
                         }
                     }

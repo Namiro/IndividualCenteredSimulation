@@ -32,20 +32,22 @@ namespace MultiAgentSystem.Cores.ViewModels
         /// </summary>
         protected override void Initialize()
         {
-            // must be initialized. required by Content loading and rendering (will add itself to the Services)
-            GraphicsDeviceManager = new WpfGraphicsDeviceService(this);
-            Content.RootDirectory = "Resources";
-            Cell.Size = App.BoxSize;
-            ContentManager = Content;
-
-            Keyboard = new WpfKeyboard(this);
-            Mouse = new WpfMouse(this);
-
-            // must be called after the WpfGraphicsDeviceService instance was created
-            base.Initialize();
-
             try
-            { Font = ContentManager.Load<SpriteFont>("spriteFont"); }
+            {
+                // must be initialized. required by Content loading and rendering (will add itself to the Services)
+                GraphicsDeviceManager = new WpfGraphicsDeviceService(this);
+                Content.RootDirectory = "Resources";
+                Cell.Size = App.BoxSize;
+                ContentManager = Content;
+
+                Keyboard = new WpfKeyboard(this);
+                Mouse = new WpfMouse(this);
+
+                // must be called after the WpfGraphicsDeviceService instance was created
+                base.Initialize();
+
+                Font = ContentManager.Load<SpriteFont>("spriteFont");
+            }
             catch (System.Exception ex)
             { Logger.WriteLog(ex.ToString()); }
 

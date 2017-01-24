@@ -192,18 +192,15 @@ namespace MultiAgentSystem.Cores.Helpers.Grids
 
             try
             {
-
-
                 // Reset
                 foreach (Cell cell in Grid2D)
                     cell.DijkstraValue = -1;
 
-                // TODO
                 int distance = 1;
                 List<Cell> listPos = new List<Cell>();
                 listPos.Add(Get(startCoordionate));
 
-                for (int i = 0; i < listPos.Count; i++)
+                for (int i = 0; i <= listPos.Count; i++)
                 {
                     listPos = DrijkstraTurn(listPos, distance, availableDirections);
                     distance++;
@@ -229,14 +226,16 @@ namespace MultiAgentSystem.Cores.Helpers.Grids
                 List<Cell> around = new List<Cell>();
                 foreach (DirectionEnum direction in availableDirections)
                 {
-                    around.Add(Get(DirectionToCoordinate(direction, pos.Coordinate)));
+                    Cell cell = Get(DirectionToCoordinate(direction, pos.Coordinate));
+                    if (cell != null)
+                        around.Add(cell);
                 }
 
 
                 for (int j = 0; j < around.Count; j++)
                 {
                     Cell position = around[j];
-                    if (position is Empty && position.DijkstraValue < 0)
+                    if (!(position is IIsDrijkstraBlocking) && position.DijkstraValue < 0)
                     {
                         position.DijkstraValue = distance;
                         nextListPos.Add(position);

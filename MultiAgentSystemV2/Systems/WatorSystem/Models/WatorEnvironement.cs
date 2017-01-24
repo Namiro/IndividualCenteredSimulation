@@ -1,4 +1,5 @@
-﻿using MultiAgentSystem.Cores.Models;
+﻿using MultiAgentSystem.Cores.Helpers;
+using MultiAgentSystem.Cores.Models;
 using System.Collections.Generic;
 
 namespace MultiAgentSystem.WatorSystem.Models
@@ -16,6 +17,12 @@ namespace MultiAgentSystem.WatorSystem.Models
 
         public WatorEnvironment() : base()
         {
+            if (App.GridSizeX * App.GridSizeY < App.FishsNumber + App.SharksNumber)
+            {
+                Logger.WriteLog("Fish number more Shark number is too big to match with the grid size.", LogLevelL4N.FATAL);
+                throw new System.Exception("Fish number more Shark number is too big to match with the grid size.");
+            }
+
             for (int i = 0; i < App.FishsNumber; i++)
             {
                 Fish Fish = new Fish();

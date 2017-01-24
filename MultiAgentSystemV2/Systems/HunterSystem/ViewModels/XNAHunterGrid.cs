@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MultiAgentSystem.Cores.Constants;
+using MultiAgentSystem.Cores.Helpers;
 using MultiAgentSystem.Cores.ViewModels;
 using MultiAgentSystem.HunterSystem.Models;
 using System;
@@ -114,6 +115,39 @@ namespace MultiAgentSystem.HunterSystem.ViewModels
             }
         }
 
+        private int _SliderAvatarSpeedPercent = App.SpeedPercentAvatar;
+        public int SliderAvatarSpeedPercent
+        {
+            get
+            {
+                return _SliderAvatarSpeedPercent;
+            }
+            set
+            {
+                _SliderAvatarSpeedPercent = value;
+                App.SpeedPercentAvatar = value;
+                RaisePropertyChanged(nameof(XNAHunterGrid.SliderAvatarSpeedPercent));
+            }
+        }
+
+        private int _SliderHunterSpeedPercent = App.SpeedPercentHunter;
+        public int SliderHunterSpeedPercent
+        {
+            get
+            {
+                return _SliderHunterSpeedPercent;
+            }
+            set
+            {
+                _SliderHunterSpeedPercent = value;
+                App.SpeedPercentHunter = value;
+                RaisePropertyChanged(nameof(XNAHunterGrid.SliderHunterSpeedPercent));
+            }
+        }
+
+
+
+
 
         public CommandXNAHunterGrid CommandXNAHunterGrid { get; private set; }
 
@@ -180,7 +214,7 @@ namespace MultiAgentSystem.HunterSystem.ViewModels
             CommandXNAHunterGrid = new CommandXNAHunterGrid();
         }
 
-        protected override void LoadContent()
+        protected override sealed void LoadContent()
         {
 
             Environment = new HunterEnvironment();
