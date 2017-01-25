@@ -37,6 +37,8 @@ namespace MultiAgentSystem.WatorSystem.Models
         public static int AgeOfOlderFish { get; set; } = 0;
         public static int[] FishAgePyramid { get; set; } = new int[App.TicksNumber + 1];
 
+        
+
         #endregion
 
         #region Construtors
@@ -157,11 +159,17 @@ namespace MultiAgentSystem.WatorSystem.Models
                     WatorEnvironment.SharkAgePyramid[i] = 0;
                     WatorEnvironment.FishAgePyramid[i] = 0;
                 }
-                
+
 
                 tickCount++;
 
-                
+                //Add data to Graphics
+                MultiAgentSystemV2.Views.Graph.SeriesCollection[0].Values.Add((double)WatorEnvironment.SharksNumber);
+                MultiAgentSystemV2.Views.Graph.SeriesCollection[1].Values.Add((double)WatorEnvironment.FishsNumber);
+                MultiAgentSystemV2.Views.Graph.Labels.Add(tickCount);
+
+                               
+                                
             }                
                 
         }

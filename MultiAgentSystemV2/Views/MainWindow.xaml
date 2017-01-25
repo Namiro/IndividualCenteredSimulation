@@ -5,14 +5,27 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:particleSystemVM="clr-namespace:MultiAgentSystem.ParticleSystem.ViewModels"
         xmlns:watorSystemVM="clr-namespace:MultiAgentSystem.WatorSystem.ViewModels"
+        xmlns:views="clr-namespace:MultiAgentSystemV2.Views"
         mc:Ignorable="d"
         WindowStyle="SingleBorderWindow"
-        ResizeMode="NoResize"
+        ResizeMode="CanResize"
         WindowStartupLocation="CenterScreen"
         Title="Individual Centered Simulation">
 
-    <Grid>
-        <!--<particleSystemVM:XNAParticleGrid x:Name="SurfaceGrid" />-->
-        <watorSystemVM:XNAWatorGrid x:Name="SurfaceGrid" />
-    </Grid>
+    <!-- Tab Control -->
+    <TabControl Grid.Row="1" Grid.Column="0" Name="TabControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TabStripPlacement="Top" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch">
+
+        <TabItem Name="SystemName" Header="System" BorderBrush="Black" BorderThickness="4,4,4,0">
+            <!--<particleSystemVM:XNAParticleGrid x:Name="SurfaceGrid" />-->
+            <watorSystemVM:XNAWatorGrid x:Name="SurfaceGrid" />
+        </TabItem>
+
+        <TabItem Name="Graph" Header="Graph" BorderBrush="Black" BorderThickness="4,4,4,0">
+            <views:Graph />
+        </TabItem>
+        
+
+    </TabControl>
+
+
 </Window>
